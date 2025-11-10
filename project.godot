@@ -1,0 +1,29 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Pandora+"
+config/tags=PackedStringArray("addon", "data", "godot4", "rpg")
+config/features=PackedStringArray("4.5", "Forward Plus")
+boot_splash/image="uid://lg3gxxm6wy8m"
+config/icon="uid://lg3gxxm6wy8m"
+
+[autoload]
+
+Pandora="*res://addons/pandora/api.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/pandora/plugin.cfg", "res://addons/pandora_plus/plugin.cfg")
+
+[pandora]
+
+config/extensions=[&"res://pandora/extensions", &"res://addons/pandora_plus/extensions"]

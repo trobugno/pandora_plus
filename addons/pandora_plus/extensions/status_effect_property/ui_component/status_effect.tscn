@@ -1,0 +1,124 @@
+[gd_scene load_steps=2 format=3 uid="uid://bb4b1islgbvyo"]
+
+[ext_resource type="Script" uid="uid://b56wkvge5sj87" path="res://addons/pandora_plus/extensions/status_effect_property/ui_component/status_effect.gd" id="1_wd1u5"]
+
+[node name="StatusEffect" type="MarginContainer"]
+offset_right = 600.0
+offset_bottom = 120.0
+script = ExtResource("1_wd1u5")
+type = "status_effect"
+metadata/_custom_type_script = "uid://bvl8qiojdoihh"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusID" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/StatusID"]
+layout_mode = 2
+text = "ID"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FirstLine/StatusID"]
+layout_mode = 2
+
+[node name="StatusKey" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/StatusKey"]
+layout_mode = 2
+text = "Status"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/FirstLine/StatusKey"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 3
+popup/item_0/text = "POISONING"
+popup/item_0/id = 0
+popup/item_1/text = "BLEEDING"
+popup/item_1/id = 1
+popup/item_2/text = "BURNING"
+popup/item_2/id = 2
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StatusDescription" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/StatusDescription"]
+layout_mode = 2
+text = "Description"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SecondLine/StatusDescription"]
+layout_mode = 2
+
+[node name="StatusDuration" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/StatusDuration"]
+layout_mode = 2
+text = "Duration"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SecondLine/StatusDuration"]
+layout_mode = 2
+focus_mode = 1
+min_value = -1.0
+max_value = 99999.0
+select_all_on_focus = true
+
+[node name="DamageContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/DamageContainer"]
+layout_mode = 2
+text = "Damage Info"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/DamageContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/DamageContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Ticks" type="VBoxContainer" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/Ticks"]
+layout_mode = 2
+text = "Ticks"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/Ticks"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+rounded = true
+select_all_on_focus = true
+
+[node name="DamagePerTick" type="VBoxContainer" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/DamagePerTick"]
+layout_mode = 2
+text = "Damage per tick"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/DamagePerTick"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+select_all_on_focus = true
+
+[node name="DamageInPercentage" type="CheckButton" parent="VBoxContainer/DamageContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Damage in %"

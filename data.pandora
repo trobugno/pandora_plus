@@ -1,0 +1,85 @@
+{
+	"_entity_data": {
+		"_categories": [
+			{
+				"_category_id": "",
+				"_icon_color": "ffffff00",
+				"_id": "1",
+				"_index": 0,
+				"_name": "Rarity",
+				"_script_path": "res://addons/pandora_plus/entities/rarity_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_icon_color": "ffffff00",
+				"_id": "4",
+				"_index": 0,
+				"_name": "Items",
+				"_script_path": "res://addons/pandora_plus/entities/item_entity.gd"
+			}
+		],
+		"_entities": [],
+		"_properties": [
+			{
+				"_category_id": "1",
+				"_default_value": "",
+				"_id": "2",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1",
+				"_default_value": 0.0,
+				"_id": "3",
+				"_name": "percentage",
+				"_type": "float"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": "",
+				"_id": "5",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": "",
+				"_id": "6",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": false,
+				"_id": "7",
+				"_name": "stackable",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": null,
+				"_id": "8",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": {
+					"_entity_id": "1",
+					"_type": 1
+				},
+				"_id": "9",
+				"_name": "rarity",
+				"_setting_overrides": {
+					"Category Filter": "1"
+				},
+				"_type": "reference"
+			}
+		]
+	},
+	"_id_generator": {
+		"_ids_by_context": {
+			"default": 10.0
+		}
+	}
+}

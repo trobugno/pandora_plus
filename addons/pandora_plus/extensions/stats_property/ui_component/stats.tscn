@@ -1,0 +1,128 @@
+[gd_scene load_steps=2 format=3 uid="uid://bdbnrlqgarhiu"]
+
+[ext_resource type="Script" uid="uid://cchr2hjiedrpk" path="res://addons/pandora_plus/extensions/stats_property/ui_component/stats.gd" id="1_w8khe"]
+
+[node name="Stats" type="MarginContainer"]
+custom_minimum_size = Vector2(500, 0)
+script = ExtResource("1_w8khe")
+type = "stats"
+metadata/_custom_type_script = "uid://bvl8qiojdoihh"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Health" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/Health"]
+layout_mode = 2
+text = "Health"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FirstLine/Health"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="Mana" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/Mana"]
+layout_mode = 2
+text = "Mana"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FirstLine/Mana"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Attack" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/Attack"]
+layout_mode = 2
+text = "Attack"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SecondLine/Attack"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="Defense" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/Defense"]
+layout_mode = 2
+text = "Defense"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SecondLine/Defense"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="ThirdLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CritRate" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/CritRate"]
+layout_mode = 2
+text = "Crit. Rate"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/ThirdLine/CritRate"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="CritDamage" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/CritDamage"]
+layout_mode = 2
+text = "Crit. Damage"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/ThirdLine/CritDamage"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="FourthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="AttSpeed" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FourthLine/AttSpeed"]
+layout_mode = 2
+text = "Att. Speed"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FourthLine/AttSpeed"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0
+
+[node name="MovSpeed" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FourthLine/MovSpeed"]
+layout_mode = 2
+text = "Mov. Speed"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FourthLine/MovSpeed"]
+layout_mode = 2
+focus_mode = 1
+max_value = 99999.0

@@ -1,0 +1,144 @@
+[gd_scene load_steps=6 format=3 uid="uid://80g6ht0fvlc1"]
+
+[ext_resource type="Script" uid="uid://5tq32nxiw77t" path="res://addons/pandora_plus/extensions/recipe_property/ui_component/recipe.gd" id="1_42t4w"]
+[ext_resource type="Texture2D" uid="uid://b0mt8ysdc5m4a" path="res://addons/pandora/icons/Edit.svg" id="2_6p6t6"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_14vw1"]
+[ext_resource type="Script" uid="uid://dlgegkql806fg" path="res://addons/pandora_plus/extensions/recipe_property/ui_component/ingredients_window.gd" id="3_rsbs8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42t4w"]
+
+[node name="Recipe" type="MarginContainer"]
+offset_right = 300.0
+offset_bottom = 31.0
+script = ExtResource("1_42t4w")
+type = "recipe"
+metadata/_custom_type_script = "uid://bvl8qiojdoihh"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+text = "Ingredients"
+
+[node name="IngredientsInfo" type="LineEdit" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0 Items"
+alignment = 1
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+flat = true
+
+[node name="EditIngredientsButton" type="Button" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+icon = ExtResource("2_6p6t6")
+
+[node name="IngredientsWindow" type="Window" parent="VBoxContainer/FirstLine"]
+disable_3d = true
+oversampling_override = 1.0
+title = "Ingredients Manager"
+initial_position = 2
+size = Vector2i(134, 100)
+visible = false
+wrap_controls = true
+content_scale_mode = 1
+content_scale_aspect = 4
+script = ExtResource("3_rsbs8")
+
+[node name="Panel" type="Panel" parent="VBoxContainer/FirstLine/IngredientsWindow"]
+self_modulate = Color(0, 0, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_42t4w")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MainContainer" type="VBoxContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderContainer" type="MarginContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_bottom = 10
+
+[node name="NewItemButton" type="Button" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer/HeaderContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add New Item +"
+
+[node name="ArrayItems" type="VBoxContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/FirstLine/IngredientsWindow/Panel/MarginContainer/MainContainer/CenterContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+text = "Recipe type"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 3
+popup/item_0/text = "Crafting"
+popup/item_0/id = 0
+popup/item_1/text = "Smithing"
+popup/item_1/id = 1
+popup/item_2/text = "Alchemy"
+popup/item_2/id = 2
+
+[node name="ThirdLine" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+text = "Result"
+
+[node name="EntityPicker" parent="VBoxContainer/ThirdLine" instance=ExtResource("2_14vw1")]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+
+[connection signal="close_requested" from="VBoxContainer/FirstLine/IngredientsWindow" to="VBoxContainer/FirstLine/IngredientsWindow" method="_on_close_requested"]
