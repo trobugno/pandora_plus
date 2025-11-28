@@ -8,7 +8,7 @@ const SETTINGS = {
 }
 
 func _init() -> void:
-	super("status_effect", SETTINGS, null, "res://addons/pandora_plus/assets/icons/icon_particle.png")
+	super("status_effect_property", SETTINGS, null, "res://addons/pandora_plus/assets/icons/icon_particle.png")
 
 func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 	if variant is Dictionary:

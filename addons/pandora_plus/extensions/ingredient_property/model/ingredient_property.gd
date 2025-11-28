@@ -20,11 +20,20 @@ func get_quantity() -> int:
 	return _quantity
 
 func load_data(data: Dictionary) -> void:
-	_reference = PandoraReference.new(data["item"]["_entity_id"], data["item"]["_type"])
-	_quantity = data["quantity"]
+	if data.has("item"):
+		_reference = PandoraReference.new(data["item"]["_entity_id"], data["item"]["_type"])
+	if data.has("quantity"):
+		_quantity = data["quantity"]
 
-func save_data() -> Dictionary:
-	return { "item": _reference.save_data(), "quantity": _quantity }
+func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
+	var result := {}
+	var item_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Item")[0] as Dictionary
+	var quantity_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Quantity")[0] as Dictionary
+	if item_field_settings["enabled"]:
+		result["item"] = _reference.save_data()
+	if quantity_field_settings["enabled"]:
+		result["quantity"] = _quantity
+	return result
 
 func _to_string() -> String:
 	return "<PPIngredient " + str(get_item_entity()) + ">"

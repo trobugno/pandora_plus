@@ -1,12 +1,12 @@
 [gd_scene load_steps=2 format=3 uid="uid://bb4b1islgbvyo"]
 
-[ext_resource type="Script" uid="uid://b56wkvge5sj87" path="res://addons/pandora_plus/extensions/status_effect_property/ui_component/status_effect.gd" id="1_wd1u5"]
+[ext_resource type="Script" uid="uid://b56wkvge5sj87" path="res://addons/pandora_plus/extensions/status_effect_property/ui_component/status_effect_property.gd" id="1_wd1u5"]
 
 [node name="StatusEffect" type="MarginContainer"]
 offset_right = 600.0
 offset_bottom = 120.0
 script = ExtResource("1_wd1u5")
-type = "status_effect"
+type = "status_effect_property"
 metadata/_custom_type_script = "uid://bvl8qiojdoihh"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

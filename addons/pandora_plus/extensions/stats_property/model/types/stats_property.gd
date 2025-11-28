@@ -1,7 +1,7 @@
 extends PandoraPropertyType
 
 func _init() -> void:
-	super("stats", {}, null, "res://addons/pandora_plus/assets/icons/icon_star.png")
+	super("stats_property", {}, null, "res://addons/pandora_plus/assets/icons/icon_star.png")
 
 func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 	if variant is Dictionary:

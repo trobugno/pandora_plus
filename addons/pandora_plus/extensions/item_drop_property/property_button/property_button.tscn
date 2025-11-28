@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_77l8n"]
 [ext_resource type="Texture2D" uid="uid://c7nf7vyjp1un2" path="res://addons/pandora_plus/assets/icons/icon_money_bag.png" id="1_edvx2"]
-[ext_resource type="PackedScene" uid="uid://d01sxjojnjgmr" path="res://addons/pandora_plus/extensions/item_drop_property/ui_component/item_drop.tscn" id="2_jfkkn"]
+[ext_resource type="PackedScene" uid="uid://d01sxjojnjgmr" path="res://addons/pandora_plus/extensions/item_drop_property/ui_component/item_drop_property.tscn" id="2_jfkkn"]
 
 [node name="AddItemDropPropertyButton" type="Button"]
 tooltip_text = "Item drop property"

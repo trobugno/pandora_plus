@@ -59,8 +59,8 @@ func load_data(data: Dictionary) -> void:
 		ingredients.append(ingredient)
 	_ingredients = ingredients
 
-func save_data() -> Dictionary:
-	var ingredients = _ingredients.map(func(ingredient: PPIngredient): return ingredient.save_data())
+func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: Array[Dictionary]) -> Dictionary:
+	var ingredients = _ingredients.map(func(ingredient: PPIngredient): return ingredient.save_data(ingredient_fields_settings))
 	return { "ingredients": ingredients, "result": _result.save_data(), "crafting_time": _crafting_time, "recipe_type": _recipe_type }
 
 func _to_string() -> String:

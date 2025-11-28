@@ -1,0 +1,264 @@
+{
+	"configuration": {
+		"icon": "res://addons/pandora/icons/pandora-icon.svg",
+		"name": "Pandora+"
+	},
+	"properties": [
+		{
+			"dependencies": [],
+			"description": "Defines a single ingredient entry that can be used by recipes and item crafting.",
+			"dir_name": "ingredient_property",
+			"enabled": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Item",
+					"settings": {
+						"category_only": true,
+						"entity_id": "1"
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			],
+			"name": "PPIngredient",
+			"show_on_top": false
+		},
+		{
+			"dependencies": [
+				{
+					"name": "PPIngredient",
+					"type": "PROPERTY"
+				}
+			],
+			"description": "Represents a full recipe composed of multiple ingredients. You can use for any type of creation.",
+			"dir_name": "recipe_property",
+			"enabled": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Ingredients",
+					"settings": {
+						"type": "float"
+					},
+					"type": "ARRAY"
+				},
+				{
+					"enabled": true,
+					"name": "Recipe types",
+					"settings": {
+						"options": [
+							"Crafting",
+							"Smithing",
+							"Alchemy"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Result",
+					"settings": {
+						"category_only": true,
+						"entity_id": "4"
+					},
+					"type": "REFERENCE"
+				}
+			],
+			"name": "PPRecipe",
+			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Defines a potential loot drop for an entity.",
+			"dir_name": "item_drop_property",
+			"enabled": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Item",
+					"settings": {
+						"category_only": true,
+						"entity_id": "4"
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Min Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Max Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			],
+			"name": "PPItemDrop",
+			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Defines the main attributes of an entity (mob, player, NPC, etc.).",
+			"dir_name": "stats_property",
+			"enabled": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Health",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Mana",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Attack",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Defense",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Crit.Rate",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Crit.Damage",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Att.Speed",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Mov.Speed",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			],
+			"name": "PPStats",
+			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Describes temporary effects that can alter entity states (e.g. poison, burn, bleed).",
+			"dir_name": "status_effect_property",
+			"enabled": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Status ID",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Status Key",
+					"settings": {
+						"options": [
+							"POISONING",
+							"BLEEDING",
+							"BURNING"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Status Description",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Status Duration",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Ticks",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Damage per Tick",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			],
+			"name": "PPStatusEffect",
+			"show_on_top": true
+		}
+	]
+}

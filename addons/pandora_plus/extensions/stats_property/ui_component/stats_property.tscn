@@ -1,11 +1,11 @@
 [gd_scene load_steps=2 format=3 uid="uid://bdbnrlqgarhiu"]
 
-[ext_resource type="Script" uid="uid://cchr2hjiedrpk" path="res://addons/pandora_plus/extensions/stats_property/ui_component/stats.gd" id="1_w8khe"]
+[ext_resource type="Script" uid="uid://cchr2hjiedrpk" path="res://addons/pandora_plus/extensions/stats_property/ui_component/stats_property.gd" id="1_w8khe"]
 
 [node name="Stats" type="MarginContainer"]
 custom_minimum_size = Vector2(500, 0)
 script = ExtResource("1_w8khe")
-type = "stats"
+type = "stats_property"
 metadata/_custom_type_script = "uid://bvl8qiojdoihh"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]

@@ -1,19 +1,19 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjkhsmf86uhk0"]
 
-[ext_resource type="Script" uid="uid://dkjefstpnqwdp" path="res://addons/pandora_plus/extensions/ingredient_property/ui_component/ingredient.gd" id="1_d88bq"]
-[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_03o57"]
+[ext_resource type="Script" uid="uid://dkjefstpnqwdp" path="res://addons/pandora_plus/extensions/ingredient_property/ui_component/ingredient_property.gd" id="1_m5ar8"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_o2qi8"]
 
 [node name="Ingredient" type="MarginContainer"]
 offset_right = 300.0
 offset_bottom = 31.0
-script = ExtResource("1_d88bq")
-type = "ingredient"
+script = ExtResource("1_m5ar8")
+type = "ingredient_property"
 metadata/_custom_type_script = "uid://bvl8qiojdoihh"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="EntityPicker" parent="HBoxContainer" instance=ExtResource("2_03o57")]
+[node name="EntityPicker" parent="HBoxContainer" instance=ExtResource("2_o2qi8")]
 layout_mode = 2
 size_flags_horizontal = 3
 

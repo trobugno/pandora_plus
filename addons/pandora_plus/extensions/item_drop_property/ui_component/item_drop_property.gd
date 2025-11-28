@@ -10,6 +10,7 @@ var current_property : PPItemDrop = PPItemDrop.new(null, 0, 0)
 
 func _ready() -> void:
 	refresh()
+	Pandora.update_fields_settings.connect(_on_update_fields_settings)
 	
 	if _property != null:
 		_property.setting_changed.connect(_setting_changed)
@@ -56,4 +57,8 @@ func refresh() -> void:
 
 func _setting_changed(key:String) -> void:
 	if key == ItemDropType.SETTING_MIN_VALUE || key == ItemDropType.SETTING_MAX_VALUE || key == ItemDropType.SETTING_CATEGORY_FILTER:
+		refresh()
+
+func _on_update_fields_settings(property_type: String) -> void:
+	if property_type == type:
 		refresh()

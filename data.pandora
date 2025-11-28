@@ -68,7 +68,7 @@
 					"_entity_id": "1",
 					"_type": 1
 				},
-				"_id": "9",
+				"_id": "12.0",
 				"_name": "rarity",
 				"_setting_overrides": {
 					"Category Filter": "1"
@@ -79,7 +79,7 @@
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 10.0
+			"default": 12.0
 		}
 	}
 }

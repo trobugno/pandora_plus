@@ -2,7 +2,6 @@
 extends Window
 
 const ArrayItem = preload("res://addons/pandora/ui/components/array_editor/array_item.tscn")
-const IngredientType = preload("res://addons/pandora_plus/extensions/ingredient_property/model/types/ingredient_property.gd")
 const PropertyBarScene = "res://addons/pandora/ui/components/property_bar/property_bar.tscn"
 
 signal item_added(item: Variant)
@@ -29,25 +28,14 @@ func close():
 	_clear()
 
 func _add_new_item():
-	var scene = property_bar.get_scene_by_type("ingredient")
+	var scene = property_bar.get_scene_by_type("string")
 	var control = scene.instantiate() as PandoraPropertyControl
-	var item_property = PandoraProperty.new("", "array_item", "ingredient")
+	var item_property = PandoraProperty.new("", "array_item", "string")
 	_items.append(item_property.get_default_value())
 	_add_property_control(control, item_property, _items.size() - 1)
 	item_added.emit(_items[_items.size() - 1])
 
-func _clear():
-	_items.clear()
-	for child in items_container.get_children():
-		child.queue_free()
-	items_container.get_children().clear()
-
 func _add_property_control(control: PandoraPropertyControl, item_property: PandoraProperty, idx: int):
-	var all_categories = Pandora.get_all_categories()
-	var item_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == "Items")
-	if item_categories:
-		item_property.set_setting_override(IngredientType.SETTING_CATEGORY_FILTER, (item_categories[0] as PandoraCategory).get_entity_id())
-	
 	var item = ArrayItem.instantiate()
 	control.init(item_property)
 	control.property_value_changed.connect(func(value: Variant): item_updated.emit(idx, value))
@@ -57,6 +45,12 @@ func _add_property_control(control: PandoraPropertyControl, item_property: Pando
 	item.init(item_property, control, Pandora._entity_backend)
 	items_container.add_child(item)
 
+func _clear():
+	_items.clear()
+	for child in items_container.get_children():
+		child.queue_free()
+	items_container.get_children().clear()
+
 func _remove_empty_items():
 	for index in range(_items.size()):
 		if _items[index] == null:
@@ -64,19 +58,14 @@ func _remove_empty_items():
 			item_removed.emit(_items[index])
 
 func _load_items():
-	var scene = property_bar.get_scene_by_type("ingredient")
 	for i in range(_items.size()):
-		var control = scene.instantiate() as PandoraPropertyControl
-		var item_property = PandoraProperty.new("", "array_item", "ingredient")
+		var control = (property_bar.get_scene_by_type("string").instantiate() as PandoraPropertyControl)
+		var item_property = PandoraProperty.new("", "array_item", "string")
 		var value = _items[i]
-		if value is Dictionary:
-			value = Pandora.get_entity(value["_entity_id"])
-		elif value is PandoraReference:
-			value = value.get_entity()
 		item_property.set_default_value(value)
 		_add_property_control(control, item_property, i)
 
-func open(original_ingredients: Array[PPIngredient]):
+func open(original_items: Array):
 	popup_centered_clamped(Vector2i(800, 1000), 0.5)
 	move_to_foreground()
 	grab_focus()
@@ -85,7 +74,7 @@ func open(original_ingredients: Array[PPIngredient]):
 	property_bar = property_bar_scene.instantiate()
 	property_bar._ready()
 	
-	_items = original_ingredients.duplicate()
+	_items = original_items.duplicate()
 	_load_items()
 
 func _on_close_requested():

@@ -16,6 +16,7 @@ var current_property : PPStats = PPStats.new(0, 0, 0, 0, 0, 0, 0, 0)
 
 func _ready() -> void:
 	refresh()
+	Pandora.update_fields_settings.connect(_on_update_fields_settings)
 	
 	for child in get_children():
 		if child is SpinBox:
@@ -82,3 +83,7 @@ func refresh() -> void:
 
 func _setting_changed(key:String) -> void:
 	refresh()
+
+func _on_update_fields_settings(property_type: String) -> void:
+	if property_type == type:
+		refresh()

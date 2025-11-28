@@ -9,6 +9,7 @@ var current_property : PPIngredient = PPIngredient.new(null, 0)
 
 func _ready() -> void:
 	refresh()
+	Pandora.update_fields_settings.connect(_on_update_fields_settings)
 	
 	if _property != null:
 		_property.setting_changed.connect(_setting_changed)
@@ -30,10 +31,20 @@ func _ready() -> void:
 			property_value_changed.emit(current_property))
 
 func refresh() -> void:
+	if _fields_settings:
+		for field_settings in _fields_settings:
+			if field_settings["name"] == "Item":
+				entity_picker.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Quantity":
+				spin_box.visible = field_settings["enabled"]
+	
 	if _property != null:
-		entity_picker.set_filter(_property.get_setting(IngredientType.SETTING_CATEGORY_FILTER) as String)
-		spin_box.min_value = _property.get_setting(IngredientType.SETTING_MIN_VALUE) as int
-		spin_box.max_value = _property.get_setting(IngredientType.SETTING_MAX_VALUE) as int
+		if _property.get_setting(IngredientType.SETTING_CATEGORY_FILTER):
+			entity_picker.set_filter(_property.get_setting(IngredientType.SETTING_CATEGORY_FILTER) as String)
+		if _property.get_setting(IngredientType.SETTING_MIN_VALUE):
+			spin_box.min_value = _property.get_setting(IngredientType.SETTING_MIN_VALUE) as int
+		if _property.get_setting(IngredientType.SETTING_MAX_VALUE):
+			spin_box.max_value = _property.get_setting(IngredientType.SETTING_MAX_VALUE) as int
 		if _property.get_default_value() != null:
 			current_property = _property.get_default_value() as PPIngredient
 			var entity = current_property.get_item_entity()
@@ -44,4 +55,8 @@ func refresh() -> void:
 
 func _setting_changed(key:String) -> void:
 	if key == IngredientType.SETTING_MIN_VALUE || key == IngredientType.SETTING_MAX_VALUE || key == IngredientType.SETTING_CATEGORY_FILTER:
+		refresh()
+
+func _on_update_fields_settings(property_type: String) -> void:
+	if property_type == type:
 		refresh()

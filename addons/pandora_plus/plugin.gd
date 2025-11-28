@@ -21,7 +21,7 @@ func _enable_plugin() -> void:
 	
 	# Register Utils Autoloaders
 	add_autoload_singleton("PPStatsUtils", "res://addons/pandora_plus/utils/PPStatsUtils.gd")
-	add_autoload_singleton("PPStatsUtils", "res://addons/pandora_plus/utils/PPRecipeUtils.gd")
+	add_autoload_singleton("PPRecipeUtils", "res://addons/pandora_plus/utils/PPRecipeUtils.gd")
 
 func _disable_plugin() -> void:
 	var extensions_dir : Array = []

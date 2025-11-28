@@ -10,7 +10,7 @@ const SETTINGS = {
 }
 
 func _init() -> void:
-	super("item_drop", SETTINGS, null, "res://addons/pandora_plus/assets/icons/icon_money_bag.png")
+	super("item_drop_property", SETTINGS, null, "res://addons/pandora_plus/assets/icons/icon_money_bag.png")
 
 func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 	if variant is Dictionary:

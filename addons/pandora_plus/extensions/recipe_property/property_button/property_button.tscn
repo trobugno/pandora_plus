@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://64aor2ka0thv" path="res://addons/pandora_plus/assets/icons/icon_parchment.png" id="1_ybp13"]
 [ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="2_2h03n"]
-[ext_resource type="PackedScene" uid="uid://80g6ht0fvlc1" path="res://addons/pandora_plus/extensions/recipe_property/ui_component/recipe.tscn" id="3_dnvjn"]
+[ext_resource type="PackedScene" uid="uid://80g6ht0fvlc1" path="res://addons/pandora_plus/extensions/recipe_property/ui_component/recipe_property.tscn" id="3_dnvjn"]
 
 [node name="AddRecipePropertyButton" type="Button"]
 tooltip_text = "Recipe property"
