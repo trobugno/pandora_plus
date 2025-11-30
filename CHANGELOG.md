@@ -5,11 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [0.2.0-alpha] - 2025-xx-xx
+## [0.2.0-alpha] - 2025-11-30
 ### What's new?
 - Created **configuration.json** following the new **Custom Extensions Settings** introduced by me in Pandora addon.
 - Renamed all property types adding the suffix **_property** to aligned them with new settings.
 - Done a fixes to autoloads when the plugin is enabled.
+
+### Notes
+- This build uses an unapproved version of the Pandora addon. To view the PR I created, follow the [link](https://github.com/bitbrain/pandora/pull/230)
 
 ---
 ## [0.1.0-alpha] - 2025-11-10
