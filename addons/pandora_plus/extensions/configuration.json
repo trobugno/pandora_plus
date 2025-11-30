@@ -47,7 +47,7 @@
 					"enabled": true,
 					"name": "Ingredients",
 					"settings": {
-						"type": "float"
+						"type": "ingredient_property"
 					},
 					"type": "ARRAY"
 				},
@@ -71,6 +71,15 @@
 						"entity_id": "4"
 					},
 					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Crafting Time",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
 				}
 			],
 			"name": "PPRecipe",

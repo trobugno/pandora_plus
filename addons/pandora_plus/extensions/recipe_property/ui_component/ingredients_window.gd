@@ -29,9 +29,9 @@ func close():
 	_clear()
 
 func _add_new_item():
-	var scene = property_bar.get_scene_by_type("ingredient")
+	var scene = property_bar.get_scene_by_type("ingredient_property")
 	var control = scene.instantiate() as PandoraPropertyControl
-	var item_property = PandoraProperty.new("", "array_item", "ingredient")
+	var item_property = PandoraProperty.new("", "array_item", "ingredient_property")
 	_items.append(item_property.get_default_value())
 	_add_property_control(control, item_property, _items.size() - 1)
 	item_added.emit(_items[_items.size() - 1])
@@ -64,10 +64,10 @@ func _remove_empty_items():
 			item_removed.emit(_items[index])
 
 func _load_items():
-	var scene = property_bar.get_scene_by_type("ingredient")
+	var scene = property_bar.get_scene_by_type("ingredient_property")
 	for i in range(_items.size()):
 		var control = scene.instantiate() as PandoraPropertyControl
-		var item_property = PandoraProperty.new("", "array_item", "ingredient")
+		var item_property = PandoraProperty.new("", "array_item", "ingredient_property")
 		var value = _items[i]
 		if value is Dictionary:
 			value = Pandora.get_entity(value["_entity_id"])

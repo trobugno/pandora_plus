@@ -13,6 +13,13 @@ const StatusEffectType = preload("uid://6bu42fycocwg")
 @onready var damage_per_tick: SpinBox = $VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/DamagePerTick/SpinBox
 @onready var damage_in_percentage: CheckButton = $VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/DamageInPercentage
 
+@onready var status_id_container: VBoxContainer = $VBoxContainer/FirstLine/StatusID
+@onready var status_key_container: VBoxContainer = $VBoxContainer/FirstLine/StatusKey
+@onready var status_description_container: VBoxContainer = $VBoxContainer/SecondLine/StatusDescription
+@onready var status_duration_container: VBoxContainer = $VBoxContainer/SecondLine/StatusDuration
+@onready var ticks_container: VBoxContainer = $VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/Ticks
+@onready var damage_per_tick_container: VBoxContainer = $VBoxContainer/DamageContainer/MarginContainer/HBoxContainer/DamagePerTick
+
 var current_property : PPStatusEffect = PPStatusEffect.new("", 0, "", 0, false, 0, 0)
 
 func _ready() -> void:
@@ -79,9 +86,40 @@ func _ready() -> void:
 			property_value_changed.emit(current_property))
 
 func refresh() -> void:
+	if _fields_settings:
+		for field_settings in _fields_settings:
+			if field_settings["name"] == "Status ID":
+				status_id_container.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Status Key":
+				status_key_container.visible = field_settings["enabled"]
+				
+				status_key.clear()
+				for option_value in field_settings["settings"]["options"]:
+					status_key.add_item(option_value)
+			elif field_settings["name"] == "Status Description":
+				status_description_container.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Status Duration":
+				status_duration_container.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Ticks":
+				ticks_container.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Damage per Tick":
+				damage_per_tick_container.visible = field_settings["enabled"]
+				damage_in_percentage.visible = field_settings["enabled"]
+	
 	if _property != null:
-		status_duration.min_value = _property.get_setting(StatusEffectType.SETTING_MIN_DURATION) as float
-		status_duration.max_value = _property.get_setting(StatusEffectType.SETTING_MAX_DURATION) as float
+		if _property.get_setting(StatusEffectType.SETTING_MIN_DURATION):
+			status_duration.min_value = _property.get_setting(StatusEffectType.SETTING_MIN_DURATION) as float
+		if _property.get_setting(StatusEffectType.SETTING_MAX_DURATION):
+			status_duration.max_value = _property.get_setting(StatusEffectType.SETTING_MAX_DURATION) as float
+		if _property.get_setting(StatusEffectType.SETTING_MIN_DAMAGE_PER_TICKS):
+			damage_per_tick.min_value = _property.get_setting(StatusEffectType.SETTING_MIN_DAMAGE_PER_TICKS) as float
+		if _property.get_setting(StatusEffectType.SETTING_MAX_DAMAGE_PER_TICKS):
+			damage_per_tick.max_value = _property.get_setting(StatusEffectType.SETTING_MAX_DAMAGE_PER_TICKS) as float
+		if _property.get_setting(StatusEffectType.SETTING_MIN_TICKS):
+			ticks.min_value = _property.get_setting(StatusEffectType.SETTING_MIN_TICKS) as int
+		if _property.get_setting(StatusEffectType.SETTING_MAX_TICKS):
+			ticks.max_value = _property.get_setting(StatusEffectType.SETTING_MAX_TICKS) as int
+		
 		if _property.get_default_value() != null:
 			current_property = _property.get_default_value() as PPStatusEffect
 			status_duration.value = current_property._duration
@@ -96,7 +134,9 @@ func refresh() -> void:
 			status_description.caret_column = current_property._description.length()
 
 func _setting_changed(key:String) -> void:
-	if key == StatusEffectType.SETTING_MIN_DURATION || key == StatusEffectType.SETTING_MAX_DURATION:
+	if key == StatusEffectType.SETTING_MIN_DURATION or key == StatusEffectType.SETTING_MAX_DURATION or \
+		key == StatusEffectType.SETTING_MAX_DAMAGE_PER_TICKS or key == StatusEffectType.SETTING_MIN_DAMAGE_PER_TICKS or \
+		key == StatusEffectType.SETTING_MAX_TICKS or key == StatusEffectType.SETTING_MIN_TICKS:
 		refresh()
 
 func _on_update_fields_settings(property_type: String) -> void:

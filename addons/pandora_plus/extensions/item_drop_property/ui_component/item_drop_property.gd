@@ -40,12 +40,24 @@ func _ready() -> void:
 			property_value_changed.emit(current_property))
 
 func refresh() -> void:
+	if _fields_settings:
+		for field_settings in _fields_settings:
+			if field_settings["name"] == "Item":
+				entity_picker.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Min Quantity":
+				min_quantity.visible = field_settings["enabled"]
+			elif field_settings["name"] == "Max Quantity":
+				max_quantity.visible = field_settings["enabled"]
+	
 	if _property != null:
-		entity_picker.set_filter(_property.get_setting(ItemDropType.SETTING_CATEGORY_FILTER) as String)
-		min_quantity.min_value = _property.get_setting(ItemDropType.SETTING_MIN_VALUE) as int
-		max_quantity.min_value = _property.get_setting(ItemDropType.SETTING_MIN_VALUE) as int
-		min_quantity.max_value = _property.get_setting(ItemDropType.SETTING_MAX_VALUE) as int
-		max_quantity.max_value = _property.get_setting(ItemDropType.SETTING_MAX_VALUE) as int
+		if _property.get_setting(ItemDropType.SETTING_CATEGORY_FILTER):
+			entity_picker.set_filter(_property.get_setting(ItemDropType.SETTING_CATEGORY_FILTER) as String)
+		if _property.get_setting(ItemDropType.SETTING_MIN_VALUE):
+			min_quantity.min_value = _property.get_setting(ItemDropType.SETTING_MIN_VALUE) as int
+			max_quantity.min_value = _property.get_setting(ItemDropType.SETTING_MIN_VALUE) as int
+		if _property.get_setting(ItemDropType.SETTING_MAX_VALUE):
+			min_quantity.max_value = _property.get_setting(ItemDropType.SETTING_MAX_VALUE) as int
+			max_quantity.max_value = _property.get_setting(ItemDropType.SETTING_MAX_VALUE) as int
 		if _property.get_default_value() != null:
 			current_property = _property.get_default_value() as PPItemDrop
 			var entity = current_property.get_item_entity()

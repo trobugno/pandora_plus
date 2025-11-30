@@ -28,11 +28,24 @@ func get_max_quantity() -> int:
 	return _max_quantity
 
 func load_data(data: Dictionary) -> void:
-	_reference = PandoraReference.new(data["item"]["_entity_id"], data["item"]["_type"])
-	_min_quantity = data["min_quantity"]
-	_max_quantity = data["max_quantity"]
+	if data.has("item"):
+		_reference = PandoraReference.new(data["item"]["_entity_id"], data["item"]["_type"])
+	if data.has("min_quantity"):
+		_min_quantity = data["min_quantity"]
+	if data.has("max_quantity"):
+		_max_quantity = data["max_quantity"]
 
-func save_data() -> Dictionary:
+func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
+	var result := {}
+	var item_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Item")[0] as Dictionary
+	var min_quantity_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Min Quantity")[0] as Dictionary
+	var max_quantity_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Max Quantity")[0] as Dictionary
+	if item_field_settings["enabled"]:
+		result["item"] = _reference.save_data()
+	if max_quantity_field_settings["enabled"]:
+		result["max_quantity"] = _max_quantity
+	if min_quantity_field_settings["enabled"]:
+		result["min_quantity"] = _min_quantity
 	return { "item": _reference.save_data(), "min_quantity": _min_quantity, "max_quantity": _max_quantity }
 
 func _to_string() -> String:
