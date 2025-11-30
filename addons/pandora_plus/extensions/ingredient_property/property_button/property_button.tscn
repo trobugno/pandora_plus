@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_n7h7y"]
 [ext_resource type="Texture2D" uid="uid://cdkrgy6q8mlhe" path="res://addons/pandora_plus/assets/icons/icon_crate.png" id="1_yoneg"]
-[ext_resource type="PackedScene" uid="uid://bjkhsmf86uhk0" path="res://addons/pandora_plus/extensions/ingredient_property/ui_component/ingredient.tscn" id="2_iv3i4"]
+[ext_resource type="PackedScene" uid="uid://bjkhsmf86uhk0" path="res://addons/pandora_plus/extensions/ingredient_property/ui_component/ingredient_property.tscn" id="2_iv3i4"]
 
 [node name="AddIngredientPropertyButton" type="Button"]
 tooltip_text = "Ingredient property"

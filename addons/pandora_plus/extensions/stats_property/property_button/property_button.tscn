@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_6koll"]
 [ext_resource type="Texture2D" uid="uid://3hh2jvtjcos8" path="res://addons/pandora_plus/assets/icons/icon_star.png" id="1_fvh5t"]
-[ext_resource type="PackedScene" uid="uid://bdbnrlqgarhiu" path="res://addons/pandora_plus/extensions/stats_property/ui_component/stats.tscn" id="3_wd78s"]
+[ext_resource type="PackedScene" uid="uid://bdbnrlqgarhiu" path="res://addons/pandora_plus/extensions/stats_property/ui_component/stats_property.tscn" id="3_wd78s"]
 
 [node name="AddStatsPropertyButton" type="Button"]
 tooltip_text = "Stats property"

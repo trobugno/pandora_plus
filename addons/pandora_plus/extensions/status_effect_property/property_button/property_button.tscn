@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_4hkyw"]
 [ext_resource type="Texture2D" uid="uid://cdt5gswcj8vtm" path="res://addons/pandora_plus/assets/icons/icon_particle.png" id="1_7bkra"]
-[ext_resource type="PackedScene" uid="uid://bb4b1islgbvyo" path="res://addons/pandora_plus/extensions/status_effect_property/ui_component/status_effect.tscn" id="3_3koen"]
+[ext_resource type="PackedScene" uid="uid://bb4b1islgbvyo" path="res://addons/pandora_plus/extensions/status_effect_property/ui_component/status_effect_property.tscn" id="3_3koen"]
 
 [node name="AddStatusEffectPropertyButton" type="Button"]
 tooltip_text = "Status effect property"

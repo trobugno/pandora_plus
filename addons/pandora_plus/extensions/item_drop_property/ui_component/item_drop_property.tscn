@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://d01sxjojnjgmr"]
+
+[ext_resource type="Script" uid="uid://dvju37aepwpro" path="res://addons/pandora_plus/extensions/item_drop_property/ui_component/item_drop_property.gd" id="1_rl0vj"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_rl0vj"]
+
+[node name="ItemDrop" type="MarginContainer"]
+offset_right = 400.0
+script = ExtResource("1_rl0vj")
+type = "item_drop_property"
+metadata/_custom_type_script = "uid://bvl8qiojdoihh"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="EntityPicker" parent="HBoxContainer" instance=ExtResource("2_rl0vj")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MinQuantity" type="SpinBox" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="MaxQuantity" type="SpinBox" parent="HBoxContainer"]
+layout_mode = 2
