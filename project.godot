@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Pandora+"
+config/version="0.3.0"
 config/tags=PackedStringArray("addon", "data", "godot4", "rpg")
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/image="uid://lg3gxxm6wy8m"
