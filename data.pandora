@@ -3,6 +3,7 @@
 		"_categories": [
 			{
 				"_category_id": "",
+				"_generate_ids": true,
 				"_icon_color": "ffffff00",
 				"_id": "1",
 				"_index": 0,
@@ -11,6 +12,7 @@
 			},
 			{
 				"_category_id": "",
+				"_generate_ids": true,
 				"_icon_color": "ffffff00",
 				"_id": "4",
 				"_index": 0,

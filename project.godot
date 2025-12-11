@@ -20,12 +20,20 @@ config/icon="uid://lg3gxxm6wy8m"
 [autoload]
 
 Pandora="*res://addons/pandora/api.gd"
-PPStatsUtils="*res://addons/pandora_plus/utils/PPStatsUtils.gd"
-PPRecipeUtils="*res://addons/pandora_plus/utils/PPRecipeUtils.gd"
+PPStatsUtils="*res://addons/pandora_plus/autoloads/PPCombatCalculator.gd"
+PPCombatCalculator="*res://addons/pandora_plus/autoloads/PPCombatCalculator.gd"
+PPInventoryUtils="*res://addons/pandora_plus/autoloads/PPInventoryUtils.gd"
+PPRecipeUtils="*res://addons/pandora_plus/autoloads/PPRecipeUtils.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/pandora/plugin.cfg", "res://addons/pandora_plus/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/pandora/plugin.cfg", "res://addons/pandora_plus/plugin.cfg")
+
+[gdunit4]
+
+settings/common/update_notification_enabled=false
+settings/test/test_discovery=true
+ui/inspector/tree_sort_mode=1
 
 [pandora]
 
