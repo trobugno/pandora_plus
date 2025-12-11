@@ -59,7 +59,7 @@ func add_item(item: PPItemEntity, quantity: int = 1, new_slot: bool = false) -> 
 func remove_item(item: PPItemEntity, quantity: int = 1, source: Array[PPInventorySlot] = all_items) -> void:
 	for index in source.size():
 		if source[index]:
-			if source[index].item.get_item_name() == item.get_item_name():
+			if source[index].item.get_entity_id() == item.get_entity_id():
 				if source[index].quantity > quantity:
 					source[index].quantity -= quantity
 					item_removed.emit(item, quantity)

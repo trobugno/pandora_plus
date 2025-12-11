@@ -50,7 +50,6 @@ func _ready() -> void:
 	if not rarity_categories:
 		rarity_category = Pandora.create_category(RARITY_NAME)
 		rarity_category.set_script_path("res://addons/pandora_plus/entities/rarity_entity.gd")
-		rarity_category.set_generate_ids(true)
 		Pandora.create_property(rarity_category, "name", "String")
 		Pandora.create_property(rarity_category, "percentage", "float")
 		Pandora.save_data()
@@ -60,15 +59,12 @@ func _ready() -> void:
 			Pandora.create_property(rarity_category, "name", "String")
 		if not rarity_category.has_entity_property("percentage"):
 			Pandora.create_property(rarity_category, "percentage", "float")
-		if not rarity_category.is_generate_ids():
-			rarity_category.set_generate_ids(true)
 		Pandora.save_data()
 	
 	# Create or update Items categories
 	if not item_categories:
 		var item_category = Pandora.create_category(ITEMS_NAME)
 		item_category.set_script_path("res://addons/pandora_plus/entities/item_entity.gd")
-		item_category.set_generate_ids(true)
 		Pandora.create_property(item_category, "name", "String")
 		Pandora.create_property(item_category, "description", "String")
 		Pandora.create_property(item_category, "stackable", "bool")
@@ -91,6 +87,4 @@ func _ready() -> void:
 			var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
 			item_category.get_entity_property("rarity").set_default_value(rarity_category)
 			rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
-		if not item_category.is_generate_ids():
-			item_category.set_generate_ids(true)
 		Pandora.save_data()

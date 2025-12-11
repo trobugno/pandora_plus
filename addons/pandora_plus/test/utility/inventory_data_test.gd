@@ -51,9 +51,6 @@ func before_test() -> void:
 	inventory.add_item(test_skull, 2)
 	inventory.add_item(test_master_sword, 1)
 
-func after() -> void:
-	Pandora.regenerate_all_ids()
-
 func after_test() -> void:
 	var rarities_category := Pandora.get_category(PandoraCategories.RARITY)
 	for entity_name in ["GDUNIT_COMMON", "GDUNIT_RARE", "GDUNIT_EPIC"]:
