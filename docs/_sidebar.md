@@ -1,8 +1,8 @@
 - 🫟 Home
   - [🔸About Pandora+](/)
-  - [🔸Getting Started](/getting-started/setup.md)
   - [🔸Installation](/getting-started/install.md)
-  - [🔸Migration from v0.2](/getting-started/migration-from-v0.2.0-alpha.md)
+  - [🔸Getting Started](/getting-started/setup.md)
+  - [🔸Migration from v0.2.0](/getting-started/migration-from-v0.2.0-alpha.md)
 - ⚗️ Core Systems
   - [🔸Runtime Stats](/core-systems/runtime-stats.md)
   - [🔸Status Effects](/core-systems/status-effects.md)

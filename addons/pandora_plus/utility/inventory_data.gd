@@ -9,19 +9,20 @@ signal item_removed(item: PPItemEntity, quantity: int)
 @export var equipments : Array[PPInventorySlot] = []
 @export var game_currency: int = 0
 
-var _max_items_in_inventory : int = -1
-var _max_items_in_equipments : int = -1
+var max_items_in_inventory : int = -1
+var max_items_in_equipments : int = -1
+var max_weight : float = -1
 
 func _init(pmi_inventory: int = -1, pmi_equipments: int = -1) -> void:
-	_max_items_in_inventory = pmi_inventory
-	_max_items_in_equipments = pmi_equipments
+	max_items_in_inventory = pmi_inventory
+	max_items_in_equipments = pmi_equipments
 	
-	if _max_items_in_inventory > -1:
-		for i in _max_items_in_inventory:
+	if max_items_in_inventory > -1:
+		for i in max_items_in_inventory:
 			all_items.append(null)
 	
-	if _max_items_in_equipments > -1:
-		for i in _max_items_in_equipments:
+	if max_items_in_equipments > -1:
+		for i in max_items_in_equipments:
 			equipments.append(null)
 
 func has_item(item: PPItemEntity, quantity : int = 1) -> bool:
@@ -45,13 +46,13 @@ func add_item(item: PPItemEntity, quantity: int = 1, new_slot: bool = false) -> 
 			var index = all_items.find(null)
 			if index > -1:
 				all_items[index] = inventory_slot
-			elif index == -1 and _max_items_in_inventory == -1:
+			elif index == -1 and max_items_in_inventory == -1:
 				all_items.append(inventory_slot)
 	else:
 		var index = all_items.find(null)
 		if index > -1:
 			all_items[index] = inventory_slot
-		elif index == -1 and _max_items_in_inventory == -1:
+		elif index == -1 and max_items_in_inventory == -1:
 			all_items.append(inventory_slot)
 	
 	item_added.emit(item, quantity)

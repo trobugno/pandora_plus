@@ -1,4 +1,3 @@
-
 # Pandora+ Documentation
 
 Welcome to the **Pandora+** documentation! This comprehensive guide will help you build production-ready RPG systems for Godot Engine.
