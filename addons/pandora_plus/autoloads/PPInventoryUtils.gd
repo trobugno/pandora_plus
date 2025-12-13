@@ -10,6 +10,10 @@ func sort_inventory(inventory: PPInventory, sort_by: String = "name") -> void:
 	match sort_by:
 		"name":
 			filled_slots.sort_custom(_sort_by_name)
+		"value":
+			filled_slots.sort_custom(_sort_by_value)
+		"weight":
+			filled_slots.sort_custom(_sort_by_weight)
 		"rarity":
 			filled_slots.sort_custom(_sort_by_rarity)
 		"quantity":
@@ -42,6 +46,24 @@ func compact_inventory(inventory: PPInventory) -> int:
 	
 	return compacted_count
 
+func calculate_total_value(inventory: PPInventory) -> float:
+	var total = 0
+	
+	for slot in inventory.all_items:
+		if not slot.item:
+			total += slot.item.get_value() * slot.quantity
+	
+	return total
+
+func calculate_total_weight(inventory: PPInventory) -> float:
+	var total = 0
+	
+	for slot in inventory.all_items:
+		if not slot.item:
+			total += slot.item.get_weight() * slot.quantity
+	
+	return total
+
 func transfer_items(from_inv: PPInventory, to_inv: PPInventory, item: PPItemEntity, quantity: int = 1) -> void:
 	if not from_inv.has_item(item, quantity):
 		push_error("Item not found")
@@ -66,6 +88,12 @@ func transfer_all(from_inv: PPInventory, to_inv: PPInventory) -> int:
 ## Sorting functions
 func _sort_by_name(a: PPInventorySlot, b: PPInventorySlot) -> bool:
 	return a.item.get_item_name() < b.item.get_item_name()
+
+func _sort_by_value(a: PPInventorySlot, b: PPInventorySlot) -> bool:
+	return a.item.get_value() > b.item.get_value()
+
+func _sort_by_weight(a: PPInventorySlot, b: PPInventorySlot) -> bool:
+	return a.item.get_weight() < b.item.get_weight()
 
 func _sort_by_quantity(a: PPInventorySlot, b: PPInventorySlot) -> bool:
 	return a.quantity > b.quantity

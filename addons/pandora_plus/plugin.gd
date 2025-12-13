@@ -69,6 +69,8 @@ func _ready() -> void:
 		Pandora.create_property(item_category, "description", "String")
 		Pandora.create_property(item_category, "stackable", "bool")
 		Pandora.create_property(item_category, "texture", "resource")
+		Pandora.create_property(item_category, "value", "float")
+		Pandora.create_property(item_category, "weight", "float")
 		var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
 		item_category.get_entity_property("rarity").set_default_value(rarity_category)
 		rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
@@ -83,6 +85,10 @@ func _ready() -> void:
 			Pandora.create_property(item_category, "stackable", "bool")
 		if not item_category.has_entity_property("texture"):
 			Pandora.create_property(item_category, "texture", "resource")
+		if not item_category.has_entity_property("value"):
+			Pandora.create_property(item_category, "value", "float")
+		if not item_category.has_entity_property("weight"):
+			Pandora.create_property(item_category, "weight", "float")
 		if not item_category.has_entity_property("rarity"):
 			var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
 			item_category.get_entity_property("rarity").set_default_value(rarity_category)
