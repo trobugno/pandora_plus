@@ -417,7 +417,7 @@ func _on_buff_removed(modifier: PPStatModifier):
 
 ## See Also
 
-- [PPStatModifier](PPStatModifier.md) - Modifier class
+- [PPStatModifier](../api/stat-modifier.md) - Modifier class
 - [Runtime Stats System](../core-systems/runtime-stats.md) - Core documentation
 - [PPCombatCalculator](../utilities/combat-calculator.md) - Using stats for damage
 

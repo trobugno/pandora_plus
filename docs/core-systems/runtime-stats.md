@@ -338,5 +338,5 @@ For detailed API documentation:
 ## 🎓 See Also
 
 - [PPCombatCalculator](../utilities/combat-calculator.md) - Use runtime stats for damage
-- [Inventory System](inventory.md) - Items that modify stats
+- [Inventory System](../core-systems/inventory-system.md) - Items that modify stats
 - [Getting Started](../getting-started/getting-started.md) - Basic tutorial

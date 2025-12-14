@@ -21,7 +21,7 @@ Modifiers support:
 
 ## Enums
 
-### `ModifierType`
+###### `ModifierType`
 
 Defines how the modifier affects the stat.
 
@@ -482,7 +482,7 @@ if buff.duration > 0:
 
 ## See Also
 
-- [PPRuntimeStats](PPRuntimeStats.md) - Runtime stats system
+- [PPRuntimeStats](../api/runtime-stats.md) - Runtime stats system
 - [Runtime Stats System](../core-systems/runtime-stats.md) - Core documentation
 - [PPCombatCalculator](../utilities/combat-calculator.md) - Using modifiers in combat
 
