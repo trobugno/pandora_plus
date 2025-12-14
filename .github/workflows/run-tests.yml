@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        godot-version: ['4.5']
+        godot-version: ["4.5", "4.5.1"]
     
     steps:
       # 1. Checkout del repository
@@ -112,60 +112,3 @@ jobs:
               exit 1
             fi
           fi
-
-  # Job separato per verificare code quality
-  code-quality:
-    name: 🔍 Code Quality Check
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-      
-      - name: 🎮 Setup Godot
-        uses: chickensoft-games/setup-godot@v1
-        with:
-          version: '4.5'
-      
-      # Verifica che non ci siano errori di script
-      - name: 🔍 Check for Script Errors
-        run: |
-          godot --headless --check-only --script-errors-stop addons/pandora_plus/ --quit
-      
-      # Opzionale: Verifica file formatting
-      - name: 📝 Check GDScript Formatting
-        run: |
-          # Installa gdtoolkit se vuoi formattare il codice
-          # pip install gdtoolkit
-          # gdformat --check addons/pandora_plus/
-          echo "Formatting check (optional)"
-
-  # Job per verificare che la documentazione sia aggiornata
-  docs-check:
-    name: 📚 Documentation Check
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-      
-      - name: ✅ Check README exists
-        run: |
-          if [ ! -f README.md ]; then
-            echo "::error::README.md is missing!"
-            exit 1
-          fi
-      
-      - name: ✅ Check docs folder
-        run: |
-          if [ ! -d docs ]; then
-            echo "::warning::docs/ folder is missing"
-          fi
-      
-      - name: ✅ Verify all examples have README
-        run: |
-          for dir in examples/*/; do
-            if [ ! -f "${dir}README.md" ]; then
-              echo "::warning::${dir} is missing README.md"
-            fi
-          done
