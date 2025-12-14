@@ -15,3 +15,9 @@ func is_stackable() -> bool:
 
 func get_rarity() -> PPRarityEntity:
 	return get_reference("rarity") as PPRarityEntity
+
+func get_value() -> float:
+	return get_float("value")
+
+func get_weight() -> float:
+	return get_float("weight")

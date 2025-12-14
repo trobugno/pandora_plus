@@ -3,6 +3,7 @@
 		"_categories": [
 			{
 				"_category_id": "",
+				"_generate_ids": true,
 				"_icon_color": "ffffff00",
 				"_id": "1",
 				"_index": 0,
@@ -11,6 +12,7 @@
 			},
 			{
 				"_category_id": "",
+				"_generate_ids": true,
 				"_icon_color": "ffffff00",
 				"_id": "4",
 				"_index": 0,
@@ -74,12 +76,26 @@
 					"Category Filter": "1"
 				},
 				"_type": "reference"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": 0.0,
+				"_id": "14.0",
+				"_name": "value",
+				"_type": "float"
+			},
+			{
+				"_category_id": "4",
+				"_default_value": 0.0,
+				"_id": "15.0",
+				"_name": "weight",
+				"_type": "float"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 13.0
+			"default": 15.0
 		}
 	}
 }

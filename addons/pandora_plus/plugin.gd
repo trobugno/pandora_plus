@@ -20,8 +20,9 @@ func _enable_plugin() -> void:
 			PandoraSettings.set_extensions_dir(extensions_dir)
 	
 	# Register Utils Autoloaders
-	add_autoload_singleton("PPStatsUtils", "res://addons/pandora_plus/utils/PPStatsUtils.gd")
-	add_autoload_singleton("PPRecipeUtils", "res://addons/pandora_plus/utils/PPRecipeUtils.gd")
+	add_autoload_singleton("PPCombatCalculator", "res://addons/pandora_plus/autoloads/PPCombatCalculator.gd")
+	add_autoload_singleton("PPInventoryUtils", "res://addons/pandora_plus/autoloads/PPInventoryUtils.gd")
+	add_autoload_singleton("PPRecipeUtils", "res://addons/pandora_plus/autoloads/PPRecipeUtils.gd")
 
 func _disable_plugin() -> void:
 	var extensions_dir : Array = []
@@ -31,10 +32,13 @@ func _disable_plugin() -> void:
 	PandoraSettings.set_extensions_dir(extensions_dir)
 	
 	# Unregister Utils Autoloaders
-	remove_autoload_singleton("PPStatsUtils")
+	remove_autoload_singleton("PPCombatCalculator")
+	remove_autoload_singleton("PPInventoryUtils")
 	remove_autoload_singleton("PPRecipeUtils")
 
 func _ready() -> void:
+	PandoraPlusSettings.initialize()
+	
 	const REFERENCE_TYPE = preload("uid://bs8pju4quv8m3")
 	
 	var all_categories = Pandora.get_all_categories()
@@ -65,6 +69,8 @@ func _ready() -> void:
 		Pandora.create_property(item_category, "description", "String")
 		Pandora.create_property(item_category, "stackable", "bool")
 		Pandora.create_property(item_category, "texture", "resource")
+		Pandora.create_property(item_category, "value", "float")
+		Pandora.create_property(item_category, "weight", "float")
 		var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
 		item_category.get_entity_property("rarity").set_default_value(rarity_category)
 		rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
@@ -79,6 +85,10 @@ func _ready() -> void:
 			Pandora.create_property(item_category, "stackable", "bool")
 		if not item_category.has_entity_property("texture"):
 			Pandora.create_property(item_category, "texture", "resource")
+		if not item_category.has_entity_property("value"):
+			Pandora.create_property(item_category, "value", "float")
+		if not item_category.has_entity_property("weight"):
+			Pandora.create_property(item_category, "weight", "float")
 		if not item_category.has_entity_property("rarity"):
 			var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
 			item_category.get_entity_property("rarity").set_default_value(rarity_category)

@@ -3,8 +3,12 @@ class_name PPIngredient extends RefCounted
 var _reference : PandoraReference
 var _quantity : int
 
-func _init(reference: PandoraReference, quantity: int) -> void:
-	_reference = reference
+func _init(reference: Variant, quantity: int) -> void:
+	assert(reference is PandoraReference or reference is PandoraEntity, "First parameter must be PandoraReference or PandoraEntity")
+	if reference is PandoraReference:
+		_reference = reference
+	elif reference is PandoraEntity:
+		_reference = PandoraReference.new(reference.get_entity_id(), PandoraReference.Type.ENTITY)
 	_quantity = quantity
 
 func set_entity(entity: PandoraEntity) -> void:
