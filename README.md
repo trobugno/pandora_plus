@@ -1,83 +1,94 @@
-## 🧩 Pandora+ — Advanced RPG Addon for Godot
-> Expand BitBrain’s **Pandora** with ready-to-use, RPG-oriented data properties for your Godot projects.
+# Pandora+ Documentation
 
-### ⚙️ Overview
-**Pandora+** is an official extension pack for [Pandora](https://bitbra.in/pandora/#/), adding a collection of custom data properties designed for **RPGs, adventure games, and narrative-driven projects**.
+Welcome to the **Pandora+** documentation! This comprehensive guide will help you build production-ready RPG systems for Godot Engine.
 
-Built on top of the new _custom extension system_ (introduced via my [Pull Request to Pandora](https://github.com/bitbrain/pandora/pull/229)
-), Pandora+ enables developers to integrate complex gameplay data — such as stats, inventory, quests, and dialogue — directly into Pandora’s data layer.
+## 🎯 What is Pandora+?
 
-### 💡 Why Pandora+?
-While Pandora provides a powerful and lightweight foundation for data serialization and synchronization, many developers working on game systems (RPGs in particular) need additional property types that handle domain-specific logic.
+Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with specialized RPG-oriented data properties and runtime systems. It provides everything you need to create complex RPG mechanics without reinventing the wheel.
 
-**Pandora+** solves this by providing a plug-and-play collection of specialized properties and helper scripts — ready to use, extend, or adapt.
+## ✨ Key Features
 
-## 🔌 Pandora Integration
-Pandora+ integrates seamlessly with [Pandora by BitBrain](https://github.com/bitbrain/pandora).
+### 📊 Runtime Stats System
+Dynamic stat calculation with support for temporary and permanent modifiers. Perfect for buffs, debuffs, equipment bonuses, and level-up systems.
 
-When enabled, the addon automatically registers its custom extensions by adding the following path to Pandora’s settings: `res://addons/pandora_plus/extensions`
-This means that all new properties (e.g., `ItemDropProperty`, `StatusEffectProperty`) become immediately available in the Pandora Editor without manual setup.
-
-### 🧱 Core Features (v1.0)
-|Property              |Description                                                                                     |
-|----------------------|------------------------------------------------------------------------------------------------|
-|`PPStats`             |Defines the main attributes of an entity (mob, player, NPC, etc.).                              |
-|`PPIngredient`        |Defines a single ingredient entry, used by recipes and item crafting.                           |
-|`PPRecipe`            |Represents a full recipe composed of multiple ingredients.                                      |
-|`PPItemDrop`          |Defines a potential loot drop for an entity.                                                    |
-|`PPStatusEffect`      |Describes temporary effects that can alter entity states (e.g. poison, burn, bleed).            |
-
-Each property is fully compatible with Pandora’s serialization system and supports the same update and sync mechanisms.
-
-### 📦 Requirements & Compatibility
-|Requirement  |	Version                                               |
-|-------------|-------------------------------------------------------|
-|Godot Engine |	4.5+                                                  |
-|Pandora	  | 1.0-alpha9+ (requires the custom extension system PR) |
-
-> If you’re using a version of Pandora prior to 1.0-alpha9+, make sure to update to access the custom extension API.
-
-Pandora+ has been tested with both standalone and integrated Pandora setups (autoload or per-scene usage).
-
-### 🚀 Installation
-1. Download the `pandora_plus/` folder and copy it into your project’s `addons/` directory.
-1. Enable it from **Project → Project Settings → Plugins**.
-1. Pandora+ will automatically register all custom property types.
-1. You can now use them in your scripts, for example:
 ```gdscript
-@export var stats: PPStats
+var runtime_stats := PPRuntimeStats.new(base_stats)
+var buff := PPStatModifier.create_percent("attack", 50.0, "potion", 60.0)
+runtime_stats.add_modifier(buff)
 ```
 
-### ⚙️ Utilities
+[Learn more →](https://trobugno.github.io/pandora_plus/#/core-systems/runtime-stats)
 
-Pandora+ provides two autoloaded singletons to simplify logic integration:
-- `StatsUtils` – methods for calculating physical and magical damage.
-- `RecipeUtils` – methods for verifying crafting eligibility.
-You can directly access them anywhere in your project:
+### 📓 Recipe System
+Want to create crafting recipes? Potions? Anything that can be created by combining items? Then the Recipe system is for you!
+
 ```gdscript
-var can_craft = RecipeUtils.can_craft(player_inventory, recipe)
-var damage = StatsUtils.calculate_damage(attacker_stats, target_stats)
+var wood := Pandora.get_entity(EntityIds.WOOD) as PPItemEntity
+var stone := Pandora.get_entity(EntityIds.STONE) as PPItemEntity
+var sword := Pandora.get_entity(EntityIds.STONE_SWORD) as PPItemEntity
+
+var wood_ingredient := PPIngredient.new(.., ..)
+var stone_ingredient := PPIngredient.new(.., ..)
+var sword_result = PandoraReference.new(.., ..)
+
+var ingredients := [wood_ingredient, stone_ingredient]
+var recipe := PPRecipe.new(ingredients, sword_result, 0, "CRAFTING")
+
+if PPRecipeUtils.can_craft(player_inventory, recipe):
+    PPRecipeUtils.craft_recipe(player_inventory, recipe)
+```
+At the end of the process, the used items will **automatically** disappear from your inventory and the newly created one will appear!
+
+[Learn more →](https://trobugno.github.io/pandora_plus/#/core-systems/recipe)
+
+### 🎒 Inventory System
+Flexible inventory with weight limits, auto-stacking, and comprehensive serialization.
+
+```gdscript
+var inventory := PPInventory.new()
+var health_potion := Pandora.get_entity(EntityIds.HEALTH_POTION) as PPItemEntity
+inventory.add_item(health_potion, 5)
 ```
 
-### 🗂️ Categories Added
-When Pandora+ is enabled, two new categories are registered automatically:
-- `Rarity` – defines item rarity tiers.
-- `Items` – manages base item entities compatible with `PPItemDrop`, `PPIngredient` and `PPRecipe`.
+[Learn more →](https://trobugno.github.io/pandora_plus/#/core-systems/inventory)
 
-### 💡 Future Additions (Premium version)
-- RuntimeStats system with scaling and modifiers 
-- Advanced Status Effects with types, origins, etc.
-- Other features
+## 🎮 Use Cases
 
-### 🧑‍💻 Credits
-Created by **Trobugno**, contributor to _Pandora_ and developer of the upcoming fantasy RPG _Arkaruh’s Tale_.
+Pandora+ is perfect for:
 
-Pandora+ is an independent extension, fully compatible with Pandora by BitBrain.
-Special thanks to **BitBrain** for developing such a robust foundation.
+- ✅ **Action RPGs** - Real-time combat with stats and effects
+- ✅ **Turn-Based RPGs** - Classic JRPG mechanics
+- ✅ **Roguelikes** - Procedural items and effects
+- ✅ **MMORPGs** - Multiplayer-ready serialization
+- ✅ **Card Games** - Effect stacking and modifiers
+- ✅ **Strategy Games** - Unit stats and abilities
 
-### ☕ Support the Project
+## 🗺️ Roadmap
 
-If you find Pandora+ useful, consider supporting development or unlocking future packs via Ko-fi:
-👉 [ko-fi.com/trobugno](https://ko-fi.com/trobugno)
+| Current v0.3.0-beta | Coming in v1.0.0-core | Planned for v1.0.0-premium|
+|---------|--------|---------|
+|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Stats Modifier<br>✅ CombatCalculator|🔜 Equipment System<br>🔜 Quest System<br>🔜 Save/Load Framework|💎 Visual Quest Editor<br>💎 Advanced Combat System<br>💎 Skill Tree System<br>💎 More..|
 
-Your support helps maintain both _Arkaruh’s Tale_ and future open-source tools for the Godot community.
+## 🤝 Contributing
+
+Pandora+ (Core) is open source and welcomes contributions!
+
+- 🐛 [Report a bug](https://github.com/trobugno/pandora_plus/issues/new?template=bug_report.md)
+- 💡 [Request a feature](https://github.com/trobugno/pandora_plus/issues/new?template=feature_request.md)
+- 🔧 [Submit a pull request](https://github.com/trobugno/pandora_plus/pulls)
+
+## 💬 Community & Support
+
+- **GitHub Discussions**: Ask questions and share projects
+- **GitHub Issues**: Report bugs and request features
+- **Ko-fi**: Support development
+
+## 📄 License
+
+Pandora+ (Core) is licensed under the [MIT License](https://github.com/trobugno/pandora_plus/blob/main/LICENSE).
+
+## 🙏 Credits
+
+- **Pandora+** created by [Trobugno](https://github.com/trobugno)
+- Built on top of [Pandora](https://bitbra.in/pandora) by [BitBrain](https://github.com/bitbrain)
+- Powered by [Godot Engine](https://godotengine.org/)
