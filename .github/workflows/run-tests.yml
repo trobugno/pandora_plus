@@ -1,114 +1,67 @@
 ## .github/workflows/run-tests.yml
-name: 🧪 Run GDUnit Tests
+name: 🧪 Pandora+ - Run GDUnit Tests
 
 on:
-  
-  # Esegui su pull request
   pull_request:
-    branches: [ main, master, develop ]
-  
-  # Permetti esecuzione manuale
+    paths-ignore:
+      - "**.jpg"
+      - "**.png"
+      - "**.svg"
+      - "**.md"
+      - "**plugin.cfg"
   workflow_dispatch:
 
-# Permessi necessari
-permissions:
-  contents: read
-  pull-requests: write
-  checks: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  run-tests:
-    name: Run Tests on Godot ${{ matrix.godot-version }}
+  unit-tests:
+    timeout-minutes: 5
+
     runs-on: ubuntu-latest
-    
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      pull-requests: write
+      statuses: write
+
     strategy:
       fail-fast: false
+      max-parallel: 10
       matrix:
         godot-version: ["4.5", "4.5.1"]
-    
+
+    name: "Run Tests on Godot ${{ matrix.godot-version }}"
     steps:
-      # 1. Checkout del repository
-      - name: 📥 Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          lfs: true
-          submodules: recursive
-      
-      # 2. Setup cache per Godot
-      - name: 💾 Cache Godot
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.local/share/godot
-            ~/Library/Application Support/Godot
-          key: godot-${{ matrix.godot-version }}-${{ runner.os }}
-      
-      # 3. Download e setup Godot
-      - name: 🎮 Setup Godot ${{ matrix.godot-version }}
-        uses: chickensoft-games/setup-godot@v1
-        with:
-          version: ${{ matrix.godot-version }}
-          use-dotnet: false
-      
-      # 4. Verifica installazione Godot
-      - name: ✅ Verify Godot Installation
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set Runner Tracking ID to prevent orphan processes
         run: |
-          godot --version
-          godot --headless --version
-      
-      # 5. Setup GDUnit (se non è già nell'addon)
-      - name: 📦 Setup GDUnit4
-        run: |
-          # Opzione A: Se GDUnit è già nel progetto come addon, skip questo step
-          # Opzione B: Se vuoi installarlo al volo, usa questo:
-          echo "GDUnit4 should be included in addons/ folder"
-          # mkdir -p addons
-          # cd addons
-          # git clone https://github.com/MikeSchulze/gdUnit4.git
-      
-      # 6. Import del progetto Godot
-      - name: 📂 Import Godot Project
-        run: |
-          godot --headless --editor --quit
-        timeout-minutes: 2
-      
-      # 7. Esegui i test GDUnit
-      - name: 🧪 Run GDUnit Tests
-        run: |
-          godot --headless --script addons/gdUnit4/bin/GdUnitCmdTool.gd \
-            --add="res://tests" \
-            --continue \
-            --verbose \
-            --report \
-            --report-path="./reports" \
-            --quit-on-finish
-        timeout-minutes: 10
-      
-      # 8. Upload dei report
-      - name: 📊 Upload Test Reports
-        if: always()
-        uses: actions/upload-artifact@v4
+          export RUNNER_TRACKING_ID=""
+
+      - name: Run GDUnit4 tests
+        uses: MikeSchulze/gdUnit4-action@v1.1.1
         with:
-          name: test-reports-godot-${{ matrix.godot-version }}
-          path: reports/
-          retention-days: 7
-      
-      # 9. Pubblica risultati come commento su PR
-      - name: 💬 Publish Test Results
-        if: always() && github.event_name == 'pull_request'
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: reports/**/*.xml
-          check_name: Test Results (Godot ${{ matrix.godot-version }})
-      
-      # 10. Fail se ci sono test falliti
-      - name: ❌ Check Test Results
-        if: always()
-        run: |
-          if [ -f reports/summary.json ]; then
-            FAILURES=$(cat reports/summary.json | grep -o '"failures":[0-9]*' | grep -o '[0-9]*')
-            if [ "$FAILURES" -gt 0 ]; then
-              echo "::error::$FAILURES test(s) failed!"
-              exit 1
-            fi
-          fi
+          godot-version: ${{ matrix.godot-version }}
+          godot-status: "stable"
+          timeout: 3
+          paths: "res://tests"
+          version: "installed"
+          publish-report: false
+          report-name: report_Godot${{ matrix.godot-version }}_unit-tests
+
+  finalize:
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    name: "Final Results"
+    needs: [unit-tests]
+    steps:
+      - run: exit 1
+        if: >-
+          ${{
+                 contains(needs.*.result, 'failure')
+              || contains(needs.*.result, 'cancelled')
+          }}
