@@ -63,12 +63,6 @@ Pandora+ is perfect for:
 - ✅ **Card Games** - Effect stacking and modifiers
 - ✅ **Strategy Games** - Unit stats and abilities
 
-## 🗺️ Roadmap
-
-| Current v0.3.0-beta | Coming in v1.0.0-core | Planned for v1.0.0-premium|
-|---------|--------|---------|
-|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Stats Modifier<br>✅ CombatCalculator|🔜 Equipment System<br>🔜 Quest System<br>🔜 Save/Load Framework|💎 Visual Quest Editor<br>💎 Advanced Combat System<br>💎 Skill Tree System<br>💎 More..|
-
 ## 🤝 Contributing
 
 Pandora+ (Core) is open source and welcomes contributions!

@@ -5,6 +5,134 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
+## [1.0.0-core] (Current) - 2025-12-29
+
+#### 🎯 Major Features
+
+**Quest System**
+- ✨ Complete quest management system with entities, runtime tracking, and serialization
+- ✨ Quest objectives with three core types: COLLECT, KILL, and TALK
+- ✨ Quest rewards system with multiple reward types (items, currency, experience)
+- ✨ Quest prerequisites and level requirements
+- ✨ Auto-complete and hidden quest support
+- ✨ Progress tracking with percentage calculation
+- ✨ Quest status management (NOT_STARTED, ACTIVE, COMPLETED, FAILED, ABANDONED)
+- ✨ Quest integration with NPC system for quest givers
+
+**NPC System**
+- ✨ NPC entity system with full runtime support
+- ✨ Combat system with health tracking and stat modifiers
+- ✨ Hostile/friendly NPC classification
+- ✨ Quest giver capabilities with level-based quest filtering
+- ✨ Dialogue and interaction support
+- ✨ Location tracking
+- ✨ Complete serialization/deserialization
+
+**Combat System**
+- ✨ Full combat mechanics with damage and healing
+- ✨ Death and revival system for NPCs
+- ✨ Combat calculator with stat-based calculations
+- ✨ Damage modifiers and combat utilities
+
+**Stats & Equipment System**
+- ✨ Base stats system with runtime modifiers
+- ✨ Stat modifier types: FLAT, ADDITIVE, MULTIPLICATIVE
+- ✨ Equipment system with slot-based item management
+- ✨ Equipped stats calculation and bonuses
+- ✨ Equipment utilities for managing equipped items
+
+**Inventory & Crafting**
+- ✨ Complete inventory system with slot-based management
+- ✨ Weight and value tracking
+- ✨ Stack management and item merging
+- ✨ Recipe/Crafting system with ingredient validation
+- ✨ Crafting utilities for recipe management
+- ✨ Inventory utilities for item operations
+
+**Item Systems**
+- ✨ Item drop system with probability-based drops
+- ✨ Status effect system for buffs/debuffs
+- ✨ Item rarity and categorization
+- ✨ Item entities with full property support
+
+**Save/Load System**
+- ✨ Complete save/load system with slot management
+- ✨ Player data serialization
+- ✨ NPC state persistence
+- ✨ Quest progress saving
+- ✨ Inventory and equipment state preservation
+- ✨ Multiple save slots support
+
+**Player Management**
+- ✨ Player data container with complete state tracking
+- ✨ Player manager autoload for centralized operations
+- ✨ Health and mana management
+- ✨ Position and scene tracking
+- ✨ Progress tracking (unlocked recipes, discovered locations, achievements)
+
+**Utilities & Autoloads**
+- ✨ PPQuestUtils autoload for quest management (start, complete, fail, abandon quests)
+- ✨ PPNPCUtils autoload for NPC interactions and combat
+- ✨ PPInventoryUtils autoload for inventory operations
+- ✨ PPEquipmentUtils autoload for equipment management
+- ✨ PPRecipeUtils autoload for crafting operations
+- ✨ Reward delivery system with validation
+- ✨ Comprehensive utility functions for all core systems
+
+**UI Components**
+- ✨ Quest property editor with visual interface
+- ✨ Quest objective editor with type selection
+- ✨ Quest reward editor with type selection
+- ✨ Objectives window for managing quest objectives
+- ✨ Rewards window for managing quest rewards
+- ✨ Recipe ingredients window
+- ✨ Status effect property editor
+- ✨ Stats property editor
+
+**Assets & Resources**
+- ✨ 60+ custom icons for game elements (weapons, items, characters, effects, etc.)
+- ✨ Quest entity category
+- ✨ Quest objective entity
+- ✨ Reward entity
+- ✨ NPC entity
+- ✨ Item entity
+- ✨ Recipe entity
+- ✨ Status effect entity
+
+#### 🐛 Bug Fixes
+
+**Critical Fixes**
+- 🔧 Fixed inverted logic in `PPInventoryUtils.calculate_total_value()` and `calculate_total_weight()` that caused 100% crash rate
+- 🔧 Fixed incorrect quantity calculation in `PPInventorySlot.merge_with()` that produced negative values
+- 🔧 Fixed 34 array index out of bounds errors in save_data() methods across:
+  - `PPItemDrop` (3 fixes)
+  - `PPRecipe` (4 fixes)
+  - `PPStats` (8 fixes)
+  - `PPStatusEffect` (7 fixes)
+
+**High Severity Fixes**
+- 🔧 Fixed null slot access in `compact_inventory()`
+- 🔧 Fixed null slot access in `can_craft()`
+
+**Medium Severity Fixes**
+- 🔧 Fixed uninitialized variables in `PPCombatCalculator` with sensible defaults
+- 🔧 Added inventory space validation in `grant_reward()`
+- 🔧 Added null checks in `inventory_data.has_item()`
+
+---
+
+### [0.3.0-beta] - 2025-12-14
+
+**Core Systems**
+- ✅ Runtime Stats System
+- ✅ Inventory System with weight and value tracking
+- ✅ Recipe/Crafting System
+- ✅ Stats Modifier System
+- ✅ CombatCalculator
+- ✅ GDUnit testing framework
+- ✅ Documentation via GitHub Pages
+
+---
 ## [0.2.0-alpha] - 2025-11-30
 ### What's new?
 - Created **configuration.json** following the new **Custom Extensions Settings** introduced by me in Pandora addon.
@@ -39,8 +167,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [Unreleased]
-### Planned for Premium version
-- `RuntimeStats` and `StatsModifier` resources for advanced stat management.
-- Level scaling and regeneration systems.
-- Extended rarity and item tier support.
-- More features
+### Planned Features
+- Additional quest objective types
+- Enhanced NPC behaviors
+- More utility functions
+- Extended UI components

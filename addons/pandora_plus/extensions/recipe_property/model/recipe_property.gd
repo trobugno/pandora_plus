@@ -64,20 +64,34 @@ func load_data(data: Dictionary) -> void:
 
 func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: Array[Dictionary]) -> Dictionary:
 	var result := {}
-	var result_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Result")[0] as Dictionary
-	var recipe_type_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Recipe types")[0] as Dictionary
-	var ingredients_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Ingredients")[0] as Dictionary
-	var crafting_time_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Crafting Time")[0] as Dictionary
-	
-	if ingredients_field_settings["enabled"]:
-		var ingredients = _ingredients.map(func(ingredient: PPIngredient): return ingredient.save_data(ingredient_fields_settings))
-		result["ingredients"] = ingredients
-	if result_field_settings["enabled"]:
-		result["result"] = _result.save_data()
-	if crafting_time_field_settings["enabled"]:
-		result["crafting_time"] = _crafting_time
-	if recipe_type_field_settings["enabled"]:
-		result["recipe_type"] = _recipe_type
+
+	# Safe field lookup
+	var result_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Result")
+	var recipe_type_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Recipe types")
+	var ingredients_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Ingredients")
+	var crafting_time_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Crafting Time")
+
+	if ingredients_field_array.size() > 0:
+		var ingredients_field_settings := ingredients_field_array[0] as Dictionary
+		if ingredients_field_settings["enabled"]:
+			var ingredients = _ingredients.map(func(ingredient: PPIngredient): return ingredient.save_data(ingredient_fields_settings))
+			result["ingredients"] = ingredients
+
+	if result_field_array.size() > 0:
+		var result_field_settings := result_field_array[0] as Dictionary
+		if result_field_settings["enabled"]:
+			result["result"] = _result.save_data()
+
+	if crafting_time_field_array.size() > 0:
+		var crafting_time_field_settings := crafting_time_field_array[0] as Dictionary
+		if crafting_time_field_settings["enabled"]:
+			result["crafting_time"] = _crafting_time
+
+	if recipe_type_field_array.size() > 0:
+		var recipe_type_field_settings := recipe_type_field_array[0] as Dictionary
+		if recipe_type_field_settings["enabled"]:
+			result["recipe_type"] = _recipe_type
+
 	return result
 
 func _to_string() -> String:

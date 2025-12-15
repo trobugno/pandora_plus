@@ -33,31 +33,52 @@ func load_data(data: Dictionary) -> void:
 
 func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 	var result := {}
-	var id_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status ID")[0] as Dictionary
-	var key_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Key")[0] as Dictionary
-	var description_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Description")[0] as Dictionary
-	var duration_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Duration")[0] as Dictionary
-	var ticks_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Ticks")[0] as Dictionary
-	var value_per_tick_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Value per Tick")[0] as Dictionary
-	var tick_type_field_settings := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Tick Type")[0] as Dictionary
-	
-	if id_field_settings["enabled"]:
-		result["status_ID"] = _status_ID
-	if key_field_settings["enabled"]:
-		result["status_key"] = _status_key
-	if description_field_settings["enabled"]:
-		result["description"] = _description
-	if duration_field_settings["enabled"]:
-		result["duration"] = _duration
-	if value_per_tick_field_settings["enabled"]:
-		result["value_in_percentage"] = _value_in_percentage
-	if value_per_tick_field_settings["enabled"]:
-		result["value_per_tick"] = _value_per_tick
-	if ticks_field_settings["enabled"]:
-		result["ticks"] = _ticks
-	if tick_type_field_settings["enabled"]:
-		result["tick_type"] = _tick_type
-	
+
+	# Safe field lookup
+	var id_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status ID")
+	var key_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Key")
+	var description_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Description")
+	var duration_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Status Duration")
+	var ticks_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Ticks")
+	var value_per_tick_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Value per Tick")
+	var tick_type_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Tick Type")
+
+	if id_field_array.size() > 0:
+		var id_field_settings := id_field_array[0] as Dictionary
+		if id_field_settings["enabled"]:
+			result["status_ID"] = _status_ID
+
+	if key_field_array.size() > 0:
+		var key_field_settings := key_field_array[0] as Dictionary
+		if key_field_settings["enabled"]:
+			result["status_key"] = _status_key
+
+	if description_field_array.size() > 0:
+		var description_field_settings := description_field_array[0] as Dictionary
+		if description_field_settings["enabled"]:
+			result["description"] = _description
+
+	if duration_field_array.size() > 0:
+		var duration_field_settings := duration_field_array[0] as Dictionary
+		if duration_field_settings["enabled"]:
+			result["duration"] = _duration
+
+	if value_per_tick_field_array.size() > 0:
+		var value_per_tick_field_settings := value_per_tick_field_array[0] as Dictionary
+		if value_per_tick_field_settings["enabled"]:
+			result["value_in_percentage"] = _value_in_percentage
+			result["value_per_tick"] = _value_per_tick
+
+	if ticks_field_array.size() > 0:
+		var ticks_field_settings := ticks_field_array[0] as Dictionary
+		if ticks_field_settings["enabled"]:
+			result["ticks"] = _ticks
+
+	if tick_type_field_array.size() > 0:
+		var tick_type_field_settings := tick_type_field_array[0] as Dictionary
+		if tick_type_field_settings["enabled"]:
+			result["tick_type"] = _tick_type
+
 	return result
 
 func _to_string() -> String:

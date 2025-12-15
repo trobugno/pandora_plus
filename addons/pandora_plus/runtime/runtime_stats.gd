@@ -14,7 +14,8 @@ var _base_stats_instance: PPStats = null
 func _init(p_base_stats: Variant = null) -> void:
 	if p_base_stats is PPStats:
 		var extension_configuration := PandoraSettings.find_extension_configuration_property("stats_property")
-		var fields_settings := extension_configuration["fields"] as Array
+		var fields_settings : Array[Dictionary]
+		fields_settings.assign(extension_configuration["fields"] as Array)
 		base_stats_data = p_base_stats.save_data(fields_settings)
 		_base_stats_instance = p_base_stats
 	elif p_base_stats is Dictionary:
@@ -142,8 +143,7 @@ func to_dict() -> Dictionary:
 	}
 
 static func from_dict(data: Dictionary) -> PPRuntimeStats:
-	var runtime = PPRuntimeStats.new()
-	runtime.base_stats_data = data.get("base_stats_data", {})
+	var runtime = PPRuntimeStats.new(data.get("base_stats_data", {}))
 	
 	for mod_data in data.get("active_modifiers", []):
 		runtime._active_modifiers.append(PPStatModifier.from_dict(mod_data))

@@ -1,0 +1,157 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpflmyiodrljb"]
+
+[ext_resource type="Script" uid="uid://dk48ly2c80q0c" path="res://addons/pandora_plus/extensions/quest_objective_property/ui_component/quest_objective_property.gd" id="1_l1a68"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_l1a68"]
+
+[node name="QuestObjective" type="MarginContainer"]
+custom_minimum_size = Vector2(450, 0)
+script = ExtResource("1_l1a68")
+type = "quest_objective_property"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ObjectiveID" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/ObjectiveID"]
+layout_mode = 2
+text = "ID"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FirstLine/ObjectiveID"]
+layout_mode = 2
+
+[node name="ObjectiveType" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/ObjectiveType"]
+layout_mode = 2
+text = "Type"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/FirstLine/ObjectiveType"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 9
+popup/item_0/text = "COLLECT"
+popup/item_0/id = 0
+popup/item_1/text = "KILL"
+popup/item_1/id = 1
+popup/item_2/text = "TALK"
+popup/item_2/id = 2
+popup/item_3/text = "REACH_LOCATION"
+popup/item_3/id = 3
+popup/item_4/text = "USE_ITEM"
+popup/item_4/id = 4
+popup/item_5/text = "CRAFT_ITEM"
+popup/item_5/id = 5
+popup/item_6/text = "DELIVER"
+popup/item_6/id = 6
+popup/item_7/text = "ESCORT"
+popup/item_7/id = 7
+popup/item_8/text = "CUSTOM"
+popup/item_8/id = 8
+
+[node name="HiddenCheck" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/HiddenCheck"]
+layout_mode = 2
+text = "Hidden"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/FirstLine/HiddenCheck"]
+layout_mode = 2
+button_pressed = true
+text = "Yes"
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="OrderIndex" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/OrderIndex"]
+layout_mode = 2
+text = "Order Index"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SecondLine/OrderIndex"]
+layout_mode = 2
+focus_mode = 1
+min_value = -1.0
+max_value = 99999.0
+select_all_on_focus = true
+
+[node name="SequentialCheck" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/SequentialCheck"]
+layout_mode = 2
+text = "Sequential"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/SecondLine/SequentialCheck"]
+layout_mode = 2
+button_pressed = true
+text = "Yes"
+
+[node name="OptionalCheck" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/OptionalCheck"]
+layout_mode = 2
+text = "Optional"
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/SecondLine/OptionalCheck"]
+layout_mode = 2
+button_pressed = true
+text = "Yes"
+
+[node name="ThirdLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ObjectiveTarget" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/ObjectiveTarget"]
+layout_mode = 2
+text = "Target"
+
+[node name="EntityPicker" parent="VBoxContainer/ThirdLine/ObjectiveTarget" instance=ExtResource("2_l1a68")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ObjectiveTargetQuantity" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/ObjectiveTargetQuantity"]
+layout_mode = 2
+text = "Quantity"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/ThirdLine/ObjectiveTargetQuantity"]
+layout_mode = 2
+focus_mode = 1
+min_value = -1.0
+max_value = 99999.0
+select_all_on_focus = true
+
+[node name="LastLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ObjectiveDescription" type="VBoxContainer" parent="VBoxContainer/LastLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/LastLine/ObjectiveDescription"]
+layout_mode = 2
+text = "Description"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/LastLine/ObjectiveDescription"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)

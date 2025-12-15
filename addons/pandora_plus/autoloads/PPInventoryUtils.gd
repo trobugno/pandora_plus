@@ -32,8 +32,8 @@ func compact_inventory(inventory: PPInventory) -> int:
 		
 		for j in range(i + 1, inventory.all_items.size()):
 			var other_slot = inventory.all_items[j]
-			
-			if other_slot and other_slot.item._id == slot.item._id and slot.can_merge_with(other_slot):
+
+			if other_slot and other_slot.item and other_slot.item._id == slot.item._id and slot.can_merge_with(other_slot):
 				slot.merge_with(other_slot)
 				
 				if other_slot.quantity <= 0:
@@ -41,27 +41,27 @@ func compact_inventory(inventory: PPInventory) -> int:
 					inventory.all_items[j] = null
 					compacted_count += 1
 	
-	if inventory._max_items_in_inventory == -1:
+	if inventory.max_items_in_inventory == -1:
 		inventory.all_items = inventory.all_items.filter(func(i): return i != null)
 	
 	return compacted_count
 
 func calculate_total_value(inventory: PPInventory) -> float:
 	var total = 0
-	
+
 	for slot in inventory.all_items:
-		if not slot.item:
+		if slot and slot.item:
 			total += slot.item.get_value() * slot.quantity
-	
+
 	return total
 
 func calculate_total_weight(inventory: PPInventory) -> float:
 	var total = 0
-	
+
 	for slot in inventory.all_items:
-		if not slot.item:
+		if slot and slot.item:
 			total += slot.item.get_weight() * slot.quantity
-	
+
 	return total
 
 func transfer_items(from_inv: PPInventory, to_inv: PPInventory, item: PPItemEntity, quantity: int = 1) -> void:
@@ -80,7 +80,7 @@ func transfer_all(from_inv: PPInventory, to_inv: PPInventory) -> int:
 			from_inv.remove_item(slot.item, slot.quantity)
 			transferred_count += slot.quantity
 	
-	if from_inv._max_items_in_inventory == -1:
+	if from_inv.max_items_in_inventory == -1:
 		from_inv.all_items = from_inv.all_items.filter(func(i): return i != null)
 	
 	return transferred_count

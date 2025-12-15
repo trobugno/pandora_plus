@@ -282,6 +282,270 @@
 			],
 			"name": "PPStatusEffect",
 			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Tracks progress and state of a single quest objective during gameplay",
+			"dir_name": "quest_objective_property",
+			"enabled": true,
+			"name": "PPQuestObjective",
+			"show_on_top": false,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Objective ID",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Objective Type",
+					"settings": {
+						"options": [
+							"COLLECT",
+							"KILL",
+							"TALK"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Description",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Target Entity",
+					"settings": {
+						"category_only": true,
+						"entity_id": "4"
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Target Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			]
+		},
+		{
+			"dependencies": [],
+			"description": "Represents a reward that can be granted to the player",
+			"dir_name": "quest_reward_property",
+			"enabled": true,
+			"name": "PPQuestReward",
+			"show_on_top": false,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Reward Name",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Reward Type",
+					"settings": {
+						"options": [
+							"ITEM",
+							"CURRENCY",
+							"EXPERIENCE"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Reward Entity",
+					"settings": {
+						"category_only": true,
+						"entity_id": ""
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Quantity",
+					"settings": {
+						"max_value": 999.0,
+						"min_value": 1.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Currency Amount",
+					"settings": {
+						"max_value": 9999999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Experience Amount",
+					"settings": {
+						"max_value": 9999999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Stat Name",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Stat Value",
+					"settings": {
+						"max_value": 9999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Faction Name",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Reputation Amount",
+					"settings": {
+						"max_value": 9999.0,
+						"min_value": -9999.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Custom Script",
+					"settings": {
+
+					},
+					"type": "STRING"
+				}
+			]
+		},
+		{
+			"dependencies": [],
+			"description": "Manages the state and progress of an active quest during gameplay",
+			"dir_name": "quest_property",
+			"enabled": true,
+			"name": "PPQuest",
+			"show_on_top": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Quest ID",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Quest Name",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Description",
+					"settings": {
+
+					},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Quest Type",
+					"settings": {
+						"options": [
+							"MAIN_STORY",
+							"SIDE_QUEST",
+							"DAILY",
+							"WEEKLY",
+							"REPEATABLE"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Objectives",
+					"settings": {
+						"type": "quest_objective_property"
+					},
+					"type": "ARRAY"
+				},
+				{
+					"enabled": true,
+					"name": "Rewards",
+					"settings": {
+						"category_only": true,
+						"entity_id": ""
+					},
+					"type": "ARRAY"
+				},
+				{
+					"enabled": true,
+					"name": "Prerequisites",
+					"settings": {
+						"category_only": true,
+						"entity_id": ""
+					},
+					"type": "ARRAY"
+				},
+				{
+					"enabled": true,
+					"name": "Level Requirement",
+					"settings": {
+						"max_value": 100.0,
+						"min_value": 1.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Quest Giver",
+					"settings": {
+						"category_only": true,
+						"entity_id": ""
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Category",
+					"settings": {
+
+					},
+					"type": "STRING"
+				}
+			]
 		}
 	]
 }

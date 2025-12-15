@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3 uid="uid://dmk87fvh6chp1"]
+
+[ext_resource type="Script" path="res://addons/pandora_plus/extensions/quest_property/ui_component/rewards_window.gd" id="1_rewards"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rewards"]
+
+[node name="RewardsWindow" type="Window"]
+disable_3d = true
+oversampling_override = 1.0
+title = "Rewards Manager"
+initial_position = 2
+size = Vector2i(800, 1000)
+visible = false
+wrap_controls = true
+content_scale_mode = 1
+content_scale_aspect = 4
+script = ExtResource("1_rewards")
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color(0, 0, 0, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rewards")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="MainContainer" type="VBoxContainer" parent="Panel/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/MainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer/MainContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HeaderContainer" type="MarginContainer" parent="Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_bottom = 10
+
+[node name="NewItemButton" type="Button" parent="Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer/HeaderContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add New Reward +"
+
+[node name="ArrayItems" type="VBoxContainer" parent="Panel/MarginContainer/MainContainer/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="Panel/MarginContainer/MainContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/MarginContainer/MainContainer/CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/MainContainer/CenterContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]

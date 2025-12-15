@@ -10,6 +10,7 @@ const __source: String = 'res://addons/pandora_plus/autoloads/PPInventoryUtils.g
 var player_inventory : PPInventory
 var chest_inventory : PPInventory
 var item_entity_ids : Dictionary = {}
+var item_instances : Dictionary = {}  # Store instances instead of IDs
 
 func before_test() -> void:
 	player_inventory = PPInventory.new()
@@ -34,25 +35,34 @@ func before_test() -> void:
 	test_apple.set_string("name", "Apple")
 	test_apple.set_bool("stackable", true)
 	test_apple.set_reference("rarity", test_common)
+	test_apple.set_float("value", 5.0)
+	test_apple.set_float("weight", 0.5)
 	item_entity_ids["GDUNIT_APPLE"] = test_apple.get_entity_id()
-	
+	item_instances["apple"] = test_apple
+
 	var test_skull := Pandora.create_entity("GDUNIT_SKULL", items_category).instantiate() as PPItemEntity
 	test_skull.set_string("name", "Skull")
 	test_skull.set_bool("stackable", true)
 	test_skull.set_reference("rarity", test_rare)
+	test_skull.set_float("value", 20.0)
+	test_skull.set_float("weight", 2.0)
 	item_entity_ids["GDUNIT_SKULL"] = test_skull.get_entity_id()
-	
+	item_instances["skull"] = test_skull
+
 	var test_master_sword := Pandora.create_entity("GDUNIT_MASTER_SWORD", items_category).instantiate() as PPItemEntity
 	test_master_sword.set_string("name", "Master Sword")
 	test_master_sword.set_bool("stackable", false)
 	test_master_sword.set_reference("rarity", test_epic)
+	test_master_sword.set_float("value", 100.0)
+	test_master_sword.set_float("weight", 5.0)
 	item_entity_ids["GDUNIT_MASTER_SWORD"] = test_master_sword.get_entity_id()
-	
+	item_instances["master_sword"] = test_master_sword
+
 	Pandora.save_data()
-	
+
 	player_inventory.add_item(test_apple, 3)
 	player_inventory.add_item(test_skull, 1)
-	
+
 	chest_inventory.add_item(test_skull, 1)
 	chest_inventory.add_item(test_master_sword, 1)
 
@@ -106,3 +116,53 @@ func test_transfer_all() -> void:
 	assert_that(player_inventory.has_item(test_skull, 2)).is_equal(true)
 	assert_that(player_inventory.has_item(test_master_sword, 1)).is_equal(true)
 	assert_that(chest_inventory.all_items.size()).is_equal(0)
+
+func test_calculate_total_value() -> void:
+	# player_inventory has: 3 apples (3 * 5 = 15) and 1 skull (1 * 20 = 20) = 35 total
+	var total_value = PPInventoryUtils.calculate_total_value(player_inventory)
+
+	assert_that(total_value).is_equal(35.0)
+
+func test_calculate_total_value_empty_inventory() -> void:
+	var empty_inventory := PPInventory.new()
+	var total_value = PPInventoryUtils.calculate_total_value(empty_inventory)
+
+	assert_that(total_value).is_equal(0.0)
+
+func test_calculate_total_weight() -> void:
+	# player_inventory has: 3 apples (3 * 0.5 = 1.5) and 1 skull (1 * 2.0 = 2.0) = 3.5 total
+	var total_weight = PPInventoryUtils.calculate_total_weight(player_inventory)
+
+	assert_that(total_weight).is_equal(3.5)
+
+func test_calculate_total_weight_empty_inventory() -> void:
+	var empty_inventory := PPInventory.new()
+	var total_weight = PPInventoryUtils.calculate_total_weight(empty_inventory)
+
+	assert_that(total_weight).is_equal(0.0)
+
+func test_sort_inventory_by_value() -> void:
+	var test_apple := item_instances["apple"] as PPItemEntity
+
+	chest_inventory.add_item(test_apple, 1)
+
+	# chest_inventory now has: skull (20), master_sword (100), apple (5)
+	# After sorting by value (descending): master_sword (100), skull (20), apple (5)
+	PPInventoryUtils.sort_inventory(chest_inventory, "value")
+
+	assert_that(chest_inventory.all_items[0].item.get_item_name()).is_equal("Master Sword")
+	assert_that(chest_inventory.all_items[1].item.get_item_name()).is_equal("Skull")
+	assert_that(chest_inventory.all_items[2].item.get_item_name()).is_equal("Apple")
+
+func test_sort_inventory_by_weight() -> void:
+	var test_apple := item_instances["apple"] as PPItemEntity
+
+	chest_inventory.add_item(test_apple, 1)
+
+	# chest_inventory now has: skull (2.0), master_sword (5.0), apple (0.5)
+	# After sorting by weight (ascending): apple (0.5), skull (2.0), master_sword (5.0)
+	PPInventoryUtils.sort_inventory(chest_inventory, "weight")
+
+	assert_that(chest_inventory.all_items[0].item.get_item_name()).is_equal("Apple")
+	assert_that(chest_inventory.all_items[1].item.get_item_name()).is_equal("Skull")
+	assert_that(chest_inventory.all_items[2].item.get_item_name()).is_equal("Master Sword")

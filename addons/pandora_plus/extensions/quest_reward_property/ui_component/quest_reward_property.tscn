@@ -1,0 +1,189 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgly28c1a0gcw"]
+
+[ext_resource type="Script" uid="uid://eel2jftdlndg" path="res://addons/pandora_plus/extensions/quest_reward_property/ui_component/quest_reward_property.gd" id="1_lq1bf"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_entity_picker"]
+
+[node name="QuestReward" type="MarginContainer"]
+custom_minimum_size = Vector2(450, 0)
+script = ExtResource("1_lq1bf")
+type = "quest_reward_property"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RewardName" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/RewardName"]
+layout_mode = 2
+text = "Reward Name"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FirstLine/RewardName"]
+layout_mode = 2
+
+[node name="RewardType" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/RewardType"]
+layout_mode = 2
+text = "Type"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/FirstLine/RewardType"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 8
+popup/item_0/text = "ITEM"
+popup/item_0/id = 0
+popup/item_1/text = "CURRENCY"
+popup/item_1/id = 1
+popup/item_2/text = "EXPERIENCE"
+popup/item_2/id = 2
+popup/item_3/text = "UNLOCK_RECIPE"
+popup/item_3/id = 3
+popup/item_4/text = "UNLOCK_QUEST"
+popup/item_4/id = 4
+popup/item_5/text = "STAT_BOOST"
+popup/item_5/id = 5
+popup/item_6/text = "REPUTATION"
+popup/item_6/id = 6
+popup/item_7/text = "CUSTOM"
+popup/item_7/id = 7
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RewardEntity" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/RewardEntity"]
+layout_mode = 2
+text = "Entity"
+
+[node name="EntityPicker" parent="VBoxContainer/SecondLine/RewardEntity" instance=ExtResource("2_entity_picker")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Quantity" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/Quantity"]
+layout_mode = 2
+text = "Quantity"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SecondLine/Quantity"]
+layout_mode = 2
+focus_mode = 1
+min_value = 1.0
+max_value = 999.0
+value = 1.0
+select_all_on_focus = true
+
+[node name="ThirdLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CurrencyAmount" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/CurrencyAmount"]
+layout_mode = 2
+text = "Currency Amount"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/ThirdLine/CurrencyAmount"]
+layout_mode = 2
+focus_mode = 1
+max_value = 9999990.0
+select_all_on_focus = true
+
+[node name="FourthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ExperienceAmount" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FourthLine/ExperienceAmount"]
+layout_mode = 2
+text = "Experience Amount"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FourthLine/ExperienceAmount"]
+layout_mode = 2
+focus_mode = 1
+max_value = 9999990.0
+select_all_on_focus = true
+
+[node name="FifthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="StatName" type="VBoxContainer" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FifthLine/StatName"]
+layout_mode = 2
+text = "Stat Name"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FifthLine/StatName"]
+layout_mode = 2
+
+[node name="StatValue" type="VBoxContainer" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/FifthLine/StatValue"]
+layout_mode = 2
+text = "Stat Value"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FifthLine/StatValue"]
+layout_mode = 2
+focus_mode = 1
+max_value = 9999.0
+select_all_on_focus = true
+
+[node name="SixthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="FactionName" type="VBoxContainer" parent="VBoxContainer/SixthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SixthLine/FactionName"]
+layout_mode = 2
+text = "Faction Name"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SixthLine/FactionName"]
+layout_mode = 2
+
+[node name="ReputationAmount" type="VBoxContainer" parent="VBoxContainer/SixthLine"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/SixthLine/ReputationAmount"]
+layout_mode = 2
+text = "Reputation Amount"
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/SixthLine/ReputationAmount"]
+layout_mode = 2
+focus_mode = 1
+min_value = -9999.0
+max_value = 9999.0
+select_all_on_focus = true
+
+[node name="SeventhLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="CustomScript" type="VBoxContainer" parent="VBoxContainer/SeventhLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SeventhLine/CustomScript"]
+layout_mode = 2
+text = "Custom Script Path"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/SeventhLine/CustomScript"]
+layout_mode = 2
