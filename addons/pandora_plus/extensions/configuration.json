@@ -282,6 +282,30 @@
 			],
 			"name": "PPStatusEffect",
 			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Tracks progress and state of a single quest objective during gameplay",
+			"dir_name": "quest_objective",
+			"enabled": false,
+			"name": "PPQuestObjective",
+			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Represents a reward that can be granted to the player",
+			"dir_name": "quest_reward",
+			"enabled": false,
+			"name": "PPQuestReward",
+			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "Manages the state and progress of an active quest during gameplay",
+			"dir_name": "quest",
+			"enabled": false,
+			"name": "PPQuest",
+			"show_on_top": true
 		}
 	]
 }
