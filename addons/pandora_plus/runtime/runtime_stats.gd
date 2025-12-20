@@ -142,8 +142,7 @@ func to_dict() -> Dictionary:
 	}
 
 static func from_dict(data: Dictionary) -> PPRuntimeStats:
-	var runtime = PPRuntimeStats.new()
-	runtime.base_stats_data = data.get("base_stats_data", {})
+	var runtime = PPRuntimeStats.new(data.get("base_stats_data", {}))
 	
 	for mod_data in data.get("active_modifiers", []):
 		runtime._active_modifiers.append(PPStatModifier.from_dict(mod_data))

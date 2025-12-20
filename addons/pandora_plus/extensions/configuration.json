@@ -286,10 +286,69 @@
 		{
 			"dependencies": [],
 			"description": "Tracks progress and state of a single quest objective during gameplay",
-			"dir_name": "quest_objective",
+			"dir_name": "quest_objective_property",
 			"enabled": false,
 			"name": "PPQuestObjective",
-			"show_on_top": true
+			"show_on_top": true,
+			"fields": [
+				{
+					"enabled": true,
+					"name": "Objective ID",
+					"settings": {},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Objective Type",
+					"settings": {
+						"options": [
+							"COLLECT",
+							"KILL",
+							"TALK",
+							"REACH_LOCATION",
+							"USE_ITEM",
+							"CRAFT_ITEM",
+							"DELIVER",
+							"ESCORT",
+							"CUSTOM"
+						]
+					},
+					"type": "OPTIONS"
+				},
+				{
+					"enabled": true,
+					"name": "Description",
+					"settings": {},
+					"type": "STRING"
+				},
+				{
+					"enabled": true,
+					"name": "Target Entity",
+					"settings": {
+						"category_only": true,
+						"entity_id": "4"
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Target Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Order Index",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 0.0
+					},
+					"type": "RANGE"
+				}
+			]
 		},
 		{
 			"dependencies": [],

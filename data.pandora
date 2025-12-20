@@ -18,6 +18,30 @@
 				"_index": 0,
 				"_name": "Items",
 				"_script_path": "res://addons/pandora_plus/entities/item_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_icon_color": "ffffff00",
+				"_id": "16.0",
+				"_index": 0,
+				"_name": "Quests",
+				"_script_path": "res://addons/pandora_plus/entities/quest_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_icon_color": "ffffff00",
+				"_id": "31.0",
+				"_index": 0,
+				"_name": "Quest Objectives",
+				"_script_path": "res://addons/pandora_plus/entities/objective_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_icon_color": "ffffff00",
+				"_id": "42.0",
+				"_index": 0,
+				"_name": "Quest Rewards",
+				"_script_path": "res://addons/pandora_plus/entities/reward_entity.gd"
 			}
 		],
 		"_entities": [],
@@ -90,12 +114,277 @@
 				"_id": "15.0",
 				"_name": "weight",
 				"_type": "float"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": "",
+				"_id": "17.0",
+				"_name": "quest_id",
+				"_type": "string"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": "",
+				"_id": "18.0",
+				"_name": "quest_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": "",
+				"_id": "19.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": 0,
+				"_id": "20.0",
+				"_name": "quest_type",
+				"_type": "int"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": {
+
+				},
+				"_id": "21.0",
+				"_name": "objectives",
+				"_type": "array"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": {
+
+				},
+				"_id": "22.0",
+				"_name": "rewards",
+				"_type": "array"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": {
+
+				},
+				"_id": "23.0",
+				"_name": "prerequisites",
+				"_type": "array"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": 0,
+				"_id": "24.0",
+				"_name": "level_requirement",
+				"_type": "int"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": false,
+				"_id": "25.0",
+				"_name": "auto_complete",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": 0.0,
+				"_id": "26.0",
+				"_name": "time_limit",
+				"_type": "float"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": null,
+				"_id": "27.0",
+				"_name": "quest_giver",
+				"_type": "reference"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": false,
+				"_id": "28.0",
+				"_name": "hidden",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": "",
+				"_id": "29.0",
+				"_name": "category",
+				"_type": "string"
+			},
+			{
+				"_category_id": "16.0",
+				"_default_value": null,
+				"_id": "30.0",
+				"_name": "icon",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": "",
+				"_id": "32.0",
+				"_name": "objective_id",
+				"_type": "string"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": 0,
+				"_id": "33.0",
+				"_name": "objective_type",
+				"_type": "int"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": "",
+				"_id": "34.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": null,
+				"_id": "35.0",
+				"_name": "target_entity",
+				"_type": "reference"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": 0,
+				"_id": "36.0",
+				"_name": "target_quantity",
+				"_type": "int"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": false,
+				"_id": "37.0",
+				"_name": "optional",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": false,
+				"_id": "38.0",
+				"_name": "hidden",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": "",
+				"_id": "39.0",
+				"_name": "custom_script",
+				"_type": "string"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": 0,
+				"_id": "40.0",
+				"_name": "order_index",
+				"_type": "int"
+			},
+			{
+				"_category_id": "31.0",
+				"_default_value": false,
+				"_id": "41.0",
+				"_name": "sequential",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0,
+				"_id": "43.0",
+				"_name": "reward_type",
+				"_type": "int"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": null,
+				"_id": "44.0",
+				"_name": "reward_entity",
+				"_type": "reference"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0,
+				"_id": "45.0",
+				"_name": "quantity",
+				"_type": "int"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0,
+				"_id": "46.0",
+				"_name": "currency_amount",
+				"_type": "int"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0,
+				"_id": "47.0",
+				"_name": "experience_amount",
+				"_type": "int"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": "",
+				"_id": "48.0",
+				"_name": "stat_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0.0,
+				"_id": "49.0",
+				"_name": "stat_value",
+				"_type": "float"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": "",
+				"_id": "50.0",
+				"_name": "faction_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": 0,
+				"_id": "51.0",
+				"_name": "reputation_amount",
+				"_type": "int"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": "",
+				"_id": "52.0",
+				"_name": "custom_script",
+				"_type": "string"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": false,
+				"_id": "53.0",
+				"_name": "optional",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": "",
+				"_id": "54.0",
+				"_name": "reward_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "42.0",
+				"_default_value": null,
+				"_id": "55.0",
+				"_name": "icon",
+				"_type": "resource"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 15.0
+			"default": 55.0
 		}
 	}
 }
