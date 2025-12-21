@@ -107,75 +107,17 @@ func _setup_item_categories(rarity_category: PandoraCategory) -> void:
 
 func _setup_quest_categories() -> void:
 	const QUESTS_NAME := "Quests"
-	const OBJECTIVES_NAME := "Quest Objectives"
-	const REWARDS_NAME := "Quest Rewards"
-	
+
 	var all_categories := Pandora.get_all_categories()
-	
+
 	# Create or update Quests category
 	var quest_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == QUESTS_NAME)
-	
+
 	if not quest_categories:
 		var quest_category = Pandora.create_category(QUESTS_NAME)
 		quest_category.set_script_path("res://addons/pandora_plus/entities/quest_entity.gd")
-		
-		# Quest properties
-		Pandora.create_property(quest_category, "quest_id", "String")
-		Pandora.create_property(quest_category, "quest_name", "String")
-		Pandora.create_property(quest_category, "description", "String")
-		Pandora.create_property(quest_category, "quest_type", "int")
-		Pandora.create_property(quest_category, "objectives", "array")
-		Pandora.create_property(quest_category, "rewards", "array")
-		Pandora.create_property(quest_category, "prerequisites", "array")
-		Pandora.create_property(quest_category, "level_requirement", "int")
-		Pandora.create_property(quest_category, "auto_complete", "bool")
-		Pandora.create_property(quest_category, "time_limit", "float")
-		Pandora.create_property(quest_category, "quest_giver", "reference")
-		Pandora.create_property(quest_category, "hidden", "bool")
-		Pandora.create_property(quest_category, "category", "String")
-		Pandora.create_property(quest_category, "icon", "resource")
-		
-		Pandora.save_data()
-	
-	# Create or update Quest Objectives category
-	var objective_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == OBJECTIVES_NAME)
-	
-	if not objective_categories:
-		var objective_category = Pandora.create_category(OBJECTIVES_NAME)
-		objective_category.set_script_path("res://addons/pandora_plus/entities/objective_entity.gd")
-		
-		Pandora.create_property(objective_category, "objective_id", "String")
-		Pandora.create_property(objective_category, "objective_type", "int")
-		Pandora.create_property(objective_category, "description", "String")
-		Pandora.create_property(objective_category, "target_entity", "reference")
-		Pandora.create_property(objective_category, "target_quantity", "int")
-		Pandora.create_property(objective_category, "optional", "bool")
-		Pandora.create_property(objective_category, "hidden", "bool")
-		Pandora.create_property(objective_category, "custom_script", "String")
-		Pandora.create_property(objective_category, "order_index", "int")
-		Pandora.create_property(objective_category, "sequential", "bool")
-		
-		Pandora.save_data()
-	
-	# Create or update Quest Rewards category
-	var reward_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == REWARDS_NAME)
-	
-	if not reward_categories:
-		var reward_category = Pandora.create_category(REWARDS_NAME)
-		reward_category.set_script_path("res://addons/pandora_plus/entities/reward_entity.gd")
-		
-		Pandora.create_property(reward_category, "reward_type", "int")
-		Pandora.create_property(reward_category, "reward_entity", "reference")
-		Pandora.create_property(reward_category, "quantity", "int")
-		Pandora.create_property(reward_category, "currency_amount", "int")
-		Pandora.create_property(reward_category, "experience_amount", "int")
-		Pandora.create_property(reward_category, "stat_name", "String")
-		Pandora.create_property(reward_category, "stat_value", "float")
-		Pandora.create_property(reward_category, "faction_name", "String")
-		Pandora.create_property(reward_category, "reputation_amount", "int")
-		Pandora.create_property(reward_category, "custom_script", "String")
-		Pandora.create_property(reward_category, "optional", "bool")
-		Pandora.create_property(reward_category, "reward_name", "String")
-		Pandora.create_property(reward_category, "icon", "resource")
-		
+
+		# Use the custom quest_property type which handles objectives and rewards internally
+		Pandora.create_property(quest_category, "quest_data", "quest_property")
+
 		Pandora.save_data()
