@@ -142,6 +142,36 @@ func set_hidden(hidden: bool) -> void:
 func set_category(category: String) -> void:
 	_category = category
 
+## Helper methods for array management
+
+# Objectives management
+func add_objective(objective: PPQuestObjective) -> void:
+	if objective:
+		_objectives.append(objective)
+
+func remove_objective(objective: PPQuestObjective) -> void:
+	_objectives.erase(objective)
+
+func update_objective_at(idx: int, objective: PPQuestObjective) -> void:
+	if _objectives.size() < idx + 1:
+		_objectives.append(objective)
+	else:
+		_objectives[idx] = objective
+
+# Rewards management
+func add_reward(reward: PPQuestReward) -> void:
+	if reward:
+		_rewards.append(reward)
+
+func remove_reward(reward: PPQuestReward) -> void:
+	_rewards.erase(reward)
+
+func update_reward_at(idx: int, reward: PPQuestReward) -> void:
+	if _rewards.size() < idx + 1:
+		_rewards.append(reward)
+	else:
+		_rewards[idx] = reward
+
 ## Serialization (follows PPQuestObjective pattern)
 
 func load_data(data: Dictionary) -> void:

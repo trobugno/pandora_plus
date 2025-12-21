@@ -11,7 +11,7 @@ const QuestObjectiveType = preload("uid://cggb2hnqs58cy")
 @onready var optional_check: CheckButton = $VBoxContainer/SecondLine/OptionalCheck/CheckButton
 @onready var objective_target: HBoxContainer = $VBoxContainer/ThirdLine/ObjectiveTarget/EntityPicker
 @onready var objective_target_quantity: SpinBox = $VBoxContainer/ThirdLine/ObjectiveTargetQuantity/SpinBox
-@onready var objective_description: LineEdit = $VBoxContainer/LastLine/ObjectiveDescription/LineEdit
+@onready var objective_description: TextEdit = $VBoxContainer/LastLine/ObjectiveDescription/TextEdit
 
 @onready var objective_id_container: VBoxContainer = $VBoxContainer/FirstLine/ObjectiveID
 @onready var objective_type_container: VBoxContainer = $VBoxContainer/FirstLine/ObjectiveType
@@ -52,8 +52,8 @@ func _ready() -> void:
 			_set_property_value())
 
 	objective_description.text_changed.connect(
-		func(new_text: String):
-			current_property.set_description(new_text)
+		func():
+			current_property.set_description(objective_description.text)
 			_set_property_value())
 
 	objective_type.item_selected.connect(

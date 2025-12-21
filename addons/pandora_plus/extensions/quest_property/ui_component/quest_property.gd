@@ -1,7 +1,7 @@
 @tool
 extends PandoraPropertyControl
 
-const QuestPropertyType = preload("uid://cxc47e1iefxhv")
+const QuestPropertyType = preload("uid://c4lpis5f7ji76")
 
 @onready var quest_id: LineEdit = $VBoxContainer/FirstLine/QuestID/LineEdit
 @onready var quest_name: LineEdit = $VBoxContainer/FirstLine/QuestName/LineEdit
@@ -29,6 +29,16 @@ const QuestPropertyType = preload("uid://cxc47e1iefxhv")
 @onready var third_line: HBoxContainer = $VBoxContainer/ThirdLine
 @onready var fourth_line: HBoxContainer = $VBoxContainer/FourthLine
 @onready var fifth_line: HBoxContainer = $VBoxContainer/FifthLine
+
+# Array editing components
+@onready var objectives_window: Window = $ObjectivesWindow
+@onready var rewards_window: Window = $RewardsWindow
+@onready var sixth_line: HBoxContainer = $VBoxContainer/SixthLine
+@onready var seventh_line: HBoxContainer = $VBoxContainer/SeventhLine
+@onready var objectives_info: LineEdit = $VBoxContainer/SixthLine/ObjectivesInfo
+@onready var edit_objectives_button: Button = $VBoxContainer/SixthLine/EditObjectivesButton
+@onready var rewards_info: LineEdit = $VBoxContainer/SeventhLine/RewardsInfo
+@onready var edit_rewards_button: Button = $VBoxContainer/SeventhLine/EditRewardsButton
 
 var current_property: PPQuest = PPQuest.new()
 
@@ -101,6 +111,58 @@ func _ready() -> void:
 				current_property.set_quest_giver(null)
 			_set_property_value())
 
+	# Objectives window
+	edit_objectives_button.pressed.connect(
+		func(): objectives_window.open(current_property.get_objectives())
+	)
+
+	objectives_window.item_added.connect(func(item: Variant):
+		current_property.add_objective(item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
+	objectives_window.item_removed.connect(func(item: Variant):
+		current_property.remove_objective(item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
+	objectives_window.item_updated.connect(func(idx: int, item: Variant):
+		current_property.update_objective_at(idx, item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
+	# Rewards window
+	edit_rewards_button.pressed.connect(
+		func(): rewards_window.open(current_property.get_rewards())
+	)
+
+	rewards_window.item_added.connect(func(item: Variant):
+		current_property.add_reward(item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
+	rewards_window.item_removed.connect(func(item: Variant):
+		current_property.remove_reward(item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
+	rewards_window.item_updated.connect(func(idx: int, item: Variant):
+		current_property.update_reward_at(idx, item)
+		_property.set_default_value(current_property)
+		property_value_changed.emit(current_property)
+		refresh.call_deferred()
+	)
+
 func _set_property_value() -> void:
 	_property.set_default_value(current_property)
 	property_value_changed.emit(current_property)
@@ -169,6 +231,10 @@ func refresh() -> void:
 			quest_id.caret_column = current_property.get_quest_id().length()
 			quest_name.caret_column = current_property.get_quest_name().length()
 			category.caret_column = current_property.get_category().length()
+
+			# Update objectives/rewards info display
+			objectives_info.text = str(current_property.get_objectives().size()) + " Objectives"
+			rewards_info.text = str(current_property.get_rewards().size()) + " Rewards"
 
 func _setting_changed(key: String) -> void:
 	if key == QuestPropertyType.SETTING_QUEST_GIVER_FILTER or \
