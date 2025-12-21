@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dgly28c1a0gcw"]
-
-[ext_resource type="Script" uid="uid://bvl8qiojdoihh" path="res://addons/pandora/ui/components/properties/property_control.gd" id="1_mdrfi"]
-
-[node name="" type="MarginContainer"]
-script = ExtResource("1_mdrfi")
-type = "quest_reward"

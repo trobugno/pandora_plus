@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://cq5newjqwctk5"]
-
-[ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_yp0xn"]
-[ext_resource type="PackedScene" uid="uid://cbwudrsm6o8fl" path="res://addons/pandora_plus/extensions/quest/ui_component/quest.tscn" id="2_d8cem"]
-
-[node name="" type="Button"]
-script = ExtResource("1_yp0xn")
-scene = ExtResource("2_d8cem")

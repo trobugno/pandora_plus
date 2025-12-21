@@ -1,0 +1,211 @@
+class_name PPQuest extends RefCounted
+
+## Quest Property (Static)
+## Represents immutable quest data, similar to PPStats or PPQuestObjective
+## Used to define quests that are then tracked at runtime via PPRuntimeQuest
+
+## Quest Types
+enum QuestType {
+	MAIN_STORY,    ## Main storyline quest
+	SIDE_QUEST,    ## Optional side quest
+	DAILY,         ## Daily repeatable quest
+	WEEKLY,        ## Weekly repeatable quest
+	REPEATABLE     ## Infinitely repeatable quest
+}
+
+var _quest_id: String
+var _quest_name: String
+var _description: String
+var _quest_type: int
+var _objectives: Array  ## Array of objective data (can be PPQuestObjective or Dictionary)
+var _rewards: Array  ## Array of reward references (PandoraReference or Dictionary)
+var _prerequisites: Array  ## Array of quest prerequisites (PandoraReference or Dictionary)
+var _level_requirement: int
+var _auto_complete: bool
+var _time_limit: float
+var _quest_giver: PandoraReference
+var _hidden: bool
+var _category: String
+
+## Constructor
+func _init(
+	quest_id: String = "",
+	quest_name: String = "",
+	description: String = "",
+	quest_type: int = QuestType.SIDE_QUEST,
+	objectives: Array = [],
+	rewards: Array = [],
+	prerequisites: Array = [],
+	level_requirement: int = 1,
+	auto_complete: bool = true,
+	time_limit: float = 0.0,
+	quest_giver: PandoraReference = null,
+	hidden: bool = false,
+	category: String = ""
+) -> void:
+	_quest_id = quest_id
+	_quest_name = quest_name
+	_description = description
+	_quest_type = quest_type
+	_objectives = objectives
+	_rewards = rewards
+	_prerequisites = prerequisites
+	_level_requirement = level_requirement
+	_auto_complete = auto_complete
+	_time_limit = time_limit
+	_quest_giver = quest_giver
+	_hidden = hidden
+	_category = category
+
+## Getters
+
+func get_quest_id() -> String:
+	return _quest_id
+
+func get_quest_name() -> String:
+	return _quest_name
+
+func get_description() -> String:
+	return _description
+
+func get_quest_type() -> int:
+	return _quest_type
+
+func get_objectives() -> Array:
+	return _objectives
+
+func get_rewards() -> Array:
+	return _rewards
+
+func get_prerequisites() -> Array:
+	return _prerequisites
+
+func get_level_requirement() -> int:
+	return _level_requirement
+
+func is_auto_complete() -> bool:
+	return _auto_complete
+
+func get_time_limit() -> float:
+	return _time_limit
+
+func get_quest_giver() -> PandoraReference:
+	return _quest_giver
+
+func get_quest_giver_entity() -> PandoraEntity:
+	return _quest_giver.get_entity() if _quest_giver else null
+
+func is_hidden() -> bool:
+	return _hidden
+
+func get_category() -> String:
+	return _category
+
+## Setters
+
+func set_quest_id(quest_id: String) -> void:
+	_quest_id = quest_id
+
+func set_quest_name(quest_name: String) -> void:
+	_quest_name = quest_name
+
+func set_description(description: String) -> void:
+	_description = description
+
+func set_quest_type(quest_type: int) -> void:
+	_quest_type = quest_type
+
+func set_objectives(objectives: Array) -> void:
+	_objectives = objectives
+
+func set_rewards(rewards: Array) -> void:
+	_rewards = rewards
+
+func set_prerequisites(prerequisites: Array) -> void:
+	_prerequisites = prerequisites
+
+func set_level_requirement(level: int) -> void:
+	_level_requirement = level
+
+func set_auto_complete(auto_complete: bool) -> void:
+	_auto_complete = auto_complete
+
+func set_time_limit(time_limit: float) -> void:
+	_time_limit = time_limit
+
+func set_quest_giver(giver: PandoraReference) -> void:
+	_quest_giver = giver
+
+func set_hidden(hidden: bool) -> void:
+	_hidden = hidden
+
+func set_category(category: String) -> void:
+	_category = category
+
+## Serialization (follows PPQuestObjective pattern)
+
+func load_data(data: Dictionary) -> void:
+	_quest_id = data.get("quest_id", "")
+	_quest_name = data.get("quest_name", "")
+	_description = data.get("description", "")
+	_quest_type = data.get("quest_type", QuestType.SIDE_QUEST)
+	_objectives = data.get("objectives", [])
+	_rewards = data.get("rewards", [])
+	_prerequisites = data.get("prerequisites", [])
+	_level_requirement = data.get("level_requirement", 1)
+	_auto_complete = data.get("auto_complete", true)
+	_time_limit = data.get("time_limit", 0.0)
+	_hidden = data.get("hidden", false)
+	_category = data.get("category", "")
+
+	if data.has("quest_giver"):
+		var giver_data = data["quest_giver"]
+		_quest_giver = PandoraReference.new(giver_data["_entity_id"], giver_data["_type"])
+
+func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
+	var result := {}
+
+	# Helper function to find field setting
+	var find_field = func(name: String) -> Dictionary:
+		var filtered = fields_settings.filter(func(d): return d["name"] == name)
+		return filtered[0] if filtered.size() > 0 else {"enabled": false}
+
+	var quest_id_field = find_field.call("Quest ID")
+	var quest_name_field = find_field.call("Quest Name")
+	var description_field = find_field.call("Description")
+	var quest_type_field = find_field.call("Quest Type")
+	var objectives_field = find_field.call("Objectives")
+	var rewards_field = find_field.call("Rewards")
+	var prerequisites_field = find_field.call("Prerequisites")
+	var level_field = find_field.call("Level Requirement")
+	var time_limit_field = find_field.call("Time Limit")
+	var quest_giver_field = find_field.call("Quest Giver")
+	var category_field = find_field.call("Category")
+
+	if quest_id_field["enabled"]:
+		result["quest_id"] = _quest_id
+	if quest_name_field["enabled"]:
+		result["quest_name"] = _quest_name
+	if description_field["enabled"]:
+		result["description"] = _description
+	if quest_type_field["enabled"]:
+		result["quest_type"] = _quest_type
+	if objectives_field["enabled"]:
+		result["objectives"] = _objectives
+	if rewards_field["enabled"]:
+		result["rewards"] = _rewards
+	if prerequisites_field["enabled"]:
+		result["prerequisites"] = _prerequisites
+	if level_field["enabled"]:
+		result["level_requirement"] = _level_requirement
+	if time_limit_field["enabled"]:
+		result["time_limit"] = _time_limit
+	if quest_giver_field["enabled"] and _quest_giver:
+		result["quest_giver"] = _quest_giver.save_data()
+	if category_field["enabled"]:
+		result["category"] = _category
+
+	return result
+
+func _to_string() -> String:
+	return "<PPQuest '%s'>" % _quest_name

@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://baovlasxgg1lx"]
+
+[ext_resource type="Texture2D" uid="uid://3rjgoexuognq" path="res://addons/pandora_plus/assets/icons/icon_trophy.png" id="1_2ut5j"]
+[ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_xirn7"]
+[ext_resource type="PackedScene" uid="uid://dgly28c1a0gcw" path="res://addons/pandora_plus/extensions/quest_reward_property/ui_component/quest_reward_property.tscn" id="2_tuxrf"]
+
+[node name="AddQuestRewardPropertyButton" type="Button"]
+tooltip_text = "Quest reward property"
+icon = ExtResource("1_2ut5j")
+script = ExtResource("1_xirn7")
+scene = ExtResource("2_tuxrf")

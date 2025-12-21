@@ -58,10 +58,15 @@ func _add_property_control(control: PandoraPropertyControl, item_property: Pando
 	items_container.add_child(item)
 
 func _remove_empty_items():
+	var indices_to_remove := []
 	for index in range(_items.size()):
 		if _items[index] == null:
-			_items.erase(index)
-			item_removed.emit(_items[index])
+			indices_to_remove.append(index)
+
+	for index in range(indices_to_remove.size() - 1, -1, -1):
+		var item_to_remove = _items[indices_to_remove[index]]
+		_items.remove_at(indices_to_remove[index])
+		item_removed.emit(item_to_remove)
 
 func _load_items():
 	var scene = property_bar.get_scene_by_type("ingredient_property")

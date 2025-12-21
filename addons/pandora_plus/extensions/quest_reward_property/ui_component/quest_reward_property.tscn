@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dgly28c1a0gcw"]
+
+[ext_resource type="Script" uid="uid://eel2jftdlndg" path="res://addons/pandora_plus/extensions/quest_reward_property/ui_component/quest_reward_property.gd" id="1_lq1bf"]
+
+[node name="QuestReward" type="MarginContainer"]
+script = ExtResource("1_lq1bf")
+type = "quest_reward_property"
