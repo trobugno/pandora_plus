@@ -68,14 +68,23 @@ func _load_items():
 		var control = scene.instantiate() as PandoraPropertyControl
 		var item_property = PandoraProperty.new("", "array_item", "quest_objective_property")
 		var value = _items[i]
+		# PPQuestObjective is already a RefCounted object, no need to convert
+		# Just handle legacy Dictionary format if present
 		if value is Dictionary:
-			value = Pandora.get_entity(value["_entity_id"])
-		elif value is PandoraReference:
-			value = value.get_entity()
+			var objective = PPQuestObjective.new()
+			objective.load_data(value)
+			value = objective
 		item_property.set_default_value(value)
 		_add_property_control(control, item_property, i)
 
 func open(original_objectives: Array):
+	# Clear previous state if window is being reopened
+	_clear()
+
+	# Free previous property_bar if it exists
+	if property_bar:
+		property_bar.queue_free()
+
 	popup_centered_clamped(Vector2i(800, 1000), 0.5)
 	move_to_foreground()
 	grab_focus()
@@ -88,5 +97,6 @@ func open(original_objectives: Array):
 	_load_items()
 
 func _on_close_requested():
+	close()
 	hide()
 	property_bar.queue_free()

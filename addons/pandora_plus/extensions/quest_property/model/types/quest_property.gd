@@ -56,12 +56,17 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 func write_value(variant: Variant) -> Variant:
 	if variant is PPQuest:
 		var extension_configuration := PandoraSettings.find_extension_configuration_property(_type_name)
-		if extension_configuration:
+		var objective_configuration := PandoraSettings.find_extension_configuration_property("quest_objective_property")
+		var reward_configuration := PandoraSettings.find_extension_configuration_property("quest_reward_property")
+
+		if extension_configuration and objective_configuration and reward_configuration:
 			var fields_settings := extension_configuration.get("fields", []) as Array
-			return variant.save_data(fields_settings)
+			var objective_fields_settings := objective_configuration.get("fields", []) as Array
+			var reward_fields_settings := reward_configuration.get("fields", []) as Array
+			return variant.save_data(fields_settings, objective_fields_settings, reward_fields_settings)
 		else:
-			# Fallback if extension not configured
-			return variant.save_data([])
+			# Fallback if extensions not configured
+			return variant.save_data([], [], [])
 	return variant
 
 func is_valid(variant: Variant) -> bool:

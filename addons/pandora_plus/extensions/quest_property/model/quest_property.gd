@@ -179,20 +179,47 @@ func load_data(data: Dictionary) -> void:
 	_quest_name = data.get("quest_name", "")
 	_description = data.get("description", "")
 	_quest_type = data.get("quest_type", QuestType.SIDE_QUEST)
-	_objectives = data.get("objectives", [])
-	_rewards = data.get("rewards", [])
-	_prerequisites = data.get("prerequisites", [])
 	_level_requirement = data.get("level_requirement", 1)
 	_auto_complete = data.get("auto_complete", true)
 	_time_limit = data.get("time_limit", 0.0)
 	_hidden = data.get("hidden", false)
 	_category = data.get("category", "")
 
+	# Deserialize objectives array
+	if data.has("objectives"):
+		_objectives = []
+		for obj_data in data["objectives"]:
+			var objective := PPQuestObjective.new()
+			objective.load_data(obj_data)
+			_objectives.append(objective)
+	else:
+		_objectives = []
+
+	# Deserialize rewards array
+	if data.has("rewards"):
+		_rewards = []
+		for reward_data in data["rewards"]:
+			var reward := PPQuestReward.new()
+			reward.load_data(reward_data)
+			_rewards.append(reward)
+	else:
+		_rewards = []
+
+	# Deserialize prerequisites array (these are PandoraReferences)
+	if data.has("prerequisites"):
+		_prerequisites = []
+		for prereq_data in data["prerequisites"]:
+			var prereq := PandoraReference.new(prereq_data["_entity_id"], prereq_data["_type"])
+			_prerequisites.append(prereq)
+	else:
+		_prerequisites = []
+
+	# Deserialize quest giver
 	if data.has("quest_giver"):
 		var giver_data = data["quest_giver"]
 		_quest_giver = PandoraReference.new(giver_data["_entity_id"], giver_data["_type"])
 
-func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
+func save_data(fields_settings: Array[Dictionary], objective_fields_settings: Array[Dictionary] = [], reward_fields_settings: Array[Dictionary] = []) -> Dictionary:
 	var result := {}
 
 	# Helper function to find field setting
@@ -220,12 +247,37 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 		result["description"] = _description
 	if quest_type_field["enabled"]:
 		result["quest_type"] = _quest_type
+
+	# Serialize objectives array
 	if objectives_field["enabled"]:
-		result["objectives"] = _objectives
+		var objectives_data = []
+		for objective in _objectives:
+			if objective is PPQuestObjective:
+				objectives_data.append(objective.save_data(objective_fields_settings))
+			elif objective is Dictionary:
+				objectives_data.append(objective)
+		result["objectives"] = objectives_data
+
+	# Serialize rewards array
 	if rewards_field["enabled"]:
-		result["rewards"] = _rewards
+		var rewards_data = []
+		for reward in _rewards:
+			if reward is PPQuestReward:
+				rewards_data.append(reward.save_data(reward_fields_settings))
+			elif reward is Dictionary:
+				rewards_data.append(reward)
+		result["rewards"] = rewards_data
+
+	# Serialize prerequisites array (PandoraReferences)
 	if prerequisites_field["enabled"]:
-		result["prerequisites"] = _prerequisites
+		var prerequisites_data = []
+		for prereq in _prerequisites:
+			if prereq is PandoraReference:
+				prerequisites_data.append(prereq.save_data())
+			elif prereq is Dictionary:
+				prerequisites_data.append(prereq)
+		result["prerequisites"] = prerequisites_data
+
 	if level_field["enabled"]:
 		result["level_requirement"] = _level_requirement
 	if time_limit_field["enabled"]:
