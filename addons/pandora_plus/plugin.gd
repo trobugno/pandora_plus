@@ -23,6 +23,7 @@ func _enable_plugin() -> void:
 	add_autoload_singleton("PPCombatCalculator", "res://addons/pandora_plus/autoloads/PPCombatCalculator.gd")
 	add_autoload_singleton("PPInventoryUtils", "res://addons/pandora_plus/autoloads/PPInventoryUtils.gd")
 	add_autoload_singleton("PPRecipeUtils", "res://addons/pandora_plus/autoloads/PPRecipeUtils.gd")
+	add_autoload_singleton("PPQuestUtils", "res://addons/pandora_plus/autoloads/PPQuestUtils.gd")
 
 func _disable_plugin() -> void:
 	var extensions_dir : Array = []
@@ -35,6 +36,7 @@ func _disable_plugin() -> void:
 	remove_autoload_singleton("PPCombatCalculator")
 	remove_autoload_singleton("PPInventoryUtils")
 	remove_autoload_singleton("PPRecipeUtils")
+	remove_autoload_singleton("PPQuestUtils")
 
 func _ready() -> void:
 	PandoraPlusSettings.initialize()
