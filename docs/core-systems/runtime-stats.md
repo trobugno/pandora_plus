@@ -1,4 +1,7 @@
-# Runtime Stats System
+# 💎 Runtime Stats System
+
+> **💎 Premium Feature** - This feature is only available in Pandora+ Premium edition.
+> [See Core vs Premium comparison →](../core-vs-premium.md)
 
 The **Runtime Stats System** provides dynamic stat calculation with support for temporary and permanent modifiers. It's the foundation for implementing buffs, debuffs, equipment bonuses, and complex stat mechanics in your RPG.
 

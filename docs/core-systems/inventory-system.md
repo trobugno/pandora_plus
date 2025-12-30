@@ -1,4 +1,7 @@
-# Inventory System
+# 💎 Inventory System
+
+> **💎 Premium Feature** - This feature is only available in Pandora+ Premium edition.
+> [See Core vs Premium comparison →](../core-vs-premium.md)
 
 Complete guide to the Pandora+ inventory management system, including items, slots, utilities, and best practices.
 

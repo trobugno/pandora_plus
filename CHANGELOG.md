@@ -28,32 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✨ Location tracking
 - ✨ Complete serialization/deserialization
 
-**Combat System**
-- ✨ Full combat mechanics with damage and healing
-- ✨ Death and revival system for NPCs
-- ✨ Combat calculator with stat-based calculations
-- ✨ Damage modifiers and combat utilities
-
-**Stats & Equipment System**
-- ✨ Base stats system with runtime modifiers
-- ✨ Stat modifier types: FLAT, ADDITIVE, MULTIPLICATIVE
+**Equipment System**
 - ✨ Equipment system with slot-based item management
 - ✨ Equipped stats calculation and bonuses
 - ✨ Equipment utilities for managing equipped items
-
-**Inventory & Crafting**
-- ✨ Complete inventory system with slot-based management
-- ✨ Weight and value tracking
-- ✨ Stack management and item merging
-- ✨ Recipe/Crafting system with ingredient validation
-- ✨ Crafting utilities for recipe management
-- ✨ Inventory utilities for item operations
-
-**Item Systems**
-- ✨ Item drop system with probability-based drops
-- ✨ Status effect system for buffs/debuffs
-- ✨ Item rarity and categorization
-- ✨ Item entities with full property support
 
 **Save/Load System**
 - ✨ Complete save/load system with slot management
@@ -73,9 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 **Utilities & Autoloads**
 - ✨ PPQuestUtils autoload for quest management (start, complete, fail, abandon quests)
 - ✨ PPNPCUtils autoload for NPC interactions and combat
-- ✨ PPInventoryUtils autoload for inventory operations
 - ✨ PPEquipmentUtils autoload for equipment management
-- ✨ PPRecipeUtils autoload for crafting operations
 - ✨ Reward delivery system with validation
 - ✨ Comprehensive utility functions for all core systems
 
@@ -85,9 +61,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✨ Quest reward editor with type selection
 - ✨ Objectives window for managing quest objectives
 - ✨ Rewards window for managing quest rewards
-- ✨ Recipe ingredients window
-- ✨ Status effect property editor
-- ✨ Stats property editor
 
 **Assets & Resources**
 - ✨ 60+ custom icons for game elements (weapons, items, characters, effects, etc.)
@@ -96,8 +69,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ✨ Reward entity
 - ✨ NPC entity
 - ✨ Item entity
-- ✨ Recipe entity
-- ✨ Status effect entity
 
 #### 🐛 Bug Fixes
 
