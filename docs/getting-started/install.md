@@ -19,7 +19,7 @@ Complete installation guide for **Pandora+** in your Godot project.
 #### Step 1: Download Pandora+
 
 1. Go to [Pandora+ Releases](https://github.com/trobugno/pandora_plus/releases)
-2. Download the latest version: `pandora_plus-v0.3.0-beta.zip`
+2. Download the latest version: `pandora_plus-v1.0.0-core.zip`
 3. Extract the archive to a temporary location
 
 #### Step 2: Install in Project
@@ -52,10 +52,20 @@ After installation, verify everything is working:
 
 Go to `Project → Project Settings → Autoload` and verify these are present:
 
-- ✅ **CombatCalculator** - `res://addons/pandora_plus/autoload/combat_calculator.gd`
-- ✅ **PPInventoryUtils** - `res://addons/pandora_plus/autoload/pp_inventory_utils.gd`
-- ✅ **PPRecipeUtils** - `res://addons/pandora_plus/autoload/pp_recipe_utils.gd`
-- ✅ **PPStatsUtils** - `res://addons/pandora_plus/autoload/pp_stats_utils.gd`
+**Core Utilities:**
+- ✅ **PPCombatCalculator** - Combat calculations
+- ✅ **PPInventoryUtils** - Inventory utilities
+- ✅ **PPRecipeUtils** - Recipe/crafting utilities
+- ✅ **PPQuestUtils** - Quest utilities
+- ✅ **PPNPCUtils** - NPC utilities
+- ✅ **PPEquipmentUtils** - Equipment utilities
+
+**Core Managers:**
+- ✅ **PPPlayerManager** - Player data management
+- ✅ **PPQuestManager** - Quest tracking
+- ✅ **PPNPCManager** - NPC management
+- ✅ **PPTimeManager** - Time/day cycle management
+- ✅ **PPSaveManager** - Save/load system
 
 ![Autoloads](../assets/screenshots/autoloads.png ':size=600')
 
@@ -73,29 +83,56 @@ Create a test script and run it:
 extends Node
 
 func _ready():
-	# Test 1: Check autoloads
-	print("CombatCalculator loaded: ", CombatCalculator != null)
-	print("PPInventoryUtils loaded: ", PPInventoryUtils != null)
-	print("PPRecipeUtils loaded: ", PPRecipeUtils != null)
-	
-	# Test 2: Create runtime stats
+	print("=== Pandora+ Installation Test ===\n")
+
+	# Test 1: Check core autoloads
+	print("Core Utilities:")
+	print("  PPCombatCalculator: ", PPCombatCalculator != null)
+	print("  PPInventoryUtils: ", PPInventoryUtils != null)
+	print("  PPRecipeUtils: ", PPRecipeUtils != null)
+	print("  PPQuestUtils: ", PPQuestUtils != null)
+	print("  PPNPCUtils: ", PPNPCUtils != null)
+
+	# Test 2: Check managers
+	print("\nCore Managers:")
+	print("  PPPlayerManager: ", PPPlayerManager != null)
+	print("  PPQuestManager: ", PPQuestManager != null)
+	print("  PPSaveManager: ", PPSaveManager != null)
+
+	# Test 3: Create runtime stats
 	var stats = PPRuntimeStats.new({"health": 100, "attack": 15})
-	print("Runtime stats created: ", stats.get_effective_stat("health"))
-	
-	# Test 3: Create inventory
+	print("\nRuntime stats created: HP=", stats.get_effective_stat("health"))
+
+	# Test 4: Create inventory
 	var inv = PPInventory.new(20)
-	print("Inventory created with %d slots" % inv.max_slots)
-	
+	print("Inventory created with 20 slots")
+
+	# Test 5: Create player data
+	var player_data = PPPlayerData.new()
+	print("Player data created: ", player_data.player_name)
+
 	print("\n✅ All tests passed! Pandora+ is ready to use.")
 ```
 
 Expected output:
 ```
-CombatCalculator loaded: true
-PPInventoryUtils loaded: true
-PPRecipeUtils loaded: true
-Runtime stats created: 100
+=== Pandora+ Installation Test ===
+
+Core Utilities:
+  PPCombatCalculator: true
+  PPInventoryUtils: true
+  PPRecipeUtils: true
+  PPQuestUtils: true
+  PPNPCUtils: true
+
+Core Managers:
+  PPPlayerManager: true
+  PPQuestManager: true
+  PPSaveManager: true
+
+Runtime stats created: HP=100
 Inventory created with 20 slots
+Player data created: Hero
 
 ✅ All tests passed! Pandora+ is ready to use.
 ```
@@ -136,16 +173,68 @@ Pandora+ extends Pandora's data management system. Without Pandora, Pandora+ can
 
 ## 🎨 Optional: Configure Pandora+
 
-Customize Pandora+ behavior in `Project Settings → Pandora+`:
+Customize Pandora+ behavior in `Project Settings → Pandora+ → Config`:
 
-### Available Settings
+### Combat Calculator Settings
 
-| Setting | Description | Default |
-|---------|-------------|---------|
-| `Defense Reducution Factor` | Each point in **Defense** reduces damage by | `0.5` |
-| `Armor Diminishing Returns` | Point where armor has 50% effectiveness | `100` |
-| `Crit Rate Cap` | Crit Rate Percentage Cap | `100` |
-| `Crit Damage Base` | Base Crit Damage (150% = 1.5x) | `150` |
+Control damage calculation formulas and combat mechanics.
+
+| Setting | Description | Default | Range |
+|---------|-------------|---------|-------|
+| `Defense Reduction Factor` | Each point in Defense reduces damage by this factor | `0.5` | - |
+| `Armor Diminishing Returns` | Point where armor has 50% effectiveness | `100.0` | - |
+| `Crit Rate Cap` | Maximum critical hit rate percentage | `100.0` | - |
+| `Crit Damage Base` | Base critical damage multiplier (150% = 1.5x) | `150.0` | - |
+
+---
+
+### Save System Settings
+
+Configure the save/load system behavior.
+
+| Setting | Description | Default | Range |
+|---------|-------------|---------|-------|
+| `Max Save Slots` | Maximum number of save slots available | `3` | 1-20 |
+| `Autosave Enabled` | Enable automatic saving | `true` | - |
+| `Autosave Interval (seconds)` | Time between autosaves | `300.0` (5 min) | 30-3600 |
+| `Save Directory` | Path where save files are stored | `user://saves/` | - |
+| `Save File Extension` | Extension for save files | `.json` | - |
+
+---
+
+### Player Settings
+
+Configure default player starting values.
+
+| Setting | Description | Default | Range |
+|---------|-------------|---------|-------|
+| `Starting Currency` | Player's starting gold/currency | `0` | 0-999999 |
+| `Max Inventory Slots` | Maximum inventory slots (-1 = unlimited) | `-1` | -1-999 |
+| `Respawn Health Percentage` | Health % on respawn (1.0 = 100%) | `1.0` | 0.0-1.0 |
+| 💎 `Skill Points Per Level` | Skill points gained per level (Premium only) | `1` | 1-10 |
+
+---
+
+### Time System Settings
+
+Configure day/night cycle and time management.
+
+| Setting | Description | Default | Range |
+|---------|-------------|---------|-------|
+| `Starting Day` | Game starts at this day number | `1` | 1-999 |
+| `Starting Hour` | Game starts at this hour (24h format) | `12` | 0-23 |
+| `Time Scale Default` | Default time flow speed (1.0 = normal) | `1.0` | 0.0-10.0 |
+
+---
+
+### Example Configuration
+
+```gdscript
+# Access settings in code
+var defense_factor = ProjectSettings.get_setting("pandora_plus/config/combat_calculator/defense_reduction_factor")
+var max_saves = ProjectSettings.get_setting("pandora_plus/config/save_system/max_save_slots")
+var starting_gold = ProjectSettings.get_setting("pandora_plus/config/player/starting_currency")
+```
 
 ---
 
@@ -191,12 +280,6 @@ Customize Pandora+ behavior in `Project Settings → Pandora+`:
 4. Reopen Godot
 5. Enable Pandora+ again
 6. Check Output for errors
-
----
-
-## 🔄 Updating Pandora+ from v0.2.0-alpha
-
-Check [Migration Guide](getting-started/migration-from-v0.2.0-alpha.md) for breaking changes
 
 ---
 

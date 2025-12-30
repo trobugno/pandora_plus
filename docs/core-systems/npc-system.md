@@ -676,7 +676,6 @@ PPNPCUtils.debug_print_all_npcs(all_npcs)
 
 - [PPNPCUtils](../utilities/npc-utils.md) - NPC utility functions
 - [PPRuntimeNPC](../api/runtime-npc.md) - Runtime NPC API
-- [PPNPC](../api/npc.md) - NPC data model
 - [Quest System](quest-system.md) - Quest integration
 - [Player Data](player-data.md) - Save/load integration
 

@@ -683,7 +683,6 @@ func trigger_ambush():
 
 - [NPC System](../core-systems/npc-system.md) - NPC system overview
 - [PPRuntimeNPC](../api/runtime-npc.md) - Runtime NPC API
-- [PPNPC](../api/npc.md) - NPC data model
 - [Quest System](../core-systems/quest-system.md) - Quest integration
 
 ---
