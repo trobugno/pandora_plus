@@ -1,9 +1,8 @@
-# 💎 Runtime Stats System
-
-> **💎 Premium Feature** - This feature is only available in Pandora+ Premium edition.
-> [See Core vs Premium comparison →](../core-vs-premium.md)
+# Runtime Stats System
 
 The **Runtime Stats System** provides dynamic stat calculation with support for temporary and permanent modifiers. It's the foundation for implementing buffs, debuffs, equipment bonuses, and complex stat mechanics in your RPG.
+
+**Availability:** ✅ Core & Premium
 
 ## 🎯 Overview
 
@@ -335,11 +334,11 @@ runtime_stats.get_effective_stat("health")  # Returns actual value
 
 For detailed API documentation:
 
-- [PPRuntimeStats API](../api/PPRuntimeStats.md)
-- [PPStatModifier API](../api/PPStatModifier.md)
+- [PPRuntimeStats API](../api/runtime-stats.md)
+- [PPStatModifier API](../api/stat-modifier.md)
 
 ## 🎓 See Also
 
 - [PPCombatCalculator](../utilities/combat-calculator.md) - Use runtime stats for damage
-- [Inventory System](../core-systems/inventory-system.md) - Items that modify stats
-- [Getting Started](../getting-started/getting-started.md) - Basic tutorial
+- [Inventory System](inventory-system.md) - Items that modify stats
+- [Getting Started](../getting-started/setup.md) - Basic tutorial

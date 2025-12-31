@@ -397,10 +397,10 @@ The `@tool` annotation allows the script to run in the editor for:
 
 ## See Also
 
-- [PPItemEntity](../entities/item-entity.md) - Item system
-- [Inventory System](../core-systems/inventory.md) - Item storage
+- [PPItemEntity](item-entity.md) - Item system
+- [Inventory System](../core-systems/inventory-system.md) - Item storage
 - [Pandora Documentation](https://bitbra.in/pandora) - Base entity system
 
 ---
 
-*API Reference generated from source code version 0.3.0-beta*
+*API Reference generated from source code v1.0.0-core | v1.0.0-premium*

@@ -155,7 +155,7 @@ var obj = PPQuestObjective.create_custom("find_secret", 1)
 
 ### 3. Quest Rewards
 
-Three reward types are supported:
+**Core Reward Types:**
 
 #### Experience Reward
 ```gdscript
@@ -174,6 +174,216 @@ var reward = PPQuestReward.create_currency(50)
 var item_ref = PandoraReference.new("magic_sword", PandoraReference.Type.ENTITY)
 var reward = PPQuestReward.create_item(item_ref, 1)
 # Awards 1 magic sword
+```
+
+**💎 Premium Reward Types:**
+
+#### 💎 Unlock Recipe Reward
+```gdscript
+var recipe_ref = PandoraReference.new("iron_armor_recipe", PandoraReference.Type.ENTITY)
+var reward = PPQuestReward.new(
+    "Iron Armor Recipe",
+    PPQuestReward.RewardType.UNLOCK_RECIPE,
+    recipe_ref
+)
+# Unlocks crafting recipe for player (Premium only)
+```
+
+#### 💎 Stat Boost Reward
+```gdscript
+var reward = PPQuestReward.new(
+    "Permanent Health Boost",
+    PPQuestReward.RewardType.STAT_BOOST,
+    null, 0, 0, 0,
+    "health",  # Stat name
+    10.0       # +10 max health
+)
+# Permanently increases player stat (Premium only)
+```
+
+#### 💎 Reputation Reward
+```gdscript
+var reward = PPQuestReward.new(
+    "Kingdom Favor",
+    PPQuestReward.RewardType.REPUTATION,
+    null, 0, 0, 0, "", 0.0,
+    "KINGDOM",  # Faction name
+    25          # +25 reputation
+)
+# Increases faction reputation (Premium only)
+```
+
+#### 💎 Optional Rewards
+```gdscript
+var bonus_reward = PPQuestReward.new(
+    "Bonus Gold",
+    PPQuestReward.RewardType.CURRENCY,
+    null, 0, 100, 0,
+    "", 0.0, "", 0, "",
+    true  # Optional
+)
+# Player can choose to accept or decline (Premium only)
+```
+
+---
+
+## 💎 Premium Features
+
+### Level Requirements
+
+**Premium only** - Restrict quests by player level:
+
+```gdscript
+var quest = PPQuest.new()
+quest.set_level_requirement(10)  # Requires level 10+
+
+# Check if player meets level requirement
+var player_level = PPPlayerManager.get_player_data().level
+if player_level >= quest.get_level_requirement():
+    print("Quest available")
+else:
+    print("Need level %d" % quest.get_level_requirement())
+```
+
+**Quest Entity Integration:**
+```gdscript
+var quest_entity = Pandora.get_entity("advanced_quest") as PPQuestEntity
+var level_req = quest_entity.get_level_requirement()
+
+# Filter quests by player level in NPC
+var npc = PPNPCUtils.spawn_npc(npc_entity)
+var player_level = PPPlayerManager.get_player_data().level
+var available = npc.get_available_quests(player_level, completed_ids)
+```
+
+---
+
+### Time-Limited Quests
+
+**Premium only** - Add time limits to create urgency:
+
+```gdscript
+var quest = PPQuest.new()
+quest.set_time_limit(300.0)  # 5 minutes (300 seconds)
+
+# Quest will auto-fail if not completed within time limit
+# Tracked automatically by PPRuntimeQuest
+```
+
+**Example: Timed Delivery Quest:**
+```gdscript
+var delivery_quest = PPQuest.new()
+delivery_quest.set_quest_id("urgent_delivery")
+delivery_quest.set_quest_name("Urgent Delivery")
+delivery_quest.set_time_limit(600.0)  # 10 minutes
+
+# Runtime tracking
+var runtime_quest = PPQuestManager.start_quest_from_data(delivery_quest)
+
+# Check remaining time
+var remaining = runtime_quest.get_time_remaining()
+print("Time left: %.0f seconds" % remaining)
+
+# Quest auto-fails when time expires
+```
+
+---
+
+### Sequential Objectives
+
+**Premium only** - Force objectives to complete in order:
+
+```gdscript
+# Objective 1: Must complete first
+var obj1 = PPQuestObjective.new(
+    "talk_to_elder",
+    ObjectiveType.TALK,
+    "Talk to Village Elder",
+    elder_ref, 1,
+    false, false,  # not optional, not hidden
+    true,  # Sequential = true
+    0      # Order index = 0 (first)
+)
+
+# Objective 2: Unlocks after objective 1
+var obj2 = PPQuestObjective.new(
+    "collect_herbs",
+    ObjectiveType.COLLECT,
+    "Collect 5 Healing Herbs",
+    herb_ref, 5,
+    false, false,
+    true,  # Sequential = true
+    1      # Order index = 1 (second)
+)
+
+# Objective 3: Unlocks after objective 2
+var obj3 = PPQuestObjective.new(
+    "return_to_elder",
+    ObjectiveType.TALK,
+    "Return to Elder",
+    elder_ref, 1,
+    false, false,
+    true,  # Sequential = true
+    2      # Order index = 2 (third)
+)
+
+quest.add_objective(obj1)
+quest.add_objective(obj2)
+quest.add_objective(obj3)
+
+# Only obj1 starts active, others unlock in sequence
+```
+
+---
+
+### Optional Objectives
+
+**Premium only** - Create bonus objectives:
+
+```gdscript
+# Required objective
+var main_obj = PPQuestObjective.new(
+    "defeat_boss",
+    ObjectiveType.KILL,
+    "Defeat the Bandit Leader",
+    boss_ref, 1,
+    false  # Not optional
+)
+
+# Bonus objective
+var bonus_obj = PPQuestObjective.new(
+    "save_hostages",
+    ObjectiveType.CUSTOM,
+    "Save all hostages",
+    null, 3,
+    true  # Optional = true
+)
+
+quest.add_objective(main_obj)
+quest.add_objective(bonus_obj)
+
+# Quest can complete without bonus objective
+# Completing bonus gives better rewards
+```
+
+**Example: Dynamic Rewards Based on Completion:**
+```gdscript
+func apply_quest_rewards(quest: PPRuntimeQuest):
+    var base_reward = 100  # Base XP
+    var bonus_reward = 50  # Bonus XP
+
+    # Check if optional objectives completed
+    var all_complete = true
+    for obj in quest.get_objectives_progress():
+        if obj.get("optional", false) and not obj["completed"]:
+            all_complete = false
+
+    if all_complete:
+        PPPlayerManager.get_player_data().add_experience(base_reward + bonus_reward)
+        print("Perfect completion! +%d XP" % (base_reward + bonus_reward))
+    else:
+        PPPlayerManager.get_player_data().add_experience(base_reward)
+        print("Quest complete. +%d XP" % base_reward)
 ```
 
 ---

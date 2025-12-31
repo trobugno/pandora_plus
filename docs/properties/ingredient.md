@@ -402,4 +402,4 @@ This ensures type safety at creation time. In release builds, assertions are dis
 
 ---
 
-*API Reference generated from source code version 0.3.0-beta*
+*API Reference generated from source code v1.0.0-core | v1.0.0-premium*

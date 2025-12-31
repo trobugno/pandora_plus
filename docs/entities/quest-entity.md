@@ -158,6 +158,45 @@ Returns the quest category.
 
 ---
 
+###### 💎 `get_level_requirement() -> int`
+
+Returns the minimum player level requirement for this quest.
+
+**Returns:** Level requirement (default: 1)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+var quest_entity = Pandora.get_entity("ADVANCED_QUEST") as PPQuestEntity
+var level_req = quest_entity.get_level_requirement()
+
+if PPPlayerManager.get_player_data().level >= level_req:
+    print("Quest unlocked!")
+else:
+    print("Requires level %d" % level_req)
+```
+
+---
+
+###### 💎 `get_time_limit() -> float`
+
+Returns the time limit in seconds for completing the quest.
+
+**Returns:** Time limit in seconds (0 = no time limit)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+var time_limit = quest_entity.get_time_limit()
+
+if time_limit > 0:
+    print("Time limit: %.0f seconds" % time_limit)
+```
+
+---
+
 ## Usage Example
 
 ### Example: Quest Manager Integration

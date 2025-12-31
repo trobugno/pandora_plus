@@ -346,14 +346,192 @@ print("Level %d %s" % [loaded_player.level, loaded_player.class_type])
 
 ## 💎 Premium Features
 
-In **Pandora+ Premium**, player data is significantly expanded with:
+In **Pandora+ Premium**, `PPPlayerData` is significantly expanded with RPG features:
 
-- **Player Stats** - Health, mana, strength, agility, etc.
-- **Player Level & Experience** - Progression system
-- **Player Class** - Character classes and specializations
-- **Player Inventory** - Full inventory integration
-- **Player Equipment** - Equipped items and slots
-- **Player Skills** - Learned skills and abilities
+### Leveling & Progression
+
+**Premium only** - Full character progression system:
+
+```gdscript
+var player_data = PPPlayerData.new()
+
+// Set level and experience
+player_data.level = 1
+player_data.experience = 0
+player_data.skill_points = 0
+
+# Add experience
+if player_data.add_experience(500):
+    print("Level up!")
+    player_data.level += 1
+    player_data.skill_points += ProjectSettings.get_setting(
+        "pandora_plus/config/player/skill_points_per_level"
+    )
+
+# Check progression
+var exp_needed = player_data.get_exp_for_next_level()
+var progress = player_data.get_level_progress()  # 0.0 to 1.0
+print("Level %d (%d%% to next)" % [player_data.level, progress * 100])
+```
+
+---
+
+### Reputation System
+
+**Premium only** - Track relationships with NPCs and factions:
+
+```gdscript
+# NPC reputation (-100 to +100)
+player_data.set_npc_reputation("VILLAGE_ELDER", 50)
+player_data.modify_npc_reputation("VILLAGE_ELDER", 10)  # Increase by 10
+var rep = player_data.get_npc_reputation("VILLAGE_ELDER")
+
+# Faction reputation (-100 to +100)
+player_data.set_faction_reputation("KINGDOM", 25)
+player_data.modify_faction_reputation("KINGDOM", 15)  # Increase by 15
+var faction_rep = player_data.get_faction_reputation("KINGDOM")
+
+# Affects merchant prices, quest availability, dialogue options
+```
+
+---
+
+### Full Inventory System
+
+**Premium only** - Complete inventory management:
+
+```gdscript
+# Initialize inventory
+player_data.inventory = PPInventory.new(30, 10)  # 30 slots, 10 equipped slots
+
+# Add items
+var sword = Pandora.get_entity("IRON_SWORD") as PPItemEntity
+player_data.inventory.add_item(sword, 1)
+
+# Manage currency
+player_data.inventory.add_currency(100)
+player_data.inventory.remove_currency(50)
+
+# Full inventory API available
+```
+
+---
+
+### Stats & Equipment
+
+**Premium only** - Character statistics:
+
+```gdscript
+# Base stats (without equipment)
+player_data.base_stats = PPStats.new()
+
+# Runtime stats (with equipment and modifiers)
+var stats_dict = {"health": 100, "attack": 15, "defense": 5}
+player_data.runtime_stats = PPRuntimeStats.new(stats_dict)
+
+# Equipped items stats
+player_data.equipped_stats = PPRuntimeStats.new()
+
+# Get effective stats
+var effective_health = player_data.runtime_stats.get_effective_stat("health")
+```
+
+---
+
+### Progress Tracking
+
+**Premium only** - Game progress features:
+
+```gdscript
+# Unlock recipes
+player_data.unlock_recipe("IRON_SWORD_RECIPE")
+if player_data.has_recipe("IRON_SWORD_RECIPE"):
+    print("Can craft Iron Sword")
+
+# Discover locations
+player_data.discover_location("ANCIENT_RUINS")
+if player_data.is_location_discovered("ANCIENT_RUINS"):
+    print("Fast travel unlocked")
+
+# Achievements
+player_data.unlock_achievement("FIRST_KILL")
+if player_data.has_achievement("FIRST_KILL"):
+    print("Achievement unlocked!")
+```
+
+---
+
+### Position & Checkpoints
+
+**Premium only** - World state tracking:
+
+```gdscript
+# Current position
+player_data.world_position = Vector3(100, 0, 50)
+player_data.current_scene = "res://scenes/world.tscn"
+
+# Checkpoint for respawn
+player_data.checkpoint_position = Vector3(0, 0, 0)
+player_data.checkpoint_scene = "res://scenes/town.tscn"
+
+# On death, respawn at checkpoint
+func on_player_death():
+    get_tree().change_scene_to_file(player_data.checkpoint_scene)
+    player.global_position = player_data.checkpoint_position
+```
+
+---
+
+### Custom Data
+
+**Core & Premium** - Extensible data storage:
+
+```gdscript
+# Store custom game-specific data
+player_data.custom_data["reputation_modifiers"] = {"diplomacy": 1.2}
+player_data.custom_data["completed_puzzles"] = ["PUZZLE_1", "PUZZLE_2"]
+player_data.custom_data["skill_tree"] = {
+    "strength_1": true,
+    "agility_2": false
+}
+
+# Retrieve custom data
+var modifiers = player_data.custom_data.get("reputation_modifiers", {})
+```
+
+---
+
+### Serialization
+
+**Core & Premium** - Complete save/load support:
+
+```gdscript
+# Save player data
+var save_dict = player_data.to_dict()
+var file = FileAccess.open("user://save.dat", FileAccess.WRITE)
+file.store_var(save_dict)
+file.close()
+
+# Load player data
+var file = FileAccess.open("user://save.dat", FileAccess.READ)
+var loaded_dict = file.get_var()
+file.close()
+var player_data = PPPlayerData.from_dict(loaded_dict)
+
+# Summary
+print(player_data.get_summary())
+# Output:
+# Player Data Summary:
+#   Name: Hero
+#   Level: 5 (Premium)
+#   Unlocked Recipes: 12
+#   Discovered Locations: 8
+#   Achievements: 5
+```
+
+---
+
+**See full API reference:** [PPPlayerData](../api/player-data.md)
 
 [See Core vs Premium comparison →](../core-vs-premium.md)
 

@@ -45,6 +45,8 @@ Defines the type and repeatability of a quest.
 | `_quest_giver` | `PandoraReference` | Reference to NPC or entity that gives this quest |
 | `_hidden` | `bool` | Whether quest details are hidden from player |
 | `_category` | `String` | Quest category for organization |
+| 💎 `_level_requirement` | `int` | Minimum player level requirement (Premium only) |
+| 💎 `_time_limit` | `float` | Time limit in seconds to complete quest (Premium only, 0 = no limit) |
 
 ---
 
@@ -169,6 +171,43 @@ Returns the quest category.
 
 ---
 
+###### 💎 `get_level_requirement() -> int`
+
+Returns the minimum player level requirement.
+
+**Returns:** Minimum level (default: 1)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if player_level >= quest.get_level_requirement():
+    print("Quest available!")
+else:
+    print("You need level %d" % quest.get_level_requirement())
+```
+
+---
+
+###### 💎 `get_time_limit() -> float`
+
+Returns the time limit in seconds for completing the quest.
+
+**Returns:** Time limit in seconds (0 = no time limit)
+
+**Premium Only**
+
+**Note:** Timed quests will fail automatically if not completed within the limit. Tracked by `PPRuntimeQuest`.
+
+**Example:**
+```gdscript
+if quest.get_time_limit() > 0:
+    var minutes = quest.get_time_limit() / 60.0
+    print("Complete within %.1f minutes" % minutes)
+```
+
+---
+
 ### Setters
 
 All properties have corresponding setter methods:
@@ -183,6 +222,8 @@ All properties have corresponding setter methods:
 - `set_quest_giver(giver: PandoraReference)`
 - `set_hidden(hidden: bool)`
 - `set_category(category: String)`
+- 💎 `set_level_requirement(level: int)` **(Premium only)**
+- 💎 `set_time_limit(seconds: float)` **(Premium only)**
 
 ---
 

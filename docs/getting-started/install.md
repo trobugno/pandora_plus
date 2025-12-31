@@ -67,8 +67,6 @@ Go to `Project → Project Settings → Autoload` and verify these are present:
 - ✅ **PPTimeManager** - Time/day cycle management
 - ✅ **PPSaveManager** - Save/load system
 
-![Autoloads](../assets/screenshots/autoloads.png ':size=600')
-
 ### 2. Check Pandora Extensions Path
 
 Go to `Project → Project Settings → Pandora → Extensions`:
@@ -301,10 +299,10 @@ If you need to remove Pandora+:
 
 **Installation complete!** Now you're ready to:
 
-1. 📖 Follow the [Getting Started Guide](getting-started/setup.md)
-2. 🎓 Learn about [Runtime Stats](core-systems/runtime-stats.md)
-3. 🎒 Explore the [Inventory System](core-systems/inventory.md)
-4. 🔨 Try the [Recipe System](core-systems/recipe.md)
+1. 📖 Follow the [Getting Started Guide](setup.md)
+2. 🎓 Learn about [Runtime Stats](../core-systems/runtime-stats.md)
+3. 🎒 Explore the [Inventory System](../core-systems/inventory-system.md)
+4. 🔨 Try the [Recipe System](../properties/recipe.md)
 
 ---
 

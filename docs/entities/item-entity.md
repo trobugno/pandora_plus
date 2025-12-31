@@ -495,11 +495,11 @@ The `@tool` annotation allows the script to run in the editor, enabling:
 
 ## See Also
 
-- [PPRarityEntity](../entities/item-entity.md) - Rarity system
+- [PPRarityEntity](rarity-entity.md) - Rarity system
 - [Inventory System](../core-systems/inventory-system.md) - Inventory system
 - [PPRecipe](../properties/recipe.md) - Crafting system
 - [Pandora Documentation](https://bitbra.in/pandora) - Base entity system
 
 ---
 
-*API Reference generated from source code version 0.3.0-beta*
+*API Reference generated from source code v1.0.0-core | v1.0.0-premium*

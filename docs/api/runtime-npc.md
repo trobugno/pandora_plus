@@ -16,6 +16,9 @@ This class manages:
 - Alive/dead state
 - Location tracking
 - Quest giver functionality
+- 💎 Reputation system with player
+- 💎 Trading system for merchant NPCs
+- 💎 Schedule/routine system for NPC activities
 - Full serialization for save/load
 
 ---
@@ -69,7 +72,7 @@ Emitted when NPC is revived.
 
 ---
 
-### Location Signal
+### Location Signals
 
 ###### `location_changed(old_location: Variant, new_location: Variant)`
 
@@ -78,6 +81,80 @@ Emitted when NPC's location changes.
 **Parameters:**
 - `old_location`: Previous location reference
 - `new_location`: New location reference
+
+---
+
+###### 💎 `activity_changed(old_activity: String, new_activity: String)`
+
+Emitted when NPC's current activity changes (from schedule).
+
+**Parameters:**
+- `old_activity`: Previous activity name
+- `new_activity`: Current activity name
+
+**Premium Only**
+
+---
+
+###### 💎 `schedule_location_changed(target_location: PandoraReference)`
+
+Emitted when NPC changes location based on schedule.
+
+**Parameters:**
+- `target_location`: New location from schedule
+
+**Premium Only**
+
+---
+
+### 💎 Reputation Signals (Premium Only)
+
+###### 💎 `reputation_changed(old_value: int, new_value: int)`
+
+Emitted when NPC's reputation with player changes.
+
+**Parameters:**
+- `old_value`: Previous reputation (-100 to 100)
+- `new_value`: Current reputation (-100 to 100)
+
+**Premium Only**
+
+---
+
+### 💎 Trading Signals (Premium Only)
+
+###### 💎 `shop_inventory_updated()`
+
+Emitted when merchant's shop inventory changes.
+
+**Premium Only**
+
+---
+
+###### 💎 `merchant_out_of_stock(item: PPItemEntity)`
+
+Emitted when merchant runs out of a specific item.
+
+**Parameters:**
+- `item`: Item that is out of stock
+
+**Premium Only**
+
+---
+
+###### 💎 `merchant_out_of_currency()`
+
+Emitted when merchant cannot afford to buy from player.
+
+**Premium Only**
+
+---
+
+###### 💎 `shop_restocked()`
+
+Emitted when merchant inventory is restocked.
+
+**Premium Only**
 
 ---
 
@@ -304,18 +381,258 @@ Returns the NPC's current location reference.
 
 ---
 
-### Quest Integration
+### 💎 Reputation System (Premium Only)
 
-###### `get_available_quests(completed_quest_ids: Array) -> Array`
+###### 💎 `modify_reputation(amount: int) -> void`
 
-Returns quests this NPC can give, filtered by completion status.
+Modifies NPC's reputation with the player.
 
 **Parameters:**
+- `amount`: Amount to change (positive or negative)
+
+**Emits:** `reputation_changed` signal
+
+**Premium Only**
+
+**Example:**
+```gdscript
+# Increase reputation (helpful action)
+npc.modify_reputation(10)
+
+# Decrease reputation (hostile action)
+npc.modify_reputation(-25)
+```
+
+---
+
+###### 💎 `get_reputation() -> int`
+
+Gets current reputation value with player.
+
+**Returns:** Reputation value (-100 to 100)
+
+**Premium Only**
+
+---
+
+###### 💎 `get_reputation_level() -> String`
+
+Gets reputation level as a human-readable string.
+
+**Returns:** One of: "Hostile", "Unfriendly", "Neutral", "Friendly", "Allied"
+
+**Premium Only**
+
+**Reputation Levels:**
+- **Hostile**: -100 to -51
+- **Unfriendly**: -50 to -1
+- **Neutral**: 0 to 24
+- **Friendly**: 25 to 74
+- **Allied**: 75 to 100
+
+**Example:**
+```gdscript
+var level = npc.get_reputation_level()
+match level:
+    "Allied":
+        show_special_dialog()
+    "Hostile":
+        enter_combat()
+```
+
+---
+
+### 💎 Schedule System (Premium Only)
+
+###### 💎 `update_schedule(current_game_hour: int) -> void`
+
+Updates NPC location and activity based on schedule and current game time.
+
+**Parameters:**
+- `current_game_hour`: Current hour (0-23)
+
+**Emits:** `schedule_location_changed`, `activity_changed` signals
+
+**Premium Only**
+
+**Example:**
+```gdscript
+# Call this when game time changes
+func _on_hour_changed(new_hour: int):
+    for npc in all_npcs:
+        npc.update_schedule(new_hour)
+```
+
+---
+
+###### 💎 `get_current_activity() -> String`
+
+Gets NPC's current activity from schedule.
+
+**Returns:** Activity name (e.g., "working", "sleeping", "idle")
+
+**Premium Only**
+
+---
+
+### 💎 Trading System (Premium Only)
+
+###### 💎 `is_merchant() -> bool`
+
+Returns `true` if this NPC is a merchant.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_shop_inventory() -> PPInventory`
+
+Gets merchant's shop inventory.
+
+**Returns:** `PPInventory` containing items for sale
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if npc.is_merchant():
+    var shop = npc.get_shop_inventory()
+    display_shop_ui(shop)
+```
+
+---
+
+###### 💎 `get_merchant_currency() -> int`
+
+Gets merchant's current currency (gold).
+
+**Returns:** Currency amount
+
+**Premium Only**
+
+---
+
+###### 💎 `calculate_buy_price(item: PPItemEntity) -> int`
+
+Calculates price player pays to buy item from merchant.
+
+**Parameters:**
+- `item`: Item to buy
+
+**Returns:** Final price including reputation discount and merchant multipliers
+
+**Premium Only**
+
+**Pricing Formula:**
+```
+price = base_value × item_multiplier × merchant_multiplier × (1 - reputation_discount)
+```
+
+**Reputation Discounts:**
+- Allied: 20% discount
+- Friendly: 10% discount
+- Neutral: No discount
+- Unfriendly: 10% markup
+- Hostile: 20% markup
+
+**Example:**
+```gdscript
+var item = Pandora.get_entity("IRON_SWORD") as PPItemEntity
+var price = merchant_npc.calculate_buy_price(item)
+print("This sword costs %d gold" % price)
+```
+
+---
+
+###### 💎 `calculate_sell_price(item: PPItemEntity) -> int`
+
+Calculates price merchant pays to buy item from player.
+
+**Parameters:**
+- `item`: Item to sell
+
+**Returns:** Final price including reputation bonus and merchant multipliers
+
+**Premium Only**
+
+---
+
+###### 💎 `can_afford_purchase(item: PPItemEntity, quantity: int) -> bool`
+
+Checks if merchant has enough currency to buy from player.
+
+**Parameters:**
+- `item`: Item player is selling
+- `quantity`: Quantity to sell
+
+**Returns:** `true` if merchant can afford the purchase
+
+**Premium Only**
+
+---
+
+###### 💎 `is_item_available_for_reputation(item: PPItemEntity, player_reputation: int) -> bool`
+
+Checks if item is available based on player's reputation with this NPC.
+
+**Parameters:**
+- `item`: Item to check
+- `player_reputation`: Player's reputation value
+
+**Returns:** `true` if item meets reputation requirements
+
+**Premium Only**
+
+---
+
+###### 💎 `needs_restock(current_game_time: float) -> bool`
+
+Checks if merchant needs to restock inventory.
+
+**Parameters:**
+- `current_game_time`: Current game time in seconds
+
+**Returns:** `true` if restock interval has elapsed
+
+**Premium Only**
+
+---
+
+###### 💎 `perform_restock() -> void`
+
+Performs merchant inventory restock based on configuration.
+
+**Emits:** `shop_restocked` signal
+
+**Premium Only**
+
+**Example:**
+```gdscript
+# Automatic restock check
+func _process_merchants():
+    var current_time = PPTimeManager.get_current_time()
+
+    for merchant in all_merchants:
+        if merchant.needs_restock(current_time):
+            merchant.perform_restock()
+```
+
+---
+
+### Quest Integration
+
+###### `get_available_quests(completed_quest_ids: Array) -> Array` (Core)
+###### 💎 `get_available_quests(player_level: int, completed_quest_ids: Array) -> Array` (Premium)
+
+Returns quests this NPC can give, filtered by completion status and level requirements.
+
+**Parameters:**
+- 💎 `player_level`: Player's current level (Premium only - filters by level requirement)
 - `completed_quest_ids`: Array of quest IDs player has already completed
 
 **Returns:** Array of `PPQuestEntity` instances
 
-**Example:**
+**Example (Core):**
 ```gdscript
 # Get quests player hasn't done yet
 var player_completed = ["TUTORIAL_001", "MAIN_001"]
@@ -323,6 +640,18 @@ var available = npc.get_available_quests(player_completed)
 
 for quest in available:
     print("Available quest: %s" % quest.get_quest_name())
+```
+
+**Example (💎 Premium):**
+```gdscript
+# Get quests for player's level
+var player_level = PPPlayerManager.get_player_data().level
+var player_completed = ["TUTORIAL_001", "MAIN_001"]
+var available = npc.get_available_quests(player_level, player_completed)
+
+for quest in available:
+    var quest_data = quest.get_quest_data()
+    print("Quest: %s (Req. Level %d)" % [quest.get_quest_name(), quest_data.get_level_requirement()])
 ```
 
 ---

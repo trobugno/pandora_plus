@@ -49,6 +49,63 @@ func _on_quest_available(npc: PPRuntimeNPC, count: int):
     show_quest_marker(npc)
 ```
 
+### 💎 Premium Signals
+
+**Premium Only**
+
+#### Reputation Signals
+
+```gdscript
+signal reputation_threshold_reached(npc: PPRuntimeNPC, level: String)
+signal faction_reputation_changed(faction: String, average_reputation: float)
+```
+
+Emitted when reputation changes cross thresholds.
+
+**Example:**
+```gdscript
+PPNPCUtils.reputation_threshold_reached.connect(_on_reputation_changed)
+
+func _on_reputation_changed(npc: PPRuntimeNPC, level: String):
+    print("%s reputation: %s" % [npc.get_npc_name(), level])
+    if level == "Allied":
+        unlock_special_merchant_items(npc)
+```
+
+#### Trading Signals
+
+```gdscript
+signal merchant_transaction_completed(merchant: PPRuntimeNPC, item: PPItemEntity, quantity: int, price: int, transaction_type: String)
+signal merchant_transaction_failed(reason: String)
+```
+
+Emitted when trading with merchants.
+
+**Example:**
+```gdscript
+PPNPCUtils.merchant_transaction_completed.connect(_on_trade_complete)
+
+func _on_trade_complete(merchant, item, qty, price, type):
+    print("%s %d %s for %d gold" % [type, qty, item.get_item_name(), price])
+```
+
+#### Schedule Signals
+
+```gdscript
+signal npc_schedule_updated(npc: PPRuntimeNPC)
+```
+
+Emitted when NPC schedule updates (location/activity changes).
+
+**Example:**
+```gdscript
+PPNPCUtils.npc_schedule_updated.connect(_on_schedule_updated)
+
+func _on_schedule_updated(npc: PPRuntimeNPC):
+    print("%s is now %s" % [npc.get_npc_name(), npc.get_current_activity()])
+    update_npc_position(npc)
+```
+
 ---
 
 ## NPC Lifecycle & Management
@@ -240,20 +297,32 @@ PPNPCUtils.revive_npc(npc, 0.5)
 
 ### can_engage_combat()
 
-Checks if NPC can engage in combat (only hostile NPCs).
+Checks if NPC can engage in combat.
 
 ```gdscript
-func can_engage_combat(runtime_npc: PPRuntimeNPC) -> bool
+func can_engage_combat(runtime_npc: PPRuntimeNPC, player_reputation: int = 0) -> bool  # 💎 Premium parameter
 ```
 
-**Returns:** `true` if NPC is hostile and alive
+**Parameters:**
+- `runtime_npc`: NPC to check
+- 💎 `player_reputation`: Player's reputation with NPC (Premium: affects hostility)
+
+**Returns:** `true` if NPC can be fought
+
+💎 **Premium behavior:** Checks reputation level. NPCs with reputation < -25 (Unfriendly or worse) can be fought.
 
 **Example:**
 ```gdscript
+# Core usage
 if PPNPCUtils.can_engage_combat(npc):
     start_combat_with(npc)
+
+# 💎 Premium: Reputation-based combat
+var reputation = npc.get_reputation()
+if PPNPCUtils.can_engage_combat(npc, reputation):
+    start_combat_with(npc)
 else:
-    print("Cannot fight this NPC")
+    print("NPC is not hostile (reputation: %d)" % reputation)
 ```
 
 ---
@@ -266,14 +335,24 @@ Checks if player can interact with NPC.
 func can_interact_with_npc(runtime_npc: PPRuntimeNPC) -> bool
 ```
 
-**Returns:** `true` if NPC is friendly and alive
+**Returns:** `true` if NPC can be interacted with
+
+💎 **Premium checks:**
+- NPC is not sleeping (respects schedule)
+- NPC reputation >= 0 (not hostile)
 
 **Example:**
 ```gdscript
 if PPNPCUtils.can_interact_with_npc(npc):
     show_dialogue_ui(npc)
 else:
-    print("Cannot interact (hostile or dead)")
+    # 💎 Premium: Check specific reason
+    if npc.get_current_activity() == "sleep":
+        print("NPC is sleeping. Come back later.")
+    elif npc.get_reputation() < 0:
+        print("NPC is hostile!")
+    else:
+        print("Cannot interact")
 ```
 
 ---
@@ -287,16 +366,28 @@ Gets available quests from an NPC.
 ```gdscript
 func get_available_quests_from_npc(
     runtime_npc: PPRuntimeNPC,
+    player_level: int,  # 💎 Premium parameter
     completed_quest_ids: Array
 ) -> Array
 ```
+
+**Parameters:**
+- `runtime_npc`: NPC to check for quests
+- 💎 `player_level`: Player's current level (Premium: validates level requirements)
+- `completed_quest_ids`: Array of completed quest IDs
 
 **Returns:** Array of available `PPQuestEntity`
 
 **Example:**
 ```gdscript
 var completed = PPQuestManager.get_completed_quest_ids()
-var quests = PPNPCUtils.get_available_quests_from_npc(runtime_npc, completed)
+
+# Core usage
+var quests = PPNPCUtils.get_available_quests_from_npc(runtime_npc, 1, completed)
+
+# 💎 Premium: Filter by player level
+var player_level = PPPlayerManager.get_player_data().level
+var quests = PPNPCUtils.get_available_quests_from_npc(runtime_npc, player_level, completed)
 
 for quest_entity in quests:
     var quest = quest_entity.get_quest_data()
@@ -463,6 +554,49 @@ for enemy in enemies:
 
 ---
 
+### 💎 get_friendly_npcs()
+
+Gets NPCs with reputation >= 25 (Friendly or better).
+
+**Premium Only**
+
+```gdscript
+func get_friendly_npcs(npcs: Array) -> Array
+```
+
+**Example:**
+```gdscript
+var friends = PPNPCUtils.get_friendly_npcs(all_npcs)
+print("%d friendly NPCs" % friends.size())
+
+for npc in friends:
+    print("- %s (reputation: %d)" % [npc.get_npc_name(), npc.get_reputation()])
+```
+
+---
+
+### 💎 get_all_merchants()
+
+Gets all merchant NPCs.
+
+**Premium Only**
+
+```gdscript
+func get_all_merchants(npcs: Array) -> Array
+```
+
+**Example:**
+```gdscript
+var merchants = PPNPCUtils.get_all_merchants(all_npcs)
+print("Found %d merchants" % merchants.size())
+
+for merchant in merchants:
+    if merchant.is_alive():
+        show_merchant_marker(merchant)
+```
+
+---
+
 ### sort_npcs()
 
 Sorts NPCs by various criteria.
@@ -475,11 +609,376 @@ func sort_npcs(npcs: Array, sort_by: String) -> Array
 - `"name"`: Alphabetical by name
 - `"health"`: By current health (highest first)
 - `"faction"`: By faction name
+- 💎 `"reputation"`: By reputation (highest first) - **Premium Only**
 
 **Example:**
 ```gdscript
 var sorted = PPNPCUtils.sort_npcs(all_npcs, "health")
 # NPCs with most health first
+
+# 💎 Premium: Sort by reputation
+var sorted_by_rep = PPNPCUtils.sort_npcs(all_npcs, "reputation")
+# Most friendly NPCs first
+```
+
+---
+
+## 💎 Reputation System
+
+**Premium Only**
+
+### modify_npc_reputation()
+
+Modifies an NPC's reputation with the player.
+
+```gdscript
+func modify_npc_reputation(runtime_npc: PPRuntimeNPC, amount: int, reason: String = "") -> void
+```
+
+**Parameters:**
+- `runtime_npc`: NPC whose reputation to modify
+- `amount`: Amount to add/subtract (-100 to +100)
+- `reason`: Optional reason for the change
+
+**Emits:** `reputation_threshold_reached` when reputation level changes
+
+**Example:**
+```gdscript
+# Player helped NPC
+PPNPCUtils.modify_npc_reputation(npc, 10, "helped_with_quest")
+
+# Player attacked NPC
+PPNPCUtils.modify_npc_reputation(npc, -25, "attacked")
+
+print("New reputation: %d (%s)" % [npc.get_reputation(), npc.get_reputation_level()])
+```
+
+---
+
+### modify_faction_reputation()
+
+Modifies reputation with an entire faction.
+
+```gdscript
+func modify_faction_reputation(npcs: Array, faction: String, amount: int) -> void
+```
+
+**Parameters:**
+- `npcs`: Array of all NPCs
+- `faction`: Faction ID to modify
+- `amount`: Reputation change amount
+
+**Emits:** `faction_reputation_changed` with average reputation
+
+**Example:**
+```gdscript
+# Player helped kingdom
+PPNPCUtils.modify_faction_reputation(all_npcs, "KINGDOM", 15)
+
+# Player attacked bandits (increases guard reputation)
+PPNPCUtils.modify_faction_reputation(all_npcs, "TOWN_GUARDS", 5)
+```
+
+---
+
+### get_faction_reputation()
+
+Gets average reputation with a faction.
+
+```gdscript
+func get_faction_reputation(npcs: Array, faction: String) -> float
+```
+
+**Returns:** Average reputation across all faction members
+
+**Example:**
+```gdscript
+var avg_rep = PPNPCUtils.get_faction_reputation(all_npcs, "KINGDOM")
+print("Kingdom reputation: %.1f" % avg_rep)
+```
+
+---
+
+## 💎 Trading & Merchant System
+
+**Premium Only**
+
+### buy_from_merchant()
+
+Player buys item from merchant NPC.
+
+```gdscript
+func buy_from_merchant(
+    merchant: PPRuntimeNPC,
+    player_inventory: PPInventory,
+    item: PPItemEntity,
+    quantity: int
+) -> bool
+```
+
+**Parameters:**
+- `merchant`: Merchant NPC
+- `player_inventory`: Player's inventory
+- `item`: Item to buy
+- `quantity`: Number to buy
+
+**Returns:** `true` if purchase succeeded
+
+**Emits:** `merchant_transaction_completed` or `merchant_transaction_failed`
+
+**Example:**
+```gdscript
+var potion = Pandora.get_entity("HEALTH_POTION") as PPItemEntity
+
+if PPNPCUtils.buy_from_merchant(merchant_npc, player.inventory, potion, 3):
+    print("Bought 3 potions!")
+else:
+    print("Purchase failed (check currency/stock)")
+```
+
+---
+
+### sell_to_merchant()
+
+Player sells item to merchant NPC.
+
+```gdscript
+func sell_to_merchant(
+    merchant: PPRuntimeNPC,
+    player_inventory: PPInventory,
+    item: PPItemEntity,
+    quantity: int
+) -> bool
+```
+
+**Returns:** `true` if sale succeeded
+
+**Example:**
+```gdscript
+var old_sword = Pandora.get_entity("RUSTY_SWORD") as PPItemEntity
+
+if PPNPCUtils.sell_to_merchant(merchant_npc, player.inventory, old_sword, 1):
+    print("Sold rusty sword!")
+```
+
+---
+
+### get_purchase_preview()
+
+Gets detailed purchase information before buying.
+
+```gdscript
+func get_purchase_preview(
+    merchant: PPRuntimeNPC,
+    item: PPItemEntity,
+    quantity: int,
+    player_currency: int
+) -> Dictionary
+```
+
+**Returns:** Dictionary with:
+- `item`: PPItemEntity
+- `quantity`: int
+- `base_price`: float
+- `price_per_unit`: float (with merchant markup)
+- `total_price`: float (with reputation discount)
+- `reputation_level`: String
+- `reputation_discount`: float
+- `can_afford`: bool
+- `in_stock`: bool
+
+**Example:**
+```gdscript
+var preview = PPNPCUtils.get_purchase_preview(
+    merchant_npc,
+    potion,
+    3,
+    player.inventory.game_currency
+)
+
+print("Total: %d gold" % preview["total_price"])
+print("Reputation discount: %.0f%%" % (preview["reputation_discount"] * 100))
+print("Can afford: %s" % preview["can_afford"])
+```
+
+---
+
+### get_sell_preview()
+
+Gets detailed sell information before selling.
+
+```gdscript
+func get_sell_preview(
+    merchant: PPRuntimeNPC,
+    item: PPItemEntity,
+    quantity: int
+) -> Dictionary
+```
+
+**Returns:** Dictionary with sell price details
+
+**Example:**
+```gdscript
+var preview = PPNPCUtils.get_sell_preview(merchant_npc, sword, 1)
+print("Sell for: %d gold" % preview["total_price"])
+```
+
+---
+
+### find_merchants_with_item()
+
+Finds all merchants selling a specific item.
+
+```gdscript
+func find_merchants_with_item(npcs: Array, item: PPItemEntity) -> Array
+```
+
+**Example:**
+```gdscript
+var potion = Pandora.get_entity("HEALTH_POTION") as PPItemEntity
+var sellers = PPNPCUtils.find_merchants_with_item(all_npcs, potion)
+
+print("Found %d merchants selling %s" % [sellers.size(), potion.get_item_name()])
+```
+
+---
+
+### update_merchant_restocks()
+
+Updates merchant inventory restocks.
+
+```gdscript
+func update_merchant_restocks(merchants: Array, current_game_time: float) -> void
+```
+
+**Example:**
+```gdscript
+# Call periodically in game loop
+func _on_hour_changed(new_hour: int):
+    var merchants = PPNPCUtils.get_all_merchants(all_npcs)
+    PPNPCUtils.update_merchant_restocks(merchants, Time.get_ticks_msec())
+```
+
+---
+
+## 💎 Schedule Management
+
+**Premium Only**
+
+### update_all_schedules()
+
+Updates all NPC schedules to current game time.
+
+```gdscript
+func update_all_schedules(npcs: Array, current_game_hour: int) -> void
+```
+
+**Parameters:**
+- `npcs`: Array of all NPCs
+- `current_game_hour`: Current hour (0-23)
+
+**Emits:** `npc_schedule_updated` for each NPC
+
+**Example:**
+```gdscript
+# Connect to time system
+PPTimeManager.hour_changed.connect(_on_hour_changed)
+
+func _on_hour_changed(new_hour: int):
+    PPNPCUtils.update_all_schedules(all_npcs, new_hour)
+    print("Updated schedules for hour %d" % new_hour)
+```
+
+---
+
+### get_npcs_by_activity()
+
+Gets all NPCs performing a specific activity.
+
+```gdscript
+func get_npcs_by_activity(npcs: Array, activity: String) -> Array
+```
+
+**Example:**
+```gdscript
+var sleeping = PPNPCUtils.get_npcs_by_activity(all_npcs, "sleep")
+print("%d NPCs are sleeping" % sleeping.size())
+
+var working = PPNPCUtils.get_npcs_by_activity(all_npcs, "work")
+print("%d NPCs are working" % working.size())
+```
+
+---
+
+### is_npc_available_at_time()
+
+Checks if NPC will be at a location at a specific time.
+
+```gdscript
+func is_npc_available_at_time(
+    npc: PPRuntimeNPC,
+    hour: int,
+    location: PandoraReference
+) -> bool
+```
+
+**Example:**
+```gdscript
+var tavern = Pandora.get_reference("LOCATION_TAVERN")
+
+if PPNPCUtils.is_npc_available_at_time(npc, 20, tavern):
+    print("NPC will be at tavern at 8 PM")
+```
+
+---
+
+### get_next_available_time()
+
+Gets next hour when NPC will be at a location.
+
+```gdscript
+func get_next_available_time(
+    npc: PPRuntimeNPC,
+    location: PandoraReference,
+    current_hour: int
+) -> int
+```
+
+**Returns:** Hour (0-23) when NPC will be at location, or `-1` if never
+
+**Example:**
+```gdscript
+var shop = Pandora.get_reference("LOCATION_SHOP")
+var next_hour = PPNPCUtils.get_next_available_time(npc, shop, current_hour)
+
+if next_hour >= 0:
+    print("NPC will be at shop at %d:00" % next_hour)
+else:
+    print("NPC never visits this location")
+```
+
+---
+
+### get_schedule_preview()
+
+Gets 24-hour schedule preview for UI display.
+
+```gdscript
+func get_schedule_preview(npc: PPRuntimeNPC) -> Array
+```
+
+**Returns:** Array of dictionaries with `hour`, `location`, and `activity` keys
+
+**Example:**
+```gdscript
+var schedule = PPNPCUtils.get_schedule_preview(npc)
+
+for entry in schedule:
+    print("%02d:00 - %s at %s" % [
+        entry["hour"],
+        entry["activity"],
+        entry["location"].get_entity().get_string("name")
+    ])
 ```
 
 ---
@@ -501,6 +1000,8 @@ func calculate_npc_stats(npcs: Array) -> Dictionary
 - `faction_distribution`: Dictionary (faction → count)
 - `hostile_count`: int
 - `quest_giver_count`: int
+- 💎 `average_reputation`: float - **Premium Only**
+- 💎 `merchant_count`: int - **Premium Only**
 
 **Example:**
 ```gdscript
@@ -509,6 +1010,10 @@ var stats = PPNPCUtils.calculate_npc_stats(all_npcs)
 print("Total NPCs: %d" % stats["total_npcs"])
 print("Alive: %d" % stats["alive_count"])
 print("Quest Givers: %d" % stats["quest_giver_count"])
+
+# 💎 Premium: Reputation and merchant stats
+print("Average reputation: %.1f" % stats["average_reputation"])
+print("Merchants: %d" % stats["merchant_count"])
 
 for faction in stats["faction_distribution"]:
     print("  %s: %d" % [faction, stats["faction_distribution"][faction]])

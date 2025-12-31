@@ -11,10 +11,11 @@ Complete player data container for save/load systems, including inventory, stats
 `PPPlayerData` is a centralized data structure that holds all player-specific runtime information. It's designed for easy serialization, making it perfect for save/load systems.
 
 This class contains:
-- **Basic Info**: Player name
+- **Basic Info**: Player name, 💎 level, 💎 experience, 💎 skill points
 - **Inventory & Equipment**: Full inventory and equipped items
 - **Stats & Combat**: Base stats, runtime stats, and active status effects
 - **Position & Scene**: Current location and checkpoint data
+- **💎 Relationships**: NPC and faction reputation tracking
 - **Game Progress**: Unlocked recipes, discovered locations, achievements
 - **Custom Data**: Extensible dictionary for game-specific features
 
@@ -29,6 +30,36 @@ This class contains:
 Player's display name.
 
 **Default:** `"Hero"`
+
+---
+
+###### 💎 `level: int`
+
+Player's current level.
+
+**Default:** `1`
+
+**Premium Only**
+
+---
+
+###### 💎 `experience: int`
+
+Player's current experience points.
+
+**Default:** `0`
+
+**Premium Only**
+
+---
+
+###### 💎 `skill_points: int`
+
+Available skill points to spend.
+
+**Default:** `0`
+
+**Premium Only**
 
 ---
 
@@ -93,6 +124,32 @@ Last checkpoint position for respawn.
 ###### `checkpoint_scene: String`
 
 Scene path of the last checkpoint.
+
+---
+
+### 💎 Relationships (Premium Only)
+
+###### 💎 `npc_reputations: Dictionary`
+
+NPC reputation values (npc_entity_id -> reputation int).
+
+**Range:** `-100` (hostile) to `+100` (allied)
+
+**Default:** `{}`
+
+**Premium Only**
+
+---
+
+###### 💎 `faction_reputations: Dictionary`
+
+Faction reputation values (faction_name -> reputation int).
+
+**Range:** `-100` (hostile) to `+100` (allied)
+
+**Default:** `{}`
+
+**Premium Only**
 
 ---
 
@@ -249,6 +306,150 @@ Checks if an achievement is unlocked.
 - `achievement_id`: Achievement identifier
 
 **Returns:** `true` if achievement is unlocked
+
+---
+
+### 💎 Reputation Helpers (Premium Only)
+
+###### 💎 `set_npc_reputation(npc_id: String, reputation: int) -> void`
+
+Sets reputation with an NPC.
+
+**Parameters:**
+- `npc_id`: NPC entity ID
+- `reputation`: Reputation value (-100 to 100)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+player_data.set_npc_reputation("VILLAGE_ELDER", 50)
+```
+
+---
+
+###### 💎 `get_npc_reputation(npc_id: String) -> int`
+
+Gets reputation with an NPC.
+
+**Parameters:**
+- `npc_id`: NPC entity ID
+
+**Returns:** Reputation value (0 if not set)
+
+**Premium Only**
+
+---
+
+###### 💎 `modify_npc_reputation(npc_id: String, amount: int) -> void`
+
+Modifies reputation with an NPC.
+
+**Parameters:**
+- `npc_id`: NPC entity ID
+- `amount`: Amount to change (positive or negative)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+player_data.modify_npc_reputation("VILLAGE_ELDER", 10)  # Increase by 10
+player_data.modify_npc_reputation("BANDIT_LEADER", -25)  # Decrease by 25
+```
+
+---
+
+###### 💎 `set_faction_reputation(faction_name: String, reputation: int) -> void`
+
+Sets reputation with a faction.
+
+**Parameters:**
+- `faction_name`: Faction identifier
+- `reputation`: Reputation value (-100 to 100)
+
+**Premium Only**
+
+---
+
+###### 💎 `get_faction_reputation(faction_name: String) -> int`
+
+Gets reputation with a faction.
+
+**Parameters:**
+- `faction_name`: Faction identifier
+
+**Returns:** Reputation value (0 if not set)
+
+**Premium Only**
+
+---
+
+###### 💎 `modify_faction_reputation(faction_name: String, amount: int) -> void`
+
+Modifies reputation with a faction.
+
+**Parameters:**
+- `faction_name`: Faction identifier
+- `amount`: Amount to change (positive or negative)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+player_data.modify_faction_reputation("KINGDOM", 15)
+player_data.modify_faction_reputation("BANDITS", -30)
+```
+
+---
+
+### 💎 Experience & Leveling Helpers (Premium Only)
+
+###### 💎 `add_experience(amount: int) -> bool`
+
+Adds experience points and checks for level up.
+
+**Parameters:**
+- `amount`: Experience to add
+
+**Returns:** `true` if player leveled up
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if player_data.add_experience(500):
+    print("Level up!")
+    player_data.level += 1
+    player_data.skill_points += ProjectSettings.get_setting("pandora_plus/config/player/skill_points_per_level")
+```
+
+---
+
+###### 💎 `get_exp_for_next_level() -> int`
+
+Calculates experience needed for next level.
+
+**Returns:** Experience required for next level
+
+**Premium Only**
+
+**Note:** Default formula is `level * 1000`. Override for custom leveling curves.
+
+---
+
+###### 💎 `get_level_progress() -> float`
+
+Calculates experience progress to next level.
+
+**Returns:** Progress percentage (0.0 to 1.0)
+
+**Premium Only**
+
+**Example:**
+```gdscript
+var progress = player_data.get_level_progress()
+$ProgressBar.value = progress * 100  # Convert to percentage
+```
 
 ---
 

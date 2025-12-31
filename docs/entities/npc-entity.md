@@ -159,6 +159,120 @@ for quest_ref in quest_refs:
 
 ---
 
+### 💎 Merchant System (Premium Only)
+
+###### 💎 `is_merchant() -> bool`
+
+Returns `true` if NPC is a merchant.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_shop_inventory() -> Array`
+
+Returns array of `PPMerchantItem` configurations for merchant's shop.
+
+**Returns:** Array of `PPMerchantItem` instances
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if npc_entity.is_merchant():
+    var merchant_items = npc_entity.get_shop_inventory()
+
+    for merchant_item in merchant_items:
+        var item = merchant_item.get_item_entity()
+        var price_mult = merchant_item.get_price_multiplier()
+        print("Sells: %s (x%.2f price)" % [item.get_item_name(), price_mult])
+```
+
+---
+
+###### 💎 `get_buy_price_multiplier() -> float`
+
+Returns price multiplier for items player buys from merchant.
+
+**Returns:** Multiplier value (e.g., 1.5 = 150% of base value)
+
+**Premium Only**
+
+---
+
+###### 💎 `get_sell_price_multiplier() -> float`
+
+Returns price multiplier for items merchant buys from player.
+
+**Returns:** Multiplier value (e.g., 0.5 = 50% of base value)
+
+**Premium Only**
+
+---
+
+###### 💎 `get_merchant_type() -> String`
+
+Returns merchant type (e.g., "General", "Blacksmith", "Alchemist").
+
+**Premium Only**
+
+---
+
+###### 💎 `can_restock() -> bool`
+
+Returns `true` if merchant can restock inventory.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_restock_interval() -> float`
+
+Returns restock interval in hours.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_merchant_currency() -> int`
+
+Returns merchant's initial currency amount.
+
+**Premium Only**
+
+---
+
+### 💎 Schedule System (Premium Only)
+
+###### 💎 `has_schedule() -> bool`
+
+Returns `true` if NPC has a schedule/routine.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_schedule() -> PPNPCSchedule`
+
+Returns NPC's schedule resource defining hourly activities and locations.
+
+**Returns:** `PPNPCSchedule` instance or `null`
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if npc_entity.has_schedule():
+    var schedule = npc_entity.get_schedule()
+
+    if schedule and schedule.enabled:
+        var location_at_noon = schedule.get_location_at_time(12)
+        var activity_at_noon = schedule.get_activity_at_time(12)
+        print("At noon: %s at %s" % [activity_at_noon, location_at_noon.get_entity().get_string("name")])
+```
+
+---
+
 ## Usage Example
 
 ### Example: NPC Spawner System

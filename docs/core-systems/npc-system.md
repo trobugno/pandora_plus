@@ -643,6 +643,260 @@ if not PPNPCUtils.can_interact_with_npc(runtime_npc):
 
 ---
 
+## 💎 Premium Features
+
+### Reputation System
+
+**Premium only** - Track player reputation with individual NPCs and factions:
+
+#### NPC Reputation
+
+```gdscript
+# Modify reputation with specific NPC
+runtime_npc.modify_reputation(10)  # Increase by 10
+
+# Get current reputation
+var rep = runtime_npc.get_reputation()
+print("Reputation: %d" % rep)  # Range: -100 to +100
+
+# Get reputation level
+var level = runtime_npc.get_reputation_level()
+print("Status: %s" % level)  # "Hostile", "Unfriendly", "Neutral", "Friendly", "Allied"
+```
+
+**Reputation Levels:**
+- **Hostile**: -100 to -51 (NPC refuses interaction, may attack)
+- **Unfriendly**: -50 to -1 (Limited services, higher prices)
+- **Neutral**: 0 to 24 (Standard interaction)
+- **Friendly**: 25 to 74 (Better prices, bonus quests)
+- **Allied**: 75 to 100 (Best prices, exclusive content)
+
+**Listen to Reputation Changes:**
+```gdscript
+runtime_npc.reputation_changed.connect(_on_reputation_changed)
+
+func _on_reputation_changed(old_value: int, new_value: int):
+    var old_level = get_level_from_value(old_value)
+    var new_level = get_level_from_value(new_value)
+
+    if old_level != new_level:
+        print("Reputation with %s changed to %s!" % [
+            runtime_npc.get_npc_name(),
+            new_level
+        ])
+```
+
+#### Faction Reputation
+
+Tracked via **PPPlayerData** (see [Player Data System](player-data.md)):
+
+```gdscript
+# Set faction reputation
+PPPlayerManager.get_player_data().modify_faction_reputation("KINGDOM", 25)
+
+# Get faction reputation
+var faction_rep = PPPlayerManager.get_player_data().get_faction_reputation("KINGDOM")
+
+# All NPCs of same faction affected
+var npc_entity = Pandora.get_entity("GUARD") as PPNPCEntity
+if npc_entity.get_faction() == "KINGDOM":
+    # This NPC's services affected by faction reputation
+    print("Kingdom reputation: %d" % faction_rep)
+```
+
+---
+
+### Trading & Merchant System
+
+**Premium only** - Full merchant functionality with dynamic pricing:
+
+#### Merchant Configuration
+
+Define merchant NPCs in PPNPCEntity:
+
+```gdscript
+var npc_entity = Pandora.get_entity("MERCHANT_GENERAL") as PPNPCEntity
+
+# Check if merchant
+if npc_entity.is_merchant():
+    var shop_items = npc_entity.get_shop_inventory()  # Array[PPMerchantItem]
+    var buy_mult = npc_entity.get_buy_price_multiplier()  # e.g., 1.5
+    var sell_mult = npc_entity.get_sell_price_multiplier()  # e.g., 0.5
+    var currency = npc_entity.get_merchant_currency()  # Starting gold
+```
+
+#### Runtime Trading
+
+```gdscript
+# Spawn merchant NPC
+var merchant_npc = PPNPCUtils.spawn_npc(merchant_entity)
+
+# Check if merchant
+if merchant_npc.is_merchant():
+    var shop_inv = merchant_npc.get_shop_inventory()
+
+    # Calculate buy price (player buys from merchant)
+    var item = Pandora.get_entity("IRON_SWORD") as PPItemEntity
+    var price = merchant_npc.calculate_buy_price(item)
+    print("Iron Sword costs: %d gold" % price)
+
+    # Price factors:
+    # - Base item value
+    # - Merchant buy multiplier
+    # - Reputation discount/markup
+```
+
+**Reputation-Based Pricing:**
+
+```gdscript
+# Allied: 20% discount
+# Friendly: 10% discount
+# Neutral: No change
+# Unfriendly: 10% markup
+# Hostile: 20% markup
+
+# Example: 100g item with Allied reputation
+# Final price: 100 * 1.5 (merchant mult) * 0.8 (20% discount) = 120g
+```
+
+#### Merchant Operations
+
+```gdscript
+# Check merchant currency
+var gold = merchant_npc.get_merchant_currency()
+
+# Check if merchant can afford purchase (player selling to merchant)
+if merchant_npc.can_afford_purchase(item, quantity):
+    var sell_price = merchant_npc.calculate_sell_price(item)
+    print("Merchant will pay: %d gold" % sell_price)
+
+# Check reputation requirements
+if merchant_npc.is_item_available_for_reputation(item, player_rep):
+    print("Item unlocked for your reputation level")
+```
+
+#### Merchant Restocking
+
+```gdscript
+# Check if needs restock
+var current_time = PPTimeManager.get_current_time()
+if merchant_npc.needs_restock(current_time):
+    merchant_npc.perform_restock()
+
+# Listen to restock events
+merchant_npc.shop_restocked.connect(_on_shop_restocked)
+
+func _on_shop_restocked():
+    print("Merchant inventory refreshed!")
+    refresh_shop_ui()
+```
+
+**Configure Restock:**
+```gdscript
+var merchant_entity = Pandora.get_entity("MERCHANT") as PPNPCEntity
+
+if merchant_entity.can_restock():
+    var interval = merchant_entity.get_restock_interval()  # Hours
+    print("Restocks every %.1f hours" % interval)
+```
+
+---
+
+### Schedule & Routine System
+
+**Premium only** - NPCs follow daily schedules based on game time:
+
+#### Define NPC Schedule
+
+Create **PPNPCSchedule** resource in Pandora editor:
+
+```gdscript
+var npc_entity = Pandora.get_entity("BLACKSMITH") as PPNPCEntity
+
+if npc_entity.has_schedule():
+    var schedule = npc_entity.get_schedule()  # PPNPCSchedule
+
+    # Schedule defines hourly activities and locations
+    # Example:
+    # 6-12h: "working" at "blacksmith_shop"
+    # 12-13h: "eating" at "tavern"
+    # 13-18h: "working" at "blacksmith_shop"
+    # 18-22h: "relaxing" at "home"
+    # 22-6h: "sleeping" at "home"
+```
+
+#### Update NPC Schedule at Runtime
+
+```gdscript
+# Update NPC location/activity based on current hour
+var current_hour = PPTimeManager.get_current_hour()  # 0-23
+runtime_npc.update_schedule(current_hour)
+
+# Listen to schedule changes
+runtime_npc.activity_changed.connect(_on_activity_changed)
+runtime_npc.schedule_location_changed.connect(_on_location_changed)
+
+func _on_activity_changed(old_activity: String, new_activity: String):
+    print("%s is now %s" % [runtime_npc.get_npc_name(), new_activity])
+
+func _on_location_changed(target_location: PandoraReference):
+    var location = target_location.get_entity()
+    print("NPC moving to: %s" % location.get_string("name"))
+```
+
+#### Automatic Schedule Management
+
+```gdscript
+# Connect to time manager
+PPTimeManager.hour_changed.connect(_on_hour_changed)
+
+func _on_hour_changed(new_hour: int):
+    # Update all NPCs with schedules
+    for npc in get_all_npcs():
+        if npc.get_npc_entity().has_schedule():
+            npc.update_schedule(new_hour)
+```
+
+#### Get Current Activity
+
+```gdscript
+# Check what NPC is doing
+var activity = runtime_npc.get_current_activity()
+print("NPC is currently: %s" % activity)
+
+# Customize interaction based on activity
+match activity:
+    "working":
+        show_merchant_ui(runtime_npc)
+    "sleeping":
+        print("NPC is asleep, come back later")
+    "eating":
+        show_casual_dialogue(runtime_npc)
+```
+
+---
+
+### Premium Quest Integration
+
+**Premium only** - Level-based quest filtering:
+
+```gdscript
+# Get quests filtered by player level
+var player_level = PPPlayerManager.get_player_data().level
+var completed_ids = PPQuestManager.get_completed_quest_ids()
+
+# Premium overload with level filtering
+var available = runtime_npc.get_available_quests(player_level, completed_ids)
+
+# Only quests within level range returned
+for quest_entity in available:
+    var quest_data = quest_entity.get_quest_data()
+    var level_req = quest_data.get_level_requirement()
+    print("Quest: %s (Level %d)" % [quest_data.get_quest_name(), level_req])
+```
+
+---
+
 ## Debug Utilities
 
 ```gdscript

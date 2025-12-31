@@ -23,24 +23,32 @@ Objectives can target specific entities (enemies, items, locations) and track pr
 | `_description` | `String` | Description shown to player |
 | `_target_reference` | `PandoraReference` | Reference to target entity (enemy, item, location, etc.) |
 | `_target_quantity` | `int` | Number required to complete objective |
+| 💎 `_optional` | `bool` | Whether objective is optional (Premium only) |
 | `_hidden` | `bool` | Whether objective progress is hidden from player |
+| 💎 `_sequential` | `bool` | Whether objective must be completed in order (Premium only) |
+| 💎 `_order_index` | `int` | Position in sequential order, starts at 0 (Premium only) |
 | `_custom_script` | `String` | Path to custom script for complex logic |
 
 ---
 
 ## Constructor
 
-###### `PPQuestObjective(objective_id: String = "", objective_type: int = -1, description: String = "", target_reference: PandoraReference = null, target_quantity: int = 0, hidden: bool = false, custom_script: String = "")`
+###### Core: `PPQuestObjective(objective_id, objective_type, description, target_reference, target_quantity, hidden, custom_script)`
+
+###### 💎 Premium: `PPQuestObjective(objective_id, objective_type, description, target_reference, target_quantity, optional, hidden, sequential, order_index, custom_script)`
 
 Creates a new quest objective with specified parameters.
 
 **Parameters:**
-- `objective_id`: Unique identifier
-- `objective_type`: Type identifier (game-defined enum)
-- `description`: Player-facing description
-- `target_reference`: Target entity reference (can be `null`)
-- `target_quantity`: Required quantity (default: 0)
+- `objective_id`: Unique identifier (default: `""`)
+- `objective_type`: Type identifier (game-defined enum) (default: `-1`)
+- `description`: Player-facing description (default: `""`)
+- `target_reference`: Target entity reference (can be `null`) (default: `null`)
+- `target_quantity`: Required quantity (default: `0`)
+- 💎 `optional`: Whether objective is optional **(Premium only)** (default: `false`)
 - `hidden`: Hide progress from player (default: `false`)
+- 💎 `sequential`: Must complete in order **(Premium only)** (default: `false`)
+- 💎 `order_index`: Position in sequential order **(Premium only)** (default: `0`)
 - `custom_script`: Custom script path (default: `""`)
 
 **Example:**
@@ -125,9 +133,49 @@ Returns the required quantity to complete the objective.
 
 ---
 
+###### 💎 `is_optional() -> bool`
+
+Returns whether the objective is optional.
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if not objective.is_optional():
+    print("This is a required objective")
+```
+
+---
+
 ###### `is_hidden() -> bool`
 
 Returns whether the objective progress is hidden from the player.
+
+---
+
+###### 💎 `is_sequential() -> bool`
+
+Returns whether the objective must be completed in sequential order.
+
+**Premium Only**
+
+**Note:** Sequential objectives activate only after the previous objective is completed.
+
+**Example:**
+```gdscript
+if objective.is_sequential():
+    print("Complete objectives in order: %d" % objective.get_order_index())
+```
+
+---
+
+###### 💎 `get_order_index() -> int`
+
+Returns the position of this objective in the sequential order.
+
+**Returns:** Order index (0 = first objective)
+
+**Premium Only**
 
 ---
 
@@ -145,7 +193,10 @@ All properties have corresponding setter methods:
 - `set_description(description: String)`
 - `set_target_reference(reference: PandoraReference)`
 - `set_target_quantity(quantity: int)`
+- 💎 `set_optional(optional: bool)` **(Premium only)**
 - `set_hidden(hidden: bool)`
+- 💎 `set_sequential(sequential: bool)` **(Premium only)**
+- 💎 `set_order_index(index: int)` **(Premium only)**
 - `set_custom_script(script: String)`
 
 ---

@@ -68,6 +68,22 @@ Emitted when the quest is abandoned.
 
 ---
 
+###### 💎 `time_limit_expired()`
+
+Emitted when a timed quest's time limit expires.
+
+**Premium Only**
+
+**Example:**
+```gdscript
+runtime_quest.time_limit_expired.connect(func():
+    print("Time's up! Quest failed.")
+    show_time_expired_message()
+)
+```
+
+---
+
 ###### `quest_progress_updated(completed_objectives: int, total_objectives: int, progress_percentage: float)`
 
 Emitted when quest progress changes.
@@ -243,17 +259,148 @@ Returns `true` if quest is in any finished state (completed, failed, or abandone
 
 ---
 
+### 💎 Premium Features
+
+###### 💎 `get_level_requirement() -> int`
+
+Returns the minimum player level requirement for this quest.
+
+**Premium Only**
+
+**Returns:** Level requirement (default: 1)
+
+**Example:**
+```gdscript
+var level_req = runtime_quest.get_level_requirement()
+var player_level = PPPlayerManager.get_player_data().level
+
+if player_level >= level_req:
+    print("Quest available!")
+else:
+    print("Requires level %d (you are level %d)" % [level_req, player_level])
+```
+
+---
+
+###### 💎 `get_time_limit() -> float`
+
+Returns the time limit in seconds for completing the quest.
+
+**Premium Only**
+
+**Returns:** Time limit in seconds (0.0 = no time limit)
+
+**Example:**
+```gdscript
+var time_limit = runtime_quest.get_time_limit()
+
+if time_limit > 0:
+    print("Complete within %.0f seconds" % time_limit)
+```
+
+---
+
+###### 💎 `get_time_elapsed() -> float`
+
+Returns the time elapsed since quest was started.
+
+**Premium Only**
+
+**Returns:** Elapsed time in seconds
+
+**Example:**
+```gdscript
+var elapsed = runtime_quest.get_time_elapsed()
+print("Time spent: %.1f seconds" % elapsed)
+```
+
+---
+
+###### 💎 `get_time_remaining() -> float`
+
+Returns the remaining time before time limit expires.
+
+**Premium Only**
+
+**Returns:** Remaining time in seconds, or `-1.0` if no time limit
+
+**Example:**
+```gdscript
+var remaining = runtime_quest.get_time_remaining()
+
+if remaining > 0:
+    print("%.0f seconds left!" % remaining)
+    update_timer_ui(remaining)
+elif remaining == -1.0:
+    print("No time limit")
+```
+
+---
+
+###### 💎 `is_timed() -> bool`
+
+Returns whether this quest has a time limit.
+
+**Premium Only**
+
+**Returns:** `true` if quest has time limit, `false` otherwise
+
+**Example:**
+```gdscript
+if runtime_quest.is_timed():
+    # Show timer UI
+    timer_label.show()
+    timer_label.text = "Time: %.0fs" % runtime_quest.get_time_remaining()
+```
+
+---
+
+###### 💎 `update(delta: float) -> void`
+
+Updates the quest timer. Must be called from game loop for timed quests.
+
+**Premium Only**
+
+**Parameters:**
+- `delta`: Time elapsed since last frame (in seconds)
+
+**Example:**
+```gdscript
+# In your quest manager's _process function
+func _process(delta: float) -> void:
+    for quest in active_quests:
+        if quest.is_timed() and quest.is_active():
+            quest.update(delta)
+
+# Or connect to a timer
+func _ready():
+    var timer = Timer.new()
+    add_child(timer)
+    timer.timeout.connect(func():
+        runtime_quest.update(timer.wait_time)
+    )
+    timer.start(1.0)  # Update every second
+```
+
+> ⚠️ **Important:** Timed quests will automatically fail when `time_limit_expired` signal is emitted. The `update()` method handles this internally.
+
+---
+
 ### Progress Tracking
 
 ###### `get_completed_objectives_count() -> int`
 
 Returns number of completed objectives.
 
+💎 **Premium:** Excludes optional objectives from the count.
+
 ---
 
 ###### `get_total_objectives_count() -> int`
 
 Returns total number of objectives.
+
+💎 **Premium:** Excludes optional objectives from the count.
 
 ---
 

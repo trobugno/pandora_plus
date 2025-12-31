@@ -20,11 +20,16 @@ Rewards are attached to `PPQuest` and granted when the quest is completed. The r
 
 Defines the type of reward to grant.
 
-| Value | Description |
-|-------|-------------|
-| `ITEM` | Give item(s) to player inventory |
-| `CURRENCY` | Give gold/currency |
-| `EXPERIENCE` | Give experience points |
+| Value | Description | Availability |
+|-------|-------------|--------------|
+| `ITEM` | Give item(s) to player inventory | Core |
+| `CURRENCY` | Give gold/currency | Core |
+| `EXPERIENCE` | Give experience points | Core |
+| 💎 `UNLOCK_RECIPE` | Unlock a crafting recipe | Premium |
+| 💎 `UNLOCK_QUEST` | Unlock another quest | Premium |
+| 💎 `STAT_BOOST` | Permanent stat increase | Premium |
+| 💎 `REPUTATION` | Increase faction reputation | Premium |
+| 💎 `CUSTOM` | Custom reward with script | Premium |
 
 ---
 
@@ -34,26 +39,40 @@ Defines the type of reward to grant.
 |----------|------|-------------|
 | `_reward_name` | `String` | Display name of the reward |
 | `_reward_type` | `int` | Reward type from `RewardType` enum |
-| `_reward_entity_reference` | `PandoraReference` | Reference to reward entity (for ITEM rewards) |
+| `_reward_entity_reference` | `PandoraReference` | Reference to reward entity (for ITEM, UNLOCK_RECIPE, UNLOCK_QUEST) |
 | `_quantity` | `int` | Quantity of items (for ITEM rewards) |
 | `_currency_amount` | `int` | Amount of currency (for CURRENCY rewards) |
 | `_experience_amount` | `int` | Amount of experience (for EXPERIENCE rewards) |
+| 💎 `_stat_name` | `String` | Name of stat to boost (for STAT_BOOST, Premium only) |
+| 💎 `_stat_value` | `float` | Value to add to stat (for STAT_BOOST, Premium only) |
+| 💎 `_faction_name` | `String` | Faction identifier (for REPUTATION, Premium only) |
+| 💎 `_reputation_amount` | `int` | Reputation points to add (for REPUTATION, Premium only) |
+| 💎 `_custom_script` | `String` | Path to custom reward script (for CUSTOM, Premium only) |
+| 💎 `_optional` | `bool` | Whether reward is optional (Premium only) |
 
 ---
 
 ## Constructor
 
-###### `PPQuestReward(reward_name: String = "", reward_type: int = RewardType.ITEM, reward_entity_reference: PandoraReference = null, quantity: int = 1, currency_amount: int = 0, experience_amount: int = 0)`
+###### Core: `PPQuestReward(reward_name, reward_type, reward_entity_reference, quantity, currency_amount, experience_amount)`
+
+###### 💎 Premium: `PPQuestReward(reward_name, reward_type, reward_entity_reference, quantity, currency_amount, experience_amount, stat_name, stat_value, faction_name, reputation_amount, custom_script, optional)`
 
 Creates a new quest reward with specified parameters.
 
 **Parameters:**
-- `reward_name`: Display name for the reward
+- `reward_name`: Display name for the reward (default: `""`)
 - `reward_type`: Type from `RewardType` enum (default: `ITEM`)
-- `reward_entity_reference`: Entity reference (for items)
-- `quantity`: Number of items (default: 1)
-- `currency_amount`: Currency amount (default: 0)
-- `experience_amount`: XP amount (default: 0)
+- `reward_entity_reference`: Entity reference (for ITEM/UNLOCK_RECIPE/UNLOCK_QUEST) (default: `null`)
+- `quantity`: Number of items (default: `1`)
+- `currency_amount`: Currency amount (default: `0`)
+- `experience_amount`: XP amount (default: `0`)
+- 💎 `stat_name`: Stat to boost **(Premium only)** (default: `""`)
+- 💎 `stat_value`: Value to add to stat **(Premium only)** (default: `0.0`)
+- 💎 `faction_name`: Faction identifier **(Premium only)** (default: `""`)
+- 💎 `reputation_amount`: Reputation points **(Premium only)** (default: `0`)
+- 💎 `custom_script`: Custom reward script path **(Premium only)** (default: `""`)
+- 💎 `optional`: Whether reward is optional **(Premium only)** (default: `false`)
 
 **Example:**
 ```gdscript
@@ -86,6 +105,53 @@ var xp_reward = PPQuestReward.new(
     0,
     0,
     250  # 250 XP
+)
+```
+
+**💎 Premium Examples:**
+```gdscript
+# Unlock recipe reward
+var recipe_ref = PandoraReference.new("IRON_ARMOR_RECIPE", PandoraReference.Type.ENTITY)
+var recipe_reward = PPQuestReward.new(
+    "Iron Armor Recipe",
+    PPQuestReward.RewardType.UNLOCK_RECIPE,
+    recipe_ref,
+    0, 0, 0,
+    "", 0.0, "", 0, "", false
+)
+
+# Stat boost reward
+var stat_reward = PPQuestReward.new(
+    "Permanent Health Boost",
+    PPQuestReward.RewardType.STAT_BOOST,
+    null,
+    0, 0, 0,
+    "health",  # Stat name
+    10.0,      # +10 max health
+    "", 0, "", false
+)
+
+# Reputation reward
+var rep_reward = PPQuestReward.new(
+    "Kingdom Favor",
+    PPQuestReward.RewardType.REPUTATION,
+    null,
+    0, 0, 0,
+    "", 0.0,
+    "KINGDOM",  # Faction name
+    25,         # +25 reputation
+    "", false
+)
+
+# Custom reward with script
+var custom_reward = PPQuestReward.new(
+    "Special Reward",
+    PPQuestReward.RewardType.CUSTOM,
+    null,
+    0, 0, 0,
+    "", 0.0, "", 0,
+    "res://scripts/rewards/special_reward.gd",  # Custom script
+    false
 )
 ```
 
@@ -144,6 +210,60 @@ Returns the amount of experience to reward.
 
 ---
 
+###### 💎 `get_stat_name() -> String`
+
+Returns the name of the stat to boost.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_stat_value() -> float`
+
+Returns the value to add to the stat.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_faction_name() -> String`
+
+Returns the faction identifier for reputation rewards.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_reputation_amount() -> int`
+
+Returns the amount of reputation to add.
+
+**Premium Only**
+
+---
+
+###### 💎 `get_custom_script() -> String`
+
+Returns the path to the custom reward script.
+
+**Premium Only**
+
+---
+
+###### 💎 `is_optional() -> bool`
+
+Returns whether the reward is optional.
+
+**Premium Only**
+
+**Example:**
+```gdscript
+if reward.is_optional():
+    print("This is a bonus reward")
+```
+
+---
+
 ### Setters
 
 All properties have corresponding setter methods:
@@ -153,6 +273,12 @@ All properties have corresponding setter methods:
 - `set_quantity(quantity: int)`
 - `set_currency_amount(amount: int)`
 - `set_experience_amount(amount: int)`
+- 💎 `set_stat_name(stat_name: String)` **(Premium only)**
+- 💎 `set_stat_value(value: float)` **(Premium only)**
+- 💎 `set_faction_name(faction_name: String)` **(Premium only)**
+- 💎 `set_reputation_amount(amount: int)` **(Premium only)**
+- 💎 `set_custom_script(script: String)` **(Premium only)**
+- 💎 `set_optional(optional: bool)` **(Premium only)**
 
 ---
 

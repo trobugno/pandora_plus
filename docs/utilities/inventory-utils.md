@@ -11,6 +11,7 @@ Utility class providing sorting, compacting, transfer, and calculation functions
 `PPInventoryUtils` is a singleton utility class that provides common inventory operations such as sorting items by various criteria, compacting stacks, transferring items between inventories, and calculating total values and weights. This class is designed to be used as an autoload singleton for global access.
 
 All methods are static-like instance methods that operate on `PPInventory` objects without modifying the utility instance itself.
+
 ---
 
 ## Setup

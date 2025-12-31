@@ -69,12 +69,14 @@ Starts a quest from a `PPQuestEntity`.
 ```gdscript
 func start_quest(
     quest_entity: PPQuestEntity,
+    player_level: int = 1,  # 💎 Premium parameter
     completed_quest_ids: Array[String] = []
 ) -> PPRuntimeQuest
 ```
 
 **Parameters:**
 - `quest_entity`: Quest entity to start
+- 💎 `player_level`: Player's current level (Premium: used for level requirement checking, Core: defaults to 1)
 - `completed_quest_ids`: Array of completed quest IDs (for prerequisite checking)
 
 **Returns:** `PPRuntimeQuest` instance or `null` if validation fails
@@ -83,12 +85,18 @@ func start_quest(
 ```gdscript
 var quest_entity = Pandora.get_entity("quest_village_help") as PPQuestEntity
 var completed_ids = PPQuestManager.get_completed_quest_ids()
-var runtime_quest = PPQuestUtils.start_quest(quest_entity, completed_ids)
+
+# Core usage
+var runtime_quest = PPQuestUtils.start_quest(quest_entity, 1, completed_ids)
+
+# 💎 Premium: Check player level
+var player_level = PPPlayerManager.get_player_data().level
+var runtime_quest = PPQuestUtils.start_quest(quest_entity, player_level, completed_ids)
 
 if runtime_quest:
     print("Quest started: ", runtime_quest.get_quest_name())
 else:
-    print("Failed to start quest")
+    print("Failed to start quest (check level requirement)")
 ```
 
 ---
@@ -100,9 +108,15 @@ Starts a quest from `PPQuest` data directly.
 ```gdscript
 func start_quest_from_data(
     quest_data: PPQuest,
+    player_level: int,  # 💎 Premium parameter
     completed_quest_ids: Array[String] = []
 ) -> PPRuntimeQuest
 ```
+
+**Parameters:**
+- `quest_data`: PPQuest data to start
+- 💎 `player_level`: Player's current level (Premium: validates level requirement)
+- `completed_quest_ids`: Array of completed quest IDs
 
 **Example:**
 ```gdscript
@@ -110,7 +124,12 @@ var quest_data = PPQuest.new()
 quest_data.set_quest_id("test_quest")
 # ... configure quest ...
 
-var runtime_quest = PPQuestUtils.start_quest_from_data(quest_data, [])
+# Core usage
+var runtime_quest = PPQuestUtils.start_quest_from_data(quest_data, 1, [])
+
+# 💎 Premium usage
+var player_level = PPPlayerManager.get_player_data().level
+var runtime_quest = PPQuestUtils.start_quest_from_data(quest_data, player_level, [])
 ```
 
 ---
@@ -124,22 +143,37 @@ Checks if a quest can be started.
 ```gdscript
 func can_start_quest(
     quest: PPQuest,
+    player_level: int,  # 💎 Premium parameter
     completed_quest_ids: Array[String] = []
 ) -> bool
 ```
 
 **Checks:**
+- 💎 **Premium:** Player level meets requirement
 - Prerequisites are met (all required quests completed)
+
+**Parameters:**
+- `quest`: Quest data to validate
+- 💎 `player_level`: Player's current level
+- `completed_quest_ids`: Array of completed quest IDs
 
 **Example:**
 ```gdscript
 var quest_data = quest_entity.get_quest_data()
 var completed = PPQuestManager.get_completed_quest_ids()
 
-if PPQuestUtils.can_start_quest(quest_data, completed):
+# Core usage
+if PPQuestUtils.can_start_quest(quest_data, 1, completed):
     print("Can start quest")
 else:
     print("Prerequisites not met")
+
+# 💎 Premium: Check with player level
+var player_level = PPPlayerManager.get_player_data().level
+if PPQuestUtils.can_start_quest(quest_data, player_level, completed):
+    print("Can start quest")
+else:
+    print("Level too low or prerequisites not met")
 ```
 
 ---
@@ -269,6 +303,110 @@ func track_npc_talked(
 func on_dialogue_started(npc: PPNPCEntity):
     for quest in PPQuestManager.get_active_quests():
         PPQuestUtils.track_npc_talked(quest, npc)
+```
+
+---
+
+### 💎 track_item_crafted()
+
+Tracks item crafting for CRAFT_ITEM objectives.
+
+**Premium Only**
+
+```gdscript
+func track_item_crafted(
+    runtime_quest: PPRuntimeQuest,
+    item: PPItemEntity,
+    quantity: int = 1
+) -> void
+```
+
+**Parameters:**
+- `runtime_quest`: Quest to track
+- `item`: Item that was crafted
+- `quantity`: Number of items crafted (default: 1)
+
+**Example:**
+```gdscript
+func on_item_crafted(item: PPItemEntity, qty: int):
+    for quest in PPQuestManager.get_active_quests():
+        PPQuestUtils.track_item_crafted(quest, item, qty)
+```
+
+---
+
+### 💎 track_item_used()
+
+Tracks item usage for USE_ITEM objectives.
+
+**Premium Only**
+
+```gdscript
+func track_item_used(
+    runtime_quest: PPRuntimeQuest,
+    item: PPItemEntity
+) -> void
+```
+
+**Example:**
+```gdscript
+func on_item_used(item: PPItemEntity):
+    for quest in PPQuestManager.get_active_quests():
+        PPQuestUtils.track_item_used(quest, item)
+```
+
+---
+
+### 💎 track_item_delivered()
+
+Tracks item delivery for DELIVER objectives.
+
+**Premium Only**
+
+```gdscript
+func track_item_delivered(
+    runtime_quest: PPRuntimeQuest,
+    item: PPItemEntity,
+    npc: PandoraEntity
+) -> void
+```
+
+**Parameters:**
+- `runtime_quest`: Quest to track
+- `item`: Item that was delivered
+- `npc`: NPC the item was delivered to
+
+**Example:**
+```gdscript
+func on_item_delivered_to_npc(item: PPItemEntity, npc: PPNPCEntity):
+    for quest in PPQuestManager.get_active_quests():
+        PPQuestUtils.track_item_delivered(quest, item, npc)
+```
+
+---
+
+### 💎 track_location_reached()
+
+Tracks location discovery for REACH_LOCATION objectives.
+
+**Premium Only**
+
+```gdscript
+func track_location_reached(
+    runtime_quest: PPRuntimeQuest,
+    location_entity: PandoraEntity
+) -> void
+```
+
+**Parameters:**
+- `runtime_quest`: Quest to track
+- `location_entity`: Location entity that was reached
+
+**Example:**
+```gdscript
+func on_area_entered(area_entity: PandoraEntity):
+    for quest in PPQuestManager.get_active_quests():
+        PPQuestUtils.track_location_reached(quest, area_entity)
 ```
 
 ---
@@ -437,22 +575,34 @@ for item_info in items:
 
 ### get_available_quests()
 
-Gets all quests available for a player based on completed quests.
+Gets all quests available for a player based on level and completed quests.
 
 ```gdscript
 func get_available_quests(
     all_quests: Array,
+    player_level: int,  # 💎 Premium parameter
     completed_quest_ids: Array[String] = []
 ) -> Array
 ```
 
 **Accepts:** Array of `PPQuestEntity` or `PPQuest`
 
+**Parameters:**
+- `all_quests`: Array of all quests to filter
+- 💎 `player_level`: Player's current level (Premium: validates level requirements)
+- `completed_quest_ids`: Array of completed quest IDs
+
 **Example:**
 ```gdscript
 var all_quests = get_all_quest_entities()
 var completed = PPQuestManager.get_completed_quest_ids()
-var available = PPQuestUtils.get_available_quests(all_quests, completed)
+
+# Core usage
+var available = PPQuestUtils.get_available_quests(all_quests, 1, completed)
+
+# 💎 Premium: Filter by player level
+var player_level = PPPlayerManager.get_player_data().level
+var available = PPQuestUtils.get_available_quests(all_quests, player_level, completed)
 
 print("Available quests: %d" % available.size())
 ```
@@ -523,6 +673,8 @@ func sort_quests(quests: Array[PPRuntimeQuest], sort_by: String = "name") -> voi
 - `"name"`: Alphabetical by quest name
 - `"progress"`: By completion percentage (highest first)
 - `"type"`: By quest type
+- 💎 `"level"`: By level requirement (lowest first) - **Premium Only**
+- 💎 `"time_remaining"`: By time remaining (least time first, non-timed last) - **Premium Only**
 
 **Example:**
 ```gdscript
@@ -531,6 +683,12 @@ PPQuestUtils.sort_quests(active_quests, "progress")
 
 for quest in active_quests:
     print("%s: %.0f%%" % [quest.get_quest_name(), quest.get_progress_percentage()])
+
+# 💎 Premium: Sort by urgency (time remaining)
+PPQuestUtils.sort_quests(active_quests, "time_remaining")
+for quest in active_quests:
+    if quest.is_timed():
+        print("%s: %.0fs left" % [quest.get_quest_name(), quest.get_time_remaining()])
 ```
 
 ---
@@ -551,6 +709,9 @@ func calculate_quest_stats(completed_quests: Array[PPRuntimeQuest]) -> Dictionar
 - `by_category`: Dictionary (category → count)
 - `total_experience`: int
 - `total_currency`: int
+- 💎 `average_completion_time`: float - **Premium Only**
+- 💎 `fastest_completion`: float - **Premium Only**
+- 💎 `slowest_completion`: float - **Premium Only**
 
 **Example:**
 ```gdscript
@@ -559,6 +720,11 @@ var stats = PPQuestUtils.calculate_quest_stats(completed)
 
 print("Completed %d quests" % stats["total_quests"])
 print("Earned %d XP total" % stats["total_experience"])
+
+# 💎 Premium: Completion time analytics
+print("Average time: %.1f seconds" % stats["average_completion_time"])
+print("Fastest: %.1f seconds" % stats["fastest_completion"])
+print("Slowest: %.1f seconds" % stats["slowest_completion"])
 ```
 
 ---
@@ -572,6 +738,65 @@ func get_most_completed_quest_type(completed_quests: Array[PPRuntimeQuest]) -> i
 ```
 
 **Returns:** Quest type ID or `-1` if none
+
+---
+
+## 💎 Time Management
+
+**Premium Only**
+
+### update_timed_quests()
+
+Updates all timed quests and returns quests that have expired.
+
+```gdscript
+func update_timed_quests(
+    active_quests: Array[PPRuntimeQuest],
+    delta: float
+) -> Array[PPRuntimeQuest]
+```
+
+**Parameters:**
+- `active_quests`: Array of active quests to update
+- `delta`: Time elapsed since last update (in seconds)
+
+**Returns:** Array of quests that expired during this update
+
+**Example:**
+```gdscript
+# In your game loop (_process or timer)
+func _process(delta: float) -> void:
+    var expired = PPQuestUtils.update_timed_quests(
+        PPQuestManager.get_active_quests(),
+        delta
+    )
+
+    for quest in expired:
+        print("Quest '%s' failed due to time limit" % quest.get_quest_name())
+        show_notification("Quest Failed: Time's Up!")
+```
+
+---
+
+### get_expired_quests()
+
+Gets all quests that have expired (time limit reached).
+
+```gdscript
+func get_expired_quests(active_quests: Array[PPRuntimeQuest]) -> Array[PPRuntimeQuest]
+```
+
+**Returns:** Array of expired quests
+
+**Example:**
+```gdscript
+var expired = PPQuestUtils.get_expired_quests(PPQuestManager.get_active_quests())
+
+if not expired.is_empty():
+    print("Warning: %d quests have expired!" % expired.size())
+    for quest in expired:
+        print("  - %s" % quest.get_quest_name())
+```
 
 ---
 
@@ -601,6 +826,7 @@ Checks if a quest can be obtained from an NPC at the current time.
 func can_obtain_quest_from_npc(
     quest: PPQuestEntity,
     npc_runtime: PPRuntimeNPC,
+    player_level: int,  # 💎 Premium parameter
     completed_quest_ids: Array[String] = []
 ) -> bool
 ```
@@ -608,13 +834,29 @@ func can_obtain_quest_from_npc(
 **Checks:**
 - NPC is quest giver for this quest
 - NPC is alive
-- NPC is available (not sleeping, not hostile in combat)
-- Player meets quest requirements
+- 💎 **Premium:** NPC is not sleeping (respects schedule)
+- 💎 **Premium:** NPC is not hostile (reputation check)
+- 💎 **Premium:** Player level meets requirement
+- Player meets quest prerequisites
+
+**Parameters:**
+- `quest`: Quest entity to check
+- `npc_runtime`: Runtime NPC instance
+- 💎 `player_level`: Player's current level
+- `completed_quest_ids`: Array of completed quest IDs
 
 **Example:**
 ```gdscript
-if PPQuestUtils.can_obtain_quest_from_npc(quest, runtime_npc, completed_ids):
+# Core usage
+if PPQuestUtils.can_obtain_quest_from_npc(quest, runtime_npc, 1, completed_ids):
     show_quest_dialogue()
+
+# 💎 Premium: Full validation with level check
+var player_level = PPPlayerManager.get_player_data().level
+if PPQuestUtils.can_obtain_quest_from_npc(quest, runtime_npc, player_level, completed_ids):
+    show_quest_dialogue()
+else:
+    print("Cannot get quest (check level, reputation, or NPC schedule)")
 ```
 
 ---
