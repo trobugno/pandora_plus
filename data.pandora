@@ -5,7 +5,7 @@
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "1",
+				"_id": "1160.0",
 				"_index": 0,
 				"_name": "Rarity",
 				"_script_path": "res://addons/pandora_plus/entities/rarity_entity.gd"
@@ -14,16 +14,25 @@
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "4",
+				"_id": "1163.0",
 				"_index": 0,
 				"_name": "Items",
 				"_script_path": "res://addons/pandora_plus/entities/item_entity.gd"
 			},
 			{
+				"_category_id": "1163.0",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1171.0",
+				"_index": 0,
+				"_name": "Equipment",
+				"_script_path": "res://addons/pandora_plus/entities/equipment_entity.gd"
+			},
+			{
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "56.0",
+				"_id": "1174.0",
 				"_index": 0,
 				"_name": "Quests",
 				"_script_path": "res://addons/pandora_plus/entities/quest_entity.gd"
@@ -32,591 +41,292 @@
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "79.0",
+				"_id": "1176.0",
 				"_index": 0,
 				"_name": "Locations",
 				"_script_path": "res://addons/pandora_plus/entities/location_entity.gd"
 			},
 			{
-				"_category_id": "4",
-				"_generate_ids": true,
-				"_icon_color": "ffffff00",
-				"_id": "97.0",
-				"_index": 0,
-				"_name": "Equipment",
-				"_property_overrides": {
-					"rarity": {
-						"type": "reference",
-						"value": {
-							"_entity_id": "1",
-							"_type": 1
-						}
-					}
-				},
-				"_script_path": "res://addons/pandora_plus/entities/equipment_entity.gd"
-			},
-			{
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "100.0",
+				"_id": "1184.0",
 				"_index": 0,
 				"_name": "NPCs",
 				"_script_path": "res://addons/pandora_plus/entities/npc_entity.gd"
 			}
 		],
-		"_entities": [
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "123.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "128.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "133.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "138.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "143.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "148.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "153.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "158.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "163.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "168.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "173.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "178.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "183.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "188.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "193.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "198.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "203.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "208.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "213.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "218.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "673.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "678.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "733.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "738.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "743.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "748.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "753.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "758.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "763.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "768.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "772.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "778.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "784.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "790.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "796.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "802.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "808.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "814.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "820.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			},
-			{
-				"_category_id": "4",
-				"_icon_color": "ffffff00",
-				"_id": "826.0",
-				"_index": 0,
-				"_name": "GDUNIT_APPLE"
-			}
-		],
+		"_entities": [],
 		"_properties": [
 			{
-				"_category_id": "1",
+				"_category_id": "1160.0",
 				"_default_value": "",
-				"_id": "2",
+				"_id": "1161.0",
 				"_name": "name",
 				"_type": "string"
 			},
 			{
-				"_category_id": "1",
+				"_category_id": "1160.0",
 				"_default_value": 0.0,
-				"_id": "3",
+				"_id": "1162.0",
 				"_name": "percentage",
 				"_type": "float"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": "",
-				"_id": "5",
+				"_id": "1164.0",
 				"_name": "name",
 				"_type": "string"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": "",
-				"_id": "6",
+				"_id": "1165.0",
 				"_name": "description",
 				"_type": "string"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": false,
-				"_id": "7",
+				"_id": "1166.0",
 				"_name": "stackable",
 				"_type": "bool"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": null,
-				"_id": "8",
+				"_id": "1167.0",
 				"_name": "texture",
 				"_type": "resource"
 			},
 			{
-				"_category_id": "4",
-				"_default_value": {
-					"_entity_id": "1",
-					"_type": 1
-				},
-				"_id": "12.0",
-				"_name": "rarity",
-				"_setting_overrides": {
-					"Category Filter": "1"
-				},
-				"_type": "reference"
-			},
-			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": 0.0,
-				"_id": "14.0",
+				"_id": "1168.0",
 				"_name": "value",
 				"_type": "float"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1163.0",
 				"_default_value": 0.0,
-				"_id": "15.0",
+				"_id": "1169.0",
 				"_name": "weight",
 				"_type": "float"
 			},
 			{
-				"_category_id": "56.0",
-				"_default_value": null,
-				"_id": "57.0",
-				"_name": "quest_data",
-				"_type": "quest_property"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": "",
-				"_id": "80.0",
-				"_name": "name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": "",
-				"_id": "81.0",
-				"_name": "description",
-				"_type": "string"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": null,
-				"_id": "82.0",
-				"_name": "texture",
-				"_type": "resource"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": "(0.0,0.0)",
-				"_id": "83.0",
-				"_name": "position",
-				"_type": "vector2"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": "",
-				"_id": "84.0",
-				"_name": "area_name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": "Wilderness",
-				"_id": "85.0",
-				"_name": "location_type",
-				"_type": "string"
-			},
-			{
-				"_category_id": "79.0",
-				"_default_value": false,
-				"_id": "86.0",
-				"_name": "is_safe_zone",
-				"_type": "bool"
-			},
-			{
-				"_category_id": "97.0",
-				"_default_value": "",
-				"_id": "98.0",
-				"_name": "equipment_slot",
-				"_type": "string"
-			},
-			{
-				"_category_id": "97.0",
-				"_default_value": null,
-				"_id": "99.0",
-				"_name": "stats_property",
-				"_type": "stats_property"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": "",
-				"_id": "101.0",
-				"_name": "name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": "",
-				"_id": "102.0",
-				"_name": "description",
-				"_type": "string"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": null,
-				"_id": "103.0",
-				"_name": "texture",
-				"_type": "resource"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": null,
-				"_id": "104.0",
-				"_name": "base_stats",
-				"_type": "stats_property"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": "Neutral",
-				"_id": "105.0",
-				"_name": "faction",
-				"_type": "string"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": false,
-				"_id": "106.0",
-				"_name": "is_hostile",
-				"_type": "bool"
-			},
-			{
-				"_category_id": "100.0",
-				"_default_value": null,
-				"_id": "107.0",
-				"_name": "spawn_location",
+				"_category_id": "1163.0",
+				"_default_value": {
+					"_entity_id": "1160.0",
+					"_type": 1
+				},
+				"_id": "1170.0",
+				"_name": "rarity",
 				"_setting_overrides": {
-					"Category Filter": "79.0"
+					"Category Filter": "1160.0"
 				},
 				"_type": "reference"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1171.0",
+				"_default_value": "WEAPON",
+				"_id": "1172.0",
+				"_name": "equipment_slot",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1171.0",
+				"_default_value": null,
+				"_id": "1173.0",
+				"_name": "stats_property",
+				"_type": "stats_property"
+			},
+			{
+				"_category_id": "1174.0",
+				"_default_value": null,
+				"_id": "1175.0",
+				"_name": "quest_data",
+				"_type": "quest_property"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": "",
+				"_id": "1177.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": "",
+				"_id": "1178.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": null,
+				"_id": "1179.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": "(0.0,0.0)",
+				"_id": "1180.0",
+				"_name": "position",
+				"_type": "vector2"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": "",
+				"_id": "1181.0",
+				"_name": "area_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": "Wilderness",
+				"_id": "1182.0",
+				"_name": "location_type",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1176.0",
+				"_default_value": false,
+				"_id": "1183.0",
+				"_name": "is_safe_zone",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": "",
+				"_id": "1185.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": "",
+				"_id": "1186.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": null,
+				"_id": "1187.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": null,
+				"_id": "1188.0",
+				"_name": "base_stats",
+				"_type": "stats_property"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": "Neutral",
+				"_id": "1189.0",
+				"_name": "faction",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": false,
+				"_id": "1190.0",
+				"_name": "is_hostile",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "1184.0",
+				"_default_value": null,
+				"_id": "1191.0",
+				"_name": "spawn_location",
+				"_setting_overrides": {
+					"Category Filter": "1176.0"
+				},
+				"_type": "reference"
+			},
+			{
+				"_category_id": "1184.0",
 				"_default_value": {
 
 				},
-				"_id": "108.0",
+				"_id": "1192.0",
 				"_name": "quest_giver_for",
 				"_type": "array"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": false,
-				"_id": "109.0",
+				"_id": "1193.0",
 				"_name": "is_merchant",
 				"_type": "bool"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": {
 
 				},
-				"_id": "110.0",
+				"_id": "1194.0",
 				"_name": "shop_inventory",
 				"_type": "array"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": 1.5,
-				"_id": "111.0",
+				"_id": "1195.0",
 				"_name": "buy_price_multiplier",
 				"_type": "float"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": 0.5,
-				"_id": "112.0",
+				"_id": "1196.0",
 				"_name": "sell_price_multiplier",
 				"_type": "float"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": "General",
-				"_id": "113.0",
+				"_id": "1197.0",
 				"_name": "merchant_type",
 				"_type": "string"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": false,
-				"_id": "114.0",
+				"_id": "1198.0",
 				"_name": "can_restock",
 				"_type": "bool"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": 24.0,
-				"_id": "115.0",
+				"_id": "1199.0",
 				"_name": "restock_interval",
 				"_type": "float"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": 1000,
-				"_id": "116.0",
+				"_id": "1200.0",
 				"_name": "merchant_currency",
 				"_type": "int"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": false,
-				"_id": "117.0",
+				"_id": "1201.0",
 				"_name": "has_schedule",
 				"_type": "bool"
 			},
 			{
-				"_category_id": "100.0",
+				"_category_id": "1184.0",
 				"_default_value": null,
-				"_id": "118.0",
+				"_id": "1202.0",
 				"_name": "schedule",
 				"_type": "resource"
 			}
@@ -624,7 +334,7 @@
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 1159.0
+			"default": 1202.0
 		}
 	}
 }

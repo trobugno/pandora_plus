@@ -306,7 +306,8 @@
 						"options": [
 							"COLLECT",
 							"KILL",
-							"TALK"
+							"TALK",
+							"REACH_LOCATION"
 						]
 					},
 					"type": "OPTIONS"
@@ -402,48 +403,6 @@
 						"min_value": 0.0
 					},
 					"type": "RANGE"
-				},
-				{
-					"enabled": true,
-					"name": "Stat Name",
-					"settings": {
-
-					},
-					"type": "STRING"
-				},
-				{
-					"enabled": true,
-					"name": "Stat Value",
-					"settings": {
-						"max_value": 9999.0,
-						"min_value": 0.0
-					},
-					"type": "RANGE"
-				},
-				{
-					"enabled": true,
-					"name": "Faction Name",
-					"settings": {
-
-					},
-					"type": "STRING"
-				},
-				{
-					"enabled": true,
-					"name": "Reputation Amount",
-					"settings": {
-						"max_value": 9999.0,
-						"min_value": -9999.0
-					},
-					"type": "RANGE"
-				},
-				{
-					"enabled": true,
-					"name": "Custom Script",
-					"settings": {
-
-					},
-					"type": "STRING"
 				}
 			]
 		},
@@ -518,15 +477,6 @@
 						"entity_id": ""
 					},
 					"type": "ARRAY"
-				},
-				{
-					"enabled": true,
-					"name": "Level Requirement",
-					"settings": {
-						"max_value": 100.0,
-						"min_value": 1.0
-					},
-					"type": "RANGE"
 				},
 				{
 					"enabled": true,

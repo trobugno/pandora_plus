@@ -245,31 +245,9 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 		# Quest properties
 		Pandora.create_property(npc_category, "quest_giver_for", "array")
 
-		# Trading properties
-		Pandora.create_property(npc_category, "is_merchant", "bool")
-		Pandora.create_property(npc_category, "shop_inventory", "array")
-		Pandora.create_property(npc_category, "buy_price_multiplier", "float")
-		Pandora.create_property(npc_category, "sell_price_multiplier", "float")
-		Pandora.create_property(npc_category, "merchant_type", "String")
-		Pandora.create_property(npc_category, "can_restock", "bool")
-		Pandora.create_property(npc_category, "restock_interval", "float")
-		Pandora.create_property(npc_category, "merchant_currency", "int")
-
-		# Schedule properties
-		Pandora.create_property(npc_category, "has_schedule", "bool")
-		Pandora.create_property(npc_category, "schedule", "resource")
-
 		# Set default values
 		npc_category.get_entity_property("faction").set_default_value("Neutral")
 		npc_category.get_entity_property("is_hostile").set_default_value(false)
-		npc_category.get_entity_property("is_merchant").set_default_value(false)
-		npc_category.get_entity_property("buy_price_multiplier").set_default_value(1.5)
-		npc_category.get_entity_property("sell_price_multiplier").set_default_value(0.5)
-		npc_category.get_entity_property("merchant_type").set_default_value("General")
-		npc_category.get_entity_property("can_restock").set_default_value(false)
-		npc_category.get_entity_property("restock_interval").set_default_value(24.0)
-		npc_category.get_entity_property("merchant_currency").set_default_value(1000)
-		npc_category.get_entity_property("has_schedule").set_default_value(false)
 		
 		npc_category.set_generate_ids(true)
 		
@@ -296,26 +274,6 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			spawn_location_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(location_category._id))
 		if not npc_category.has_entity_property("quest_giver_for"):
 			Pandora.create_property(npc_category, "quest_giver_for", "array")
-		if not npc_category.has_entity_property("is_merchant"):
-			Pandora.create_property(npc_category, "is_merchant", "bool")
-		if not npc_category.has_entity_property("shop_inventory"):
-			Pandora.create_property(npc_category, "shop_inventory", "array")
-		if not npc_category.has_entity_property("buy_price_multiplier"):
-			Pandora.create_property(npc_category, "buy_price_multiplier", "float")
-		if not npc_category.has_entity_property("sell_price_multiplier"):
-			Pandora.create_property(npc_category, "sell_price_multiplier", "float")
-		if not npc_category.has_entity_property("merchant_type"):
-			Pandora.create_property(npc_category, "merchant_type", "String")
-		if not npc_category.has_entity_property("can_restock"):
-			Pandora.create_property(npc_category, "can_restock", "bool")
-		if not npc_category.has_entity_property("restock_interval"):
-			Pandora.create_property(npc_category, "restock_interval", "float")
-		if not npc_category.has_entity_property("merchant_currency"):
-			Pandora.create_property(npc_category, "merchant_currency", "int")
-		if not npc_category.has_entity_property("has_schedule"):
-			Pandora.create_property(npc_category, "has_schedule", "bool")
-		if not npc_category.has_entity_property("schedule"):
-			Pandora.create_property(npc_category, "schedule", "resource")
 		if not npc_category.is_generate_ids():
 			npc_category.set_generate_ids(true)
 		Pandora.save_data()

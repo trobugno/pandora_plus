@@ -174,7 +174,7 @@ func validate_quest_giver(quest: PPQuestEntity, npc: PPNPCEntity) -> bool:
 
 	return false
 
-## Checks if quest can be started
+## Checks if quest can be started from NPC
 func can_start_quest_at_time(
 	quest: PPQuestEntity,
 	npc: PPRuntimeNPC,

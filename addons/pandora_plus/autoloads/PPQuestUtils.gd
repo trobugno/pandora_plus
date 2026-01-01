@@ -459,8 +459,8 @@ func validate_quest_giver(quest: PPQuestEntity, npc: PPNPCEntity) -> bool:
 
 	return false
 
-## Checks if a quest can be obtained from an NPC at the current time
-## Takes into account schedule, activity, and NPC state
+## Checks if a quest can be obtained from an NPC
+## Takes into account NPC state
 func can_obtain_quest_from_npc(
 	quest: PPQuestEntity,
 	npc_runtime: PPRuntimeNPC,
@@ -475,10 +475,6 @@ func can_obtain_quest_from_npc(
 
 	# Check if NPC is alive
 	if not npc_runtime.is_alive():
-		return false
-
-	# Check if NPC is available for interaction (not sleeping, not hostile in combat)
-	if npc_runtime.get_current_activity() == "sleep":
 		return false
 
 	# Check if player meets quest requirements

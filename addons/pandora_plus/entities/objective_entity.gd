@@ -8,7 +8,8 @@ class_name PPObjectiveEntity extends PandoraEntity
 enum ObjectiveType {
 	COLLECT,        ## Collect X items
 	KILL,           ## Kill X enemies
-	TALK            ## Talk to NPC
+	TALK,           ## Talk to NPC
+	REACH_LOCATION  ## Reach a specific location
 }
 
 func get_objective_id() -> String:
