@@ -55,6 +55,9 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 		var reward = PPQuestReward.new()
 		reward.load_data(variant)
 		return reward
+	elif variant is PPQuestReward:
+		# Return a deep copy to avoid reference sharing
+		return variant.duplicate()
 	return variant
 
 func write_value(variant: Variant) -> Variant:

@@ -6,22 +6,16 @@ const QuestObjectiveType = preload("uid://cggb2hnqs58cy")
 @onready var objective_id: LineEdit = $VBoxContainer/FirstLine/ObjectiveID/LineEdit
 @onready var objective_type: OptionButton = $VBoxContainer/FirstLine/ObjectiveType/OptionButton
 @onready var hidden_check: CheckButton = $VBoxContainer/FirstLine/HiddenCheck/CheckButton
-@onready var order_index: SpinBox = $VBoxContainer/SecondLine/OrderIndex/SpinBox
-@onready var sequential_check: CheckButton = $VBoxContainer/SecondLine/SequentialCheck/CheckButton
-@onready var optional_check: CheckButton = $VBoxContainer/SecondLine/OptionalCheck/CheckButton
-@onready var objective_target: HBoxContainer = $VBoxContainer/ThirdLine/ObjectiveTarget/EntityPicker
-@onready var objective_target_quantity: SpinBox = $VBoxContainer/ThirdLine/ObjectiveTargetQuantity/SpinBox
-@onready var objective_description: TextEdit = $VBoxContainer/LastLine/ObjectiveDescription/TextEdit
+@onready var objective_target: HBoxContainer = $VBoxContainer/SecondLine/ObjectiveTarget/EntityPicker
+@onready var objective_target_quantity: SpinBox = $VBoxContainer/SecondLine/ObjectiveTargetQuantity/SpinBox
+@onready var objective_description: TextEdit = $VBoxContainer/ThirdLine/ObjectiveDescription/TextEdit
 
 @onready var objective_id_container: VBoxContainer = $VBoxContainer/FirstLine/ObjectiveID
 @onready var objective_type_container: VBoxContainer = $VBoxContainer/FirstLine/ObjectiveType
 @onready var hidden_check_container: VBoxContainer = $VBoxContainer/FirstLine/HiddenCheck
-@onready var order_index_container: VBoxContainer = $VBoxContainer/SecondLine/OrderIndex
-@onready var sequential_check_container: VBoxContainer = $VBoxContainer/SecondLine/SequentialCheck
-@onready var optional_check_container: VBoxContainer = $VBoxContainer/SecondLine/OptionalCheck
-@onready var objective_target_container: VBoxContainer = $VBoxContainer/ThirdLine/ObjectiveTarget
-@onready var objective_target_quantity_container: VBoxContainer = $VBoxContainer/ThirdLine/ObjectiveTargetQuantity
-@onready var objective_description_container: VBoxContainer = $VBoxContainer/LastLine/ObjectiveDescription
+@onready var objective_target_container: VBoxContainer = $VBoxContainer/SecondLine/ObjectiveTarget
+@onready var objective_target_quantity_container: VBoxContainer = $VBoxContainer/SecondLine/ObjectiveTargetQuantity
+@onready var objective_description_container: VBoxContainer = $VBoxContainer/ThirdLine/ObjectiveDescription
 
 var current_property : PPQuestObjective = PPQuestObjective.new("", -1, "", null, 0, false, "")
 
@@ -42,8 +36,6 @@ func _ready() -> void:
 	objective_target.focus_exited.connect(func(): unfocused.emit())
 	objective_target_quantity.focus_entered.connect(func(): focused.emit())
 	objective_target_quantity.focus_exited.connect(func(): unfocused.emit())
-	order_index.focus_entered.connect(func(): focused.emit())
-	order_index.focus_exited.connect(func(): unfocused.emit())
 
 	# Value changed signals
 	objective_id.text_changed.connect(
@@ -53,7 +45,10 @@ func _ready() -> void:
 
 	objective_description.text_changed.connect(
 		func():
-			current_property.set_description(objective_description.text)
+			current_property.set_description(objective_description.text))
+
+	objective_description.focus_exited.connect(
+		func():
 			_set_property_value())
 
 	objective_type.item_selected.connect(
@@ -64,7 +59,7 @@ func _ready() -> void:
 	objective_target.entity_selected.connect(
 		func(entity: PandoraEntity):
 			if entity:
-				var reference = PandoraReference.new(entity.get_entity_id(), PandoraReference.Type.ENTITY)
+				var reference = PandoraReference.new(entity._id, PandoraReference.Type.ENTITY)
 				current_property.set_target_reference(reference)
 			else:
 				current_property.set_target_reference(null)
@@ -75,27 +70,10 @@ func _ready() -> void:
 			current_property.set_target_quantity(int(value))
 			_set_property_value())
 
-	order_index.value_changed.connect(
-		func(value: float):
-			current_property.set_order_index(int(value))
-			_set_property_value())
-
-	optional_check.toggled.connect(
-		func(toggled_on: bool):
-			_on_check_button_toggled(toggled_on, optional_check)
-			current_property.set_optional(toggled_on)
-			_set_property_value())
-
 	hidden_check.toggled.connect(
 		func(toggled_on: bool):
 			_on_check_button_toggled(toggled_on, hidden_check)
 			current_property.set_hidden(toggled_on)
-			_set_property_value())
-
-	sequential_check.toggled.connect(
-		func(toggled_on: bool):
-			_on_check_button_toggled(toggled_on, sequential_check)
-			current_property.set_sequential(toggled_on)
 			_set_property_value())
 
 func _set_property_value() -> void:
@@ -119,8 +97,6 @@ func refresh() -> void:
 				objective_target_container.visible = field_settings["enabled"]
 			elif field_settings["name"] == "Target Quantity":
 				objective_target_quantity_container.visible = field_settings["enabled"]
-			elif field_settings["name"] == "Order Index":
-				order_index_container.visible = field_settings["enabled"]
 	
 	if _property != null:
 		if _property.get_setting(QuestObjectiveType.SETTING_CATEGORY_FILTER):
@@ -143,7 +119,6 @@ func refresh() -> void:
 			hidden_check.button_pressed = current_property.is_hidden()
 			hidden_check.text = "Yes" if current_property.is_hidden() else "No"
 			objective_id.caret_column = current_property.get_objective_id().length()
-			objective_description.caret_column = current_property.get_description().length()
 
 func _setting_changed(key:String) -> void:
 	if key == QuestObjectiveType.SETTING_MAX_VALUE or key == QuestObjectiveType.SETTING_MIN_VALUE or \

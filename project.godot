@@ -33,6 +33,11 @@ PPNPCManager="*res://addons/pandora_plus/managers/npc_manager.gd"
 PPTimeManager="*res://addons/pandora_plus/managers/time_manager.gd"
 PPSaveManager="*res://addons/pandora_plus/save_system/save_manager.gd"
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg", "res://addons/pandora/plugin.cfg", "res://addons/pandora_plus/plugin.cfg")
@@ -46,3 +51,7 @@ ui/inspector/tree_sort_mode=1
 [pandora]
 
 config/extensions=[&"res://pandora/extensions", &"res://addons/pandora_plus/extensions"]
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

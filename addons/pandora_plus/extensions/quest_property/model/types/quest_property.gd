@@ -35,6 +35,9 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 		var quest = PPQuest.new()
 		quest.load_data(variant)
 		return quest
+	elif variant is PPQuest:
+		# Return a deep copy to avoid reference sharing between entities
+		return variant.duplicate()
 	return variant
 
 func write_value(variant: Variant) -> Variant:

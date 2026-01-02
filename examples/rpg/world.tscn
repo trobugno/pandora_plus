@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://daqyibj3ecyfm"]
+
+[ext_resource type="PackedScene" uid="uid://cknj1un5e8edr" path="res://examples/rpg/scenes/capital_city/capital_city.tscn" id="1_c36lu"]
+[ext_resource type="PackedScene" uid="uid://kalpbokvadin" path="res://examples/rpg/scenes/black_market/black_market.tscn" id="2_piitl"]
+[ext_resource type="PackedScene" uid="uid://dcybgqq2sewof" path="res://examples/rpg/actors/player/player.tscn" id="3_cu7we"]
+
+[node name="World" type="Node2D"]
+y_sort_enabled = true
+
+[node name="CapitalCity" parent="." instance=ExtResource("1_c36lu")]
+
+[node name="BlackMarket" parent="." instance=ExtResource("2_piitl")]
+position = Vector2(-528, 0)
+
+[node name="Player" parent="." instance=ExtResource("3_cu7we")]
+position = Vector2(409, 147)

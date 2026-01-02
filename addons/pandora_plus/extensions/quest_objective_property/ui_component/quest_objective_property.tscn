@@ -101,5 +101,5 @@ layout_mode = 2
 text = "Description"
 
 [node name="TextEdit" type="TextEdit" parent="VBoxContainer/ThirdLine/ObjectiveDescription"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 60)
+layout_mode = 2

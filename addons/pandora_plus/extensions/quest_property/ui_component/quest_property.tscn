@@ -95,60 +95,28 @@ layout_mode = 2
 [node name="FourthLine" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="LevelRequirement" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
+[node name="QuestGiver" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/FourthLine/LevelRequirement"]
-layout_mode = 2
-text = "Level Requirement"
-
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FourthLine/LevelRequirement"]
-layout_mode = 2
-focus_mode = 1
-min_value = 1.0
-value = 1.0
-select_all_on_focus = true
-
-[node name="TimeLimit" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="VBoxContainer/FourthLine/TimeLimit"]
-layout_mode = 2
-text = "Time Limit (seconds)"
-
-[node name="SpinBox" type="SpinBox" parent="VBoxContainer/FourthLine/TimeLimit"]
-layout_mode = 2
-focus_mode = 1
-max_value = 86400.0
-select_all_on_focus = true
-
-[node name="FifthLine" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="QuestGiver" type="VBoxContainer" parent="VBoxContainer/FifthLine"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="VBoxContainer/FifthLine/QuestGiver"]
+[node name="Label" type="Label" parent="VBoxContainer/FourthLine/QuestGiver"]
 layout_mode = 2
 text = "Quest Giver"
 
-[node name="EntityPicker" parent="VBoxContainer/FifthLine/QuestGiver" instance=ExtResource("2_entity_picker")]
+[node name="EntityPicker" parent="VBoxContainer/FourthLine/QuestGiver" instance=ExtResource("2_entity_picker")]
 custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="SixthLine" type="HBoxContainer" parent="VBoxContainer"]
+[node name="FifthLine" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="ObjectivesLabel" type="Label" parent="VBoxContainer/SixthLine"]
+[node name="ObjectivesLabel" type="Label" parent="VBoxContainer/FifthLine"]
 layout_mode = 2
 text = "Objectives"
 
-[node name="ObjectivesInfo" type="LineEdit" parent="VBoxContainer/SixthLine"]
+[node name="ObjectivesInfo" type="LineEdit" parent="VBoxContainer/FifthLine"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 Objectives"
@@ -160,18 +128,18 @@ shortcut_keys_enabled = false
 selecting_enabled = false
 flat = true
 
-[node name="EditObjectivesButton" type="Button" parent="VBoxContainer/SixthLine"]
+[node name="EditObjectivesButton" type="Button" parent="VBoxContainer/FifthLine"]
 layout_mode = 2
 icon = ExtResource("3_6es32")
 
-[node name="SeventhLine" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SixthLine" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="RewardsLabel" type="Label" parent="VBoxContainer/SeventhLine"]
+[node name="RewardsLabel" type="Label" parent="VBoxContainer/SixthLine"]
 layout_mode = 2
 text = "Rewards"
 
-[node name="RewardsInfo" type="LineEdit" parent="VBoxContainer/SeventhLine"]
+[node name="RewardsInfo" type="LineEdit" parent="VBoxContainer/SixthLine"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0 Rewards"
@@ -183,7 +151,7 @@ shortcut_keys_enabled = false
 selecting_enabled = false
 flat = true
 
-[node name="EditRewardsButton" type="Button" parent="VBoxContainer/SeventhLine"]
+[node name="EditRewardsButton" type="Button" parent="VBoxContainer/SixthLine"]
 layout_mode = 2
 icon = ExtResource("3_6es32")
 

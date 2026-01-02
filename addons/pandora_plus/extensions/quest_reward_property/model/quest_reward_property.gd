@@ -124,5 +124,20 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+## Creates a deep copy of this reward
+func duplicate() -> PPQuestReward:
+	var entity_ref_copy: PandoraReference = null
+	if _reward_entity_reference:
+		entity_ref_copy = PandoraReference.new(_reward_entity_reference._entity_id, PandoraReference.Type.ENTITY)
+
+	return PPQuestReward.new(
+		_reward_name,
+		_reward_type,
+		entity_ref_copy,
+		_quantity,
+		_currency_amount,
+		_experience_amount
+	)
+
 func _to_string() -> String:
 	return "<PPReward '%s'>" % _reward_name

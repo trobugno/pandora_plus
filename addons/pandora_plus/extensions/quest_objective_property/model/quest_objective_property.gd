@@ -146,5 +146,21 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+## Creates a deep copy of this objective
+func duplicate() -> PPQuestObjective:
+	var target_ref_copy: PandoraReference = null
+	if _target_reference:
+		target_ref_copy = PandoraReference.new(_target_reference._entity_id, PandoraReference.Type.ENTITY)
+
+	return PPQuestObjective.new(
+		_objective_id,
+		_objective_type,
+		_description,
+		target_ref_copy,
+		_target_quantity,
+		_hidden,
+		_custom_script
+	)
+
 func _to_string() -> String:
 	return "<PPQuestObjective '%s'>" % _objective_id

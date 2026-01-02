@@ -49,14 +49,14 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 		var description = variant.get("description", "")
 		var target_reference = null if not variant.has("target_reference") else PandoraReference.new(variant["target_reference"]["_entity_id"], variant["target_reference"]["_type"])
 		var target_quantity = variant.get("target_quantity", 1)
-		var optional = variant.get("optional", false)
 		var hidden = variant.get("hidden", false)
-		var sequential = variant.get("sequential", false)
-		var order_index = variant.get("order_index", 0)
 		var custom_script = variant.get("custom_script", "")
-		
+
 		return PPQuestObjective.new(objective_id, objective_type, description, target_reference, target_quantity, \
-			optional, custom_script)
+			hidden, custom_script)
+	elif variant is PPQuestObjective:
+		# Return a deep copy to avoid reference sharing
+		return variant.duplicate()
 	return variant
 
 func write_value(variant: Variant) -> Variant:

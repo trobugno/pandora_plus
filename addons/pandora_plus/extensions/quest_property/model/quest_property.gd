@@ -288,5 +288,50 @@ func save_data(fields_settings: Array[Dictionary], objective_fields_settings: Ar
 
 	return result
 
+## Creates a deep copy of this quest
+func duplicate() -> PPQuest:
+	# Deep copy objectives array
+	var objectives_copy: Array = []
+	for obj in _objectives:
+		if obj is PPQuestObjective:
+			objectives_copy.append(obj.duplicate())
+		elif obj is Dictionary:
+			objectives_copy.append(obj.duplicate(true))
+
+	# Deep copy rewards array
+	var rewards_copy: Array = []
+	for reward in _rewards:
+		if reward is PPQuestReward:
+			rewards_copy.append(reward.duplicate())
+		elif reward is Dictionary:
+			rewards_copy.append(reward.duplicate(true))
+
+	# Deep copy prerequisites array
+	var prerequisites_copy: Array = []
+	for prereq in _prerequisites:
+		if prereq is PandoraReference:
+			prerequisites_copy.append(PandoraReference.new(prereq._entity_id, PandoraReference.Type.ENTITY))
+		elif prereq is Dictionary:
+			prerequisites_copy.append(prereq.duplicate(true))
+
+	# Deep copy quest giver
+	var quest_giver_copy: PandoraReference = null
+	if _quest_giver:
+		quest_giver_copy = PandoraReference.new(_quest_giver._entity_id, PandoraReference.Type.ENTITY)
+
+	return PPQuest.new(
+		_quest_id,
+		_quest_name,
+		_description,
+		_quest_type,
+		objectives_copy,
+		rewards_copy,
+		prerequisites_copy,
+		_auto_complete,
+		quest_giver_copy,
+		_hidden,
+		_category
+	)
+
 func _to_string() -> String:
 	return "<PPQuest '%s'>" % _quest_name

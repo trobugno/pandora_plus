@@ -10,7 +10,7 @@ const QuestPropertyType = preload("uid://c4lpis5f7ji76")
 @onready var quest_type: OptionButton = $VBoxContainer/ThirdLine/QuestType/OptionButton
 @onready var category: LineEdit = $VBoxContainer/ThirdLine/Category/LineEdit
 
-@onready var quest_giver: HBoxContainer = $VBoxContainer/FifthLine/QuestGiver/EntityPicker
+@onready var quest_giver: HBoxContainer = $VBoxContainer/FourthLine/QuestGiver/EntityPicker
 
 # Container references for visibility control
 @onready var quest_id_container: VBoxContainer = $VBoxContainer/FirstLine/QuestID
@@ -18,22 +18,21 @@ const QuestPropertyType = preload("uid://c4lpis5f7ji76")
 @onready var description_container: VBoxContainer = $VBoxContainer/SecondLine/Description
 @onready var quest_type_container: VBoxContainer = $VBoxContainer/ThirdLine/QuestType
 @onready var category_container: VBoxContainer = $VBoxContainer/ThirdLine/Category
-@onready var quest_giver_container: VBoxContainer = $VBoxContainer/FifthLine/QuestGiver
+@onready var quest_giver_container: VBoxContainer = $VBoxContainer/FourthLine/QuestGiver
 
 @onready var second_line: HBoxContainer = $VBoxContainer/SecondLine
 @onready var third_line: HBoxContainer = $VBoxContainer/ThirdLine
 @onready var fourth_line: HBoxContainer = $VBoxContainer/FourthLine
-@onready var fifth_line: HBoxContainer = $VBoxContainer/FifthLine
 
 # Array editing components
 @onready var objectives_window: Window = $ObjectivesWindow
 @onready var rewards_window: Window = $RewardsWindow
+@onready var fifth_line: HBoxContainer = $VBoxContainer/FifthLine
 @onready var sixth_line: HBoxContainer = $VBoxContainer/SixthLine
-@onready var seventh_line: HBoxContainer = $VBoxContainer/SeventhLine
-@onready var objectives_info: LineEdit = $VBoxContainer/SixthLine/ObjectivesInfo
-@onready var edit_objectives_button: Button = $VBoxContainer/SixthLine/EditObjectivesButton
-@onready var rewards_info: LineEdit = $VBoxContainer/SeventhLine/RewardsInfo
-@onready var edit_rewards_button: Button = $VBoxContainer/SeventhLine/EditRewardsButton
+@onready var objectives_info: LineEdit = $VBoxContainer/FifthLine/ObjectivesInfo
+@onready var edit_objectives_button: Button = $VBoxContainer/FifthLine/EditObjectivesButton
+@onready var rewards_info: LineEdit = $VBoxContainer/SixthLine/RewardsInfo
+@onready var edit_rewards_button: Button = $VBoxContainer/SixthLine/EditRewardsButton
 
 var current_property: PPQuest = PPQuest.new()
 
@@ -70,7 +69,10 @@ func _ready() -> void:
 
 	description.text_changed.connect(
 		func():
-			current_property.set_description(description.text)
+			current_property.set_description(description.text))
+
+	description.focus_exited.connect(
+		func():
 			_set_property_value())
 
 	quest_type.item_selected.connect(
@@ -168,10 +170,14 @@ func refresh() -> void:
 				category_container.visible = field_settings["enabled"]
 			elif field_settings["name"] == "Quest Giver":
 				quest_giver_container.visible = field_settings["enabled"]
-				fifth_line.visible = field_settings["enabled"]
+				fourth_line.visible = field_settings["enabled"]
 
 		# Update line visibility based on visible children
 		third_line.visible = quest_type_container.visible or category_container.visible
+
+		# Objectives and Rewards are always visible in core
+		fifth_line.visible = true
+		sixth_line.visible = true
 
 	if _property != null:
 		if _property.get_setting(QuestPropertyType.SETTING_QUEST_GIVER_FILTER):

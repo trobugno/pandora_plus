@@ -1,0 +1,24 @@
+[gd_scene load_steps=6 format=3 uid="uid://bpshsgogivg1f"]
+
+[ext_resource type="Texture2D" uid="uid://c50qi6ndojo1o" path="res://examples/rpg/assets/Boy.png" id="1_1sh4x"]
+[ext_resource type="Script" uid="uid://dxbw4qcd4k1vd" path="res://examples/rpg/scripts/npc.gd" id="1_480wk"]
+[ext_resource type="Script" uid="uid://sxoy0bv4eefy" path="res://addons/pandora_plus/entities/npc_entity.gd" id="2_mui0s"]
+
+[sub_resource type="Resource" id="Resource_2mtca"]
+script = ExtResource("2_mui0s")
+_id = "1236.0"
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7gpl6"]
+
+[node name="Boy" type="CharacterBody2D"]
+script = ExtResource("1_480wk")
+npc = SubResource("Resource_2mtca")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_1sh4x")
+hframes = 4
+vframes = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_7gpl6")
