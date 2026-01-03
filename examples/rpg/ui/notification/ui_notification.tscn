@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbf1gel8hepee"]
+
+[ext_resource type="Script" uid="uid://d318yfx0kkpb8" path="res://examples/rpg/ui/notification/ui_notification.gd" id="1_x1yhi"]
+
+[node name="UINotification" type="PanelContainer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -109.0
+offset_bottom = 65.0
+grow_horizontal = 0
+script = ExtResource("1_x1yhi")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.69803923, 0, 1)
+text = "Title"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Description"

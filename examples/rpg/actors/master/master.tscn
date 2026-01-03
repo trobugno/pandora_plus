@@ -9,6 +9,7 @@ script = ExtResource("2_rdkru")
 _id = "1237.0"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fylhw"]
+radius = 6.0
 
 [node name="Master" type="CharacterBody2D"]
 script = ExtResource("1_fylhw")
@@ -20,5 +21,5 @@ hframes = 4
 vframes = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_fylhw")

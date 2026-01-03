@@ -191,6 +191,27 @@ Returns array of runtime objective instances.
 
 ---
 
+###### `get_rewards() -> Array[PPQuestReward]`
+
+Returns array of quest rewards as `PPQuestReward` instances.
+
+**Returns:** Array of `PPQuestReward` objects
+
+**Example:**
+```gdscript
+var rewards = runtime_quest.get_rewards()
+for reward in rewards:
+    match reward.get_reward_type():
+        PPQuestReward.RewardType.ITEM:
+            print("Item: %s x%d" % [reward.get_reward_name(), reward.get_quantity()])
+        PPQuestReward.RewardType.CURRENCY:
+            print("Currency: %d gold" % reward.get_currency_amount())
+        PPQuestReward.RewardType.EXPERIENCE:
+            print("Experience: %d XP" % reward.get_experience_amount())
+```
+
+---
+
 ###### `get_start_timestamp() -> float`
 
 Returns the timestamp when quest was started (seconds).
@@ -651,12 +672,9 @@ func _on_objective_completed(obj_index: int, quest: PPRuntimeQuest) -> void:
     print("Objective completed: %s" % objective.get_display_text())
 
 func grant_rewards(quest: PPRuntimeQuest) -> void:
-    var rewards = quest.quest_data.get("rewards", [])
+    var rewards = quest.get_rewards()
 
-    for reward_data in rewards:
-        var reward = PPQuestReward.new()
-        reward.load_data(reward_data)
-
+    for reward in rewards:
         if quest.is_reward_delivered(reward.get_reward_name()):
             continue
 

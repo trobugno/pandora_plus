@@ -33,10 +33,16 @@ signal all_quests_cleared()
 ## Active quests (currently in progress)
 var _active_quests: Array[PPRuntimeQuest] = []
 
-## Completed quest IDs
+## Completed quests
+var _completed_quests: Array[PPRuntimeQuest] = []
+
+## Failed quests
+var _failed_quests: Array[PPRuntimeQuest] = []
+
+## Completed quest IDs (for backward compatibility and quick lookups)
 var _completed_quest_ids: Array[String] = []
 
-## Failed quest IDs
+## Failed quest IDs (for backward compatibility and quick lookups)
 var _failed_quest_ids: Array[String] = []
 
 # ============================================================================
@@ -151,6 +157,16 @@ func remove_quest(quest_id: String) -> void:
 func get_active_quests() -> Array[PPRuntimeQuest]:
 	return _active_quests.duplicate()
 
+## Gets all completed quests
+## @return Array[PPRuntimeQuest]: Array of completed quests
+func get_completed_quests() -> Array[PPRuntimeQuest]:
+	return _completed_quests.duplicate()
+
+## Gets all failed quests
+## @return Array[PPRuntimeQuest]: Array of failed quests
+func get_failed_quests() -> Array[PPRuntimeQuest]:
+	return _failed_quests.duplicate()
+
 ## Gets completed quest IDs
 ## @return Array[String]: Array of completed quest IDs
 func get_completed_quest_ids() -> Array[String]:
@@ -161,10 +177,31 @@ func get_completed_quest_ids() -> Array[String]:
 func get_failed_quest_ids() -> Array[String]:
 	return _failed_quest_ids.duplicate()
 
-## Finds an active quest by ID
+## Finds a quest by ID in any state (active, completed, or failed)
 ## @param quest_id: Quest identifier
 ## @return PPRuntimeQuest: Quest or null if not found
 func find_quest(quest_id: String) -> PPRuntimeQuest:
+	# Search in active quests first (most common case)
+	for quest in _active_quests:
+		if quest.get_quest_id() == quest_id:
+			return quest
+
+	# Search in completed quests
+	for quest in _completed_quests:
+		if quest.get_quest_id() == quest_id:
+			return quest
+
+	# Search in failed quests
+	for quest in _failed_quests:
+		if quest.get_quest_id() == quest_id:
+			return quest
+
+	return null
+
+## Finds an active quest by ID
+## @param quest_id: Quest identifier
+## @return PPRuntimeQuest: Quest or null if not found
+func find_active_quest(quest_id: String) -> PPRuntimeQuest:
 	for quest in _active_quests:
 		if quest.get_quest_id() == quest_id:
 			return quest
@@ -205,6 +242,8 @@ func get_completed_quest_count() -> int:
 ## Clears all quest state (for new game)
 func clear_all() -> void:
 	_active_quests.clear()
+	_completed_quests.clear()
+	_failed_quests.clear()
 	_completed_quest_ids.clear()
 	_failed_quest_ids.clear()
 	all_quests_cleared.emit()
@@ -219,14 +258,26 @@ func load_state(game_state: PPGameState) -> void:
 		var runtime_quest = PPRuntimeQuest.from_dict(quest_data)
 		_add_quest(runtime_quest)
 
-	# Load completed/failed IDs
+	# Load completed quests (if available in save data)
+	if game_state.has("completed_quests"):
+		for quest_data in game_state.completed_quests:
+			var runtime_quest = PPRuntimeQuest.from_dict(quest_data)
+			_completed_quests.append(runtime_quest)
+
+	# Load failed quests (if available in save data)
+	if game_state.has("failed_quests"):
+		for quest_data in game_state.failed_quests:
+			var runtime_quest = PPRuntimeQuest.from_dict(quest_data)
+			_failed_quests.append(runtime_quest)
+
+	# Load completed/failed IDs (for backward compatibility)
 	_completed_quest_ids.assign(game_state.completed_quest_ids)
 	_failed_quest_ids.assign(game_state.failed_quest_ids)
 
 	print("QuestManager: Loaded %d active quests, %d completed, %d failed" % [
 		_active_quests.size(),
-		_completed_quest_ids.size(),
-		_failed_quest_ids.size()
+		_completed_quests.size(),
+		_failed_quests.size()
 	])
 
 ## Saves quest state to GameState (called by SaveManager)
@@ -237,7 +288,21 @@ func save_state(game_state: PPGameState) -> void:
 	for quest in _active_quests:
 		game_state.active_quests.append(quest.to_dict())
 
-	# Save completed/failed IDs
+	# Save completed quests
+	if not game_state.has("completed_quests"):
+		game_state.completed_quests = []
+	game_state.completed_quests.clear()
+	for quest in _completed_quests:
+		game_state.completed_quests.append(quest.to_dict())
+
+	# Save failed quests
+	if not game_state.has("failed_quests"):
+		game_state.failed_quests = []
+	game_state.failed_quests.clear()
+	for quest in _failed_quests:
+		game_state.failed_quests.append(quest.to_dict())
+
+	# Save completed/failed IDs (for backward compatibility)
 	game_state.completed_quest_ids.assign(_completed_quest_ids)
 	game_state.failed_quest_ids.assign(_failed_quest_ids)
 
@@ -276,12 +341,34 @@ func _remove_quest(quest_id: String) -> void:
 			return
 
 func _move_to_completed(quest_id: String) -> void:
+	# Find the quest before removing it
+	var quest = find_active_quest(quest_id)
+	if not quest:
+		push_warning("Cannot move quest to completed: quest not found in active quests (%s)" % quest_id)
+		return
+
 	_remove_quest(quest_id)
+
+	# Add to completed quests array
+	_completed_quests.append(quest)
+
+	# Also add ID for backward compatibility
 	if quest_id not in _completed_quest_ids:
 		_completed_quest_ids.append(quest_id)
 
 func _move_to_failed(quest_id: String) -> void:
+	# Find the quest before removing it
+	var quest = find_active_quest(quest_id)
+	if not quest:
+		push_warning("Cannot move quest to failed: quest not found in active quests (%s)" % quest_id)
+		return
+
 	_remove_quest(quest_id)
+
+	# Add to failed quests array
+	_failed_quests.append(quest)
+
+	# Also add ID for backward compatibility
 	if quest_id not in _failed_quest_ids:
 		_failed_quest_ids.append(quest_id)
 

@@ -1,10 +1,112 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcybgqq2sewof"]
+[gd_scene load_steps=11 format=3 uid="uid://dcybgqq2sewof"]
 
 [ext_resource type="Texture2D" uid="uid://c22b0nliefpf" path="res://examples/rpg/assets/Player.png" id="1_hfn4p"]
+[ext_resource type="Script" uid="uid://cds66ygs7f0mw" path="res://examples/rpg/scripts/player.gd" id="2_player"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ftfv0"]
+radius = 6.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tcbew"]
+radius = 13.0
+
+[sub_resource type="Animation" id="Animation_ftfv0"]
+resource_name = "down"
+length = 0.6
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45000002),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 4, 8, 12]
+}
+
+[sub_resource type="Animation" id="Animation_tcbew"]
+resource_name = "left"
+length = 0.6
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45000002),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [2, 6, 10, 14]
+}
+
+[sub_resource type="Animation" id="Animation_f4614"]
+resource_name = "up"
+length = 0.6
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45000002),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [1, 5, 9, 13]
+}
+
+[sub_resource type="Animation" id="Animation_qk82x"]
+resource_name = "right"
+length = 0.6
+loop_mode = 1
+step = 0.15
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.45000002),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [3, 7, 11, 15]
+}
+
+[sub_resource type="Animation" id="Animation_piw63"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_pi4gn"]
+_data = {
+&"RESET": SubResource("Animation_piw63"),
+&"down": SubResource("Animation_ftfv0"),
+&"left": SubResource("Animation_tcbew"),
+&"right": SubResource("Animation_qk82x"),
+&"up": SubResource("Animation_f4614")
+}
 
 [node name="Player" type="CharacterBody2D"]
+script = ExtResource("2_player")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_hfn4p")
@@ -12,5 +114,23 @@ hframes = 4
 vframes = 7
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-visible = false
+position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_ftfv0")
+
+[node name="InteractableArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractableArea"]
+shape = SubResource("CircleShape2D_tcbew")
+debug_color = Color(0.68416464, 0.44444647, 0.6223409, 0.41960785)
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_pi4gn")
+}
+
+[connection signal="body_entered" from="InteractableArea" to="." method="_on_interactable_area_body_entered"]
+[connection signal="body_exited" from="InteractableArea" to="." method="_on_interactable_area_body_exited"]

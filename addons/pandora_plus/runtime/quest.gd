@@ -25,6 +25,7 @@ signal objective_activated(objective_index: int)
 
 var _quest_instance: PPQuest
 var _runtime_objectives: Array[PPRuntimeQuestObjective] = []
+var _rewards: Array[PPQuestReward] = []
 var _quest_status: QuestStatus = QuestStatus.NOT_STARTED
 var _start_timestamp: float = 0.0
 var _completion_timestamp: float = 0.0
@@ -60,6 +61,7 @@ func _init(p_quest: Variant = null) -> void:
 			}
 		_quest_instance = p_quest
 		_initialize_objectives()
+		_initialize_rewards()
 	elif p_quest is Dictionary:
 		quest_data = p_quest
 
@@ -82,6 +84,9 @@ func get_quest_status() -> QuestStatus:
 
 func get_runtime_objectives() -> Array[PPRuntimeQuestObjective]:
 	return _runtime_objectives
+
+func get_rewards() -> Array[PPQuestReward]:
+	return _rewards
 
 func get_start_timestamp() -> float:
 	return _start_timestamp
@@ -251,13 +256,33 @@ func to_dict() -> Dictionary:
 	for objective in _runtime_objectives:
 		objectives_data.append(objective.to_dict())
 
+	var rewards_data = []
+	for reward in _rewards:
+		# Get the extension configuration for proper serialization
+		var reward_configuration := PandoraSettings.find_extension_configuration_property("quest_reward_property")
+		var reward_fields_settings : Array[Dictionary]
+		if reward_configuration:
+			reward_fields_settings.assign(reward_configuration.get("fields", []) as Array)
+		else:
+			# Fallback to all fields enabled
+			reward_fields_settings = [
+				{"name": "Reward Name", "enabled": true},
+				{"name": "Reward Type", "enabled": true},
+				{"name": "Reward Entity", "enabled": true},
+				{"name": "Quantity", "enabled": true},
+				{"name": "Currency Amount", "enabled": true},
+				{"name": "Experience Amount", "enabled": true}
+			]
+		rewards_data.append(reward.save_data(reward_fields_settings))
+
 	return {
 		"quest_data": quest_data,
 		"quest_status": _quest_status,
 		"start_timestamp": _start_timestamp,
 		"completion_timestamp": _completion_timestamp,
 		"delivered_rewards": _delivered_rewards,
-		"runtime_objectives": objectives_data
+		"runtime_objectives": objectives_data,
+		"rewards": rewards_data
 	}
 
 static func from_dict(data: Dictionary) -> PPRuntimeQuest:
@@ -272,6 +297,13 @@ static func from_dict(data: Dictionary) -> PPRuntimeQuest:
 	for obj_data in objectives_data:
 		var runtime_obj = PPRuntimeQuestObjective.from_dict(obj_data)
 		runtime.add_objective(runtime_obj)
+
+	# Load rewards
+	var rewards_data = data.get("rewards", [])
+	for reward_data in rewards_data:
+		var reward := PPQuestReward.new()
+		reward.load_data(reward_data)
+		runtime._rewards.append(reward)
 
 	return runtime
 
@@ -322,6 +354,24 @@ func _initialize_objectives() -> void:
 			continue
 
 		add_objective(runtime_obj)
+
+func _initialize_rewards() -> void:
+	if not _quest_instance:
+		return
+
+	var rewards = _quest_instance.get_rewards()
+	for reward_data in rewards:
+		# Check if it's already a PPQuestReward or needs to be created from Dictionary
+		if reward_data is PPQuestReward:
+			_rewards.append(reward_data)
+		elif reward_data is Dictionary:
+			# Deserialize from Dictionary
+			var reward := PPQuestReward.new()
+			reward.load_data(reward_data)
+			_rewards.append(reward)
+		else:
+			push_warning("Unknown reward data type in quest initialization")
+			continue
 
 func _on_objective_completed(objective_index: int) -> void:
 	objective_completed.emit(objective_index)
