@@ -270,8 +270,7 @@ func to_dict() -> Dictionary:
 				{"name": "Reward Type", "enabled": true},
 				{"name": "Reward Entity", "enabled": true},
 				{"name": "Quantity", "enabled": true},
-				{"name": "Currency Amount", "enabled": true},
-				{"name": "Experience Amount", "enabled": true}
+				{"name": "Currency Amount", "enabled": true}
 			]
 		rewards_data.append(reward.save_data(reward_fields_settings))
 

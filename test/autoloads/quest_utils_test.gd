@@ -72,17 +72,11 @@ func before_test() -> void:
 	prereq_quest_entity.get_entity_property("quest_data").set_default_value(prereq_quest_data)
 	test_quests["prereq"] = prereq_quest_entity
 
-	# Create a quest with experience and currency rewards
+	# Create a quest with currency rewards
 	var reward_quest_entity := Pandora.create_entity("GDUNIT_REWARD_QUEST", quests_category).instantiate() as PPQuestEntity
 	var reward_quest_data := PPQuest.new()
 	reward_quest_data.set_quest_id("quest_rewards")
 	reward_quest_data.set_quest_name("Quest With Various Rewards")
-
-	var exp_reward := PPQuestReward.new()
-	exp_reward.set_reward_name("Experience Reward")
-	exp_reward.set_reward_type(PPQuestReward.RewardType.EXPERIENCE)
-	exp_reward.set_experience_amount(100)
-	reward_quest_data.add_reward(exp_reward)
 
 	var currency_reward := PPQuestReward.new()
 	currency_reward.set_reward_name("Currency Reward")
@@ -302,7 +296,7 @@ func test_track_item_collected_quest_ready_to_complete() -> void:
 func test_grant_reward_item() -> void:
 	var quest_entity = test_quests["rewards"] as PPQuestEntity
 	var quest_data = quest_entity.get_quest_data()
-	var item_reward = quest_data.get_rewards()[2]  # Item reward (potion x3)
+	var item_reward = quest_data.get_rewards()[1]  # Item reward (potion x3)
 
 	var success = PPQuestUtils.grant_reward(item_reward, test_inventory, "quest_rewards")
 
@@ -312,20 +306,11 @@ func test_grant_reward_item() -> void:
 func test_grant_reward_item_without_inventory() -> void:
 	var quest_entity = test_quests["rewards"] as PPQuestEntity
 	var quest_data = quest_entity.get_quest_data()
-	var item_reward = quest_data.get_rewards()[2]
+	var item_reward = quest_data.get_rewards()[1]
 
 	var success = PPQuestUtils.grant_reward(item_reward, null, "quest_rewards")
 
 	assert_that(success).is_false()
-
-func test_grant_reward_experience() -> void:
-	var quest_entity = test_quests["rewards"] as PPQuestEntity
-	var quest_data = quest_entity.get_quest_data()
-	var exp_reward = quest_data.get_rewards()[0]
-
-	var success = PPQuestUtils.grant_reward(exp_reward, test_inventory, "quest_rewards")
-
-	assert_that(success).is_true()
 
 func test_grant_reward_currency() -> void:
 	var quest_entity = test_quests["rewards"] as PPQuestEntity
@@ -346,7 +331,7 @@ func test_grant_quest_rewards() -> void:
 
 	var granted = PPQuestUtils.grant_quest_rewards(quest_data, test_inventory)
 
-	assert_that(granted.size()).is_equal(3)
+	assert_that(granted.size()).is_equal(2)
 	assert_that(test_inventory.has_item(test_items["potion"])).is_true()
 
 func test_grant_quest_rewards_emits_signal() -> void:
@@ -361,19 +346,11 @@ func test_grant_quest_rewards_emits_signal() -> void:
 	PPQuestUtils.rewards_granted.disconnect(PPQuestUtils.rewards_granted.get_connections()[0]["callable"])
 
 	assert_that(signal_received.size()).is_equal(1)
-	assert_that(signal_received[0][1].size()).is_equal(3)
+	assert_that(signal_received[0][1].size()).is_equal(2)
 
 # ============================================================================
 # TEST: Reward Management - calculate functions
 # ============================================================================
-
-func test_calculate_total_experience() -> void:
-	var quest_entity = test_quests["rewards"] as PPQuestEntity
-	var quest_data = quest_entity.get_quest_data()
-
-	var total_exp = PPQuestUtils.calculate_total_experience(quest_data)
-
-	assert_that(total_exp).is_equal(100)
 
 func test_calculate_total_currency() -> void:
 	var quest_entity = test_quests["rewards"] as PPQuestEntity
@@ -467,7 +444,6 @@ func test_calculate_quest_stats() -> void:
 	var stats = PPQuestUtils.calculate_quest_stats(completed)
 
 	assert_that(stats["total_quests"]).is_equal(2)
-	assert_that(stats["total_experience"]).is_equal(100)  # From rewards quest
 	assert_that(stats["total_currency"]).is_equal(50)
 
 func test_get_most_completed_quest_type() -> void:

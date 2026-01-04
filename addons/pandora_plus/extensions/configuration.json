@@ -362,8 +362,7 @@
 					"settings": {
 						"options": [
 							"ITEM",
-							"CURRENCY",
-							"EXPERIENCE"
+							"CURRENCY"
 						]
 					},
 					"type": "OPTIONS"
@@ -389,15 +388,6 @@
 				{
 					"enabled": true,
 					"name": "Currency Amount",
-					"settings": {
-						"max_value": 9999999.0,
-						"min_value": 0.0
-					},
-					"type": "RANGE"
-				},
-				{
-					"enabled": true,
-					"name": "Experience Amount",
 					"settings": {
 						"max_value": 9999999.0,
 						"min_value": 0.0

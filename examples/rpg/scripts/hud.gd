@@ -44,10 +44,6 @@ func _on_quest_completed(quest_id: String) -> void:
 				print("  Type: Currency")
 				print("  Amount: ", reward.get_currency_amount())
 				reward_string += "\n  Currency: %s" % reward.get_currency_amount()
-			PPQuestReward.RewardType.EXPERIENCE:
-				print("  Type: Experience")
-				print("  Amount: ", reward.get_experience_amount())
-				reward_string += "\n  Experience: %s" % reward.get_experience_amount()
 	
 	print("====================")
 	

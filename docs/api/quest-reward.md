@@ -24,7 +24,7 @@ Defines the type of reward to grant.
 |-------|-------------|--------------|
 | `ITEM` | Give item(s) to player inventory | Core |
 | `CURRENCY` | Give gold/currency | Core |
-| `EXPERIENCE` | Give experience points | Core |
+| 💎 `EXPERIENCE` | Give experience points | Premium |
 | 💎 `UNLOCK_RECIPE` | Unlock a crafting recipe | Premium |
 | 💎 `UNLOCK_QUEST` | Unlock another quest | Premium |
 | 💎 `STAT_BOOST` | Permanent stat increase | Premium |
@@ -42,7 +42,7 @@ Defines the type of reward to grant.
 | `_reward_entity_reference` | `PandoraReference` | Reference to reward entity (for ITEM, UNLOCK_RECIPE, UNLOCK_QUEST) |
 | `_quantity` | `int` | Quantity of items (for ITEM rewards) |
 | `_currency_amount` | `int` | Amount of currency (for CURRENCY rewards) |
-| `_experience_amount` | `int` | Amount of experience (for EXPERIENCE rewards) |
+| 💎 `_experience_amount` | `int` | Amount of experience (for EXPERIENCE rewards, Premium only) |
 | 💎 `_stat_name` | `String` | Name of stat to boost (for STAT_BOOST, Premium only) |
 | 💎 `_stat_value` | `float` | Value to add to stat (for STAT_BOOST, Premium only) |
 | 💎 `_faction_name` | `String` | Faction identifier (for REPUTATION, Premium only) |
@@ -54,7 +54,7 @@ Defines the type of reward to grant.
 
 ## Constructor
 
-###### Core: `PPQuestReward(reward_name, reward_type, reward_entity_reference, quantity, currency_amount, experience_amount)`
+###### Core: `PPQuestReward(reward_name, reward_type, reward_entity_reference, quantity, currency_amount)`
 
 ###### 💎 Premium: `PPQuestReward(reward_name, reward_type, reward_entity_reference, quantity, currency_amount, experience_amount, stat_name, stat_value, faction_name, reputation_amount, custom_script, optional)`
 
@@ -66,7 +66,7 @@ Creates a new quest reward with specified parameters.
 - `reward_entity_reference`: Entity reference (for ITEM/UNLOCK_RECIPE/UNLOCK_QUEST) (default: `null`)
 - `quantity`: Number of items (default: `1`)
 - `currency_amount`: Currency amount (default: `0`)
-- `experience_amount`: XP amount (default: `0`)
+- 💎 `experience_amount`: XP amount **(Premium only)** (default: `0`)
 - 💎 `stat_name`: Stat to boost **(Premium only)** (default: `""`)
 - 💎 `stat_value`: Value to add to stat **(Premium only)** (default: `0.0`)
 - 💎 `faction_name`: Faction identifier **(Premium only)** (default: `""`)
@@ -93,10 +93,12 @@ var gold_reward = PPQuestReward.new(
     PPQuestReward.RewardType.CURRENCY,
     null,
     0,
-    100,  # 100 gold
-    0
+    100  # 100 gold
 )
+```
 
+**💎 Premium Examples:**
+```gdscript
 # Experience reward
 var xp_reward = PPQuestReward.new(
     "Quest XP",
@@ -106,10 +108,7 @@ var xp_reward = PPQuestReward.new(
     0,
     250  # 250 XP
 )
-```
 
-**💎 Premium Examples:**
-```gdscript
 # Unlock recipe reward
 var recipe_ref = PandoraReference.new("IRON_ARMOR_RECIPE", PandoraReference.Type.ENTITY)
 var recipe_reward = PPQuestReward.new(
@@ -204,9 +203,11 @@ Returns the amount of currency to reward.
 
 ---
 
-###### `get_experience_amount() -> int`
+###### 💎 `get_experience_amount() -> int`
 
 Returns the amount of experience to reward.
+
+**Premium Only**
 
 ---
 
@@ -272,7 +273,7 @@ All properties have corresponding setter methods:
 - `set_reward_entity_reference(reference: PandoraReference)`
 - `set_quantity(quantity: int)`
 - `set_currency_amount(amount: int)`
-- `set_experience_amount(amount: int)`
+- 💎 `set_experience_amount(amount: int)` **(Premium only)**
 - 💎 `set_stat_name(stat_name: String)` **(Premium only)**
 - 💎 `set_stat_value(value: float)` **(Premium only)**
 - 💎 `set_faction_name(faction_name: String)` **(Premium only)**
@@ -332,21 +333,9 @@ func create_quest_rewards() -> Array[PPQuestReward]:
         PPQuestReward.RewardType.CURRENCY,
         null,
         0,
-        150,  # 150 gold
-        0
+        150  # 150 gold
     )
     rewards.append(gold_reward)
-
-    # Experience reward
-    var xp_reward = PPQuestReward.new(
-        "Quest Experience",
-        PPQuestReward.RewardType.EXPERIENCE,
-        null,
-        0,
-        0,
-        500  # 500 XP
-    )
-    rewards.append(xp_reward)
 
     return rewards
 
@@ -363,11 +352,6 @@ func grant_rewards_to_player(rewards: Array[PPQuestReward], player: Node):
                 var amount = reward.get_currency_amount()
                 player.inventory.game_currency += amount
                 print("Received: %d gold" % amount)
-
-            PPQuestReward.RewardType.EXPERIENCE:
-                var xp = reward.get_experience_amount()
-                player.add_experience(xp)
-                print("Received: %d XP" % xp)
 ```
 
 ---
@@ -475,34 +459,19 @@ func create_tiered_rewards(tier: int) -> Array[PPQuestReward]:
             rewards.append(PPQuestReward.new(
                 "Bronze Reward",
                 PPQuestReward.RewardType.CURRENCY,
-                null, 0, 50, 0
-            ))
-            rewards.append(PPQuestReward.new(
-                "XP",
-                PPQuestReward.RewardType.EXPERIENCE,
-                null, 0, 0, 100
+                null, 0, 50
             ))
         2:  # Silver
             rewards.append(PPQuestReward.new(
                 "Silver Reward",
                 PPQuestReward.RewardType.CURRENCY,
-                null, 0, 150, 0
-            ))
-            rewards.append(PPQuestReward.new(
-                "XP",
-                PPQuestReward.RewardType.EXPERIENCE,
-                null, 0, 0, 300
+                null, 0, 150
             ))
         3:  # Gold
             rewards.append(PPQuestReward.new(
                 "Gold Reward",
                 PPQuestReward.RewardType.CURRENCY,
-                null, 0, 500, 0
-            ))
-            rewards.append(PPQuestReward.new(
-                "XP",
-                PPQuestReward.RewardType.EXPERIENCE,
-                null, 0, 0, 1000
+                null, 0, 500
             ))
 
     return rewards
@@ -578,13 +547,13 @@ func grant_random_reward(player: Node):
 ### Reward Types
 
 Each reward type serves different purposes:
-- **ITEM**: Tangible gear, consumables, or quest items
-- **CURRENCY**: In-game money for purchasing
-- **EXPERIENCE**: Character progression
+- **ITEM** (Core): Tangible gear, consumables, or quest items
+- **CURRENCY** (Core): In-game money for purchasing
+- 💎 **EXPERIENCE** (Premium): Character progression
 
 ### Null References
 
-For CURRENCY and EXPERIENCE rewards, `reward_entity_reference` should be `null` since they don't reference specific entities.
+For CURRENCY rewards (and 💎 EXPERIENCE in Premium), `reward_entity_reference` should be `null` since they don't reference specific entities.
 
 ### Multiple Rewards
 

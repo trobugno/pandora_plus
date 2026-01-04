@@ -218,12 +218,10 @@ func grant_reward(reward: PPQuestReward, inventory: PPInventory = null, quest_id
 			if not inventory:
 				reward_grant_failed.emit(quest_id, reward, "No inventory provided for ITEM reward")
 				return false
-
 			var item = reward.get_reward_entity() as PPItemEntity
 			if not item:
 				reward_grant_failed.emit(quest_id, reward, "Invalid item entity")
 				return false
-
 			# Check if inventory has space (if max_items_in_inventory is set)
 			if inventory.max_items_in_inventory > -1:
 				var empty_slots = inventory.all_items.filter(func(s): return s == null).size()
@@ -234,31 +232,12 @@ func grant_reward(reward: PPQuestReward, inventory: PPInventory = null, quest_id
 				if empty_slots == 0 and existing_stackable.is_empty():
 					reward_grant_failed.emit(quest_id, reward, "Inventory full, cannot add reward")
 					return false
-
 			inventory.add_item(item, reward.get_quantity())
 			return true
-
 		PPQuestReward.RewardType.CURRENCY:
-			# Currency is handled externally, just return true
-			# Game should listen to rewards_granted signal and handle currency
+			inventory.game_currency += reward.get_currency_amount()
 			return true
-
-		PPQuestReward.RewardType.EXPERIENCE:
-			# Experience is handled externally
-			return true
-
 	return false
-
-## Calculates total experience from all rewards
-func calculate_total_experience(quest: PPQuest) -> int:
-	var total = 0
-
-	for reward in quest.get_rewards():
-		if reward is PPQuestReward:
-			if reward.get_reward_type() == PPQuestReward.RewardType.EXPERIENCE:
-				total += reward.get_experience_amount()
-
-	return total
 
 ## Calculates total currency from all rewards
 func calculate_total_currency(quest: PPQuest) -> int:
@@ -396,20 +375,19 @@ func calculate_quest_stats(completed_quests: Array[PPRuntimeQuest]) -> Dictionar
 		"total_quests": completed_quests.size(),
 		"by_type": {},
 		"by_category": {},
-		"total_experience": 0,
 		"total_currency": 0
 	}
-
+	
 	if completed_quests.is_empty():
 		return stats
-
+	
 	for quest in completed_quests:
 		# Type distribution
 		var quest_type = quest.get_quest_type()
 		if not stats["by_type"].has(quest_type):
 			stats["by_type"][quest_type] = 0
 		stats["by_type"][quest_type] += 1
-
+		
 		# Category distribution
 		var quest_data = PPQuest.new()
 		quest_data.load_data(quest.quest_data)
@@ -418,11 +396,7 @@ func calculate_quest_stats(completed_quests: Array[PPRuntimeQuest]) -> Dictionar
 			if not stats["by_category"].has(category):
 				stats["by_category"][category] = 0
 			stats["by_category"][category] += 1
-
-		# Experience and currency
-		stats["total_experience"] += calculate_total_experience(quest_data)
 		stats["total_currency"] += calculate_total_currency(quest_data)
-
 	return stats
 
 ## Gets the most completed quest type
@@ -451,12 +425,12 @@ func get_most_completed_quest_type(completed_quests: Array[PPRuntimeQuest]) -> i
 func validate_quest_giver(quest: PPQuestEntity, npc: PPNPCEntity) -> bool:
 	if not quest or not npc:
 		return false
-
+	
 	var quest_givers = npc.get_quest_giver_for()
 	for quest_ref in quest_givers:
 		if quest_ref is PandoraReference and quest_ref.get_id() == quest.get_entity_id():
 			return true
-
+	
 	return false
 
 ## Checks if a quest can be obtained from an NPC
@@ -468,11 +442,11 @@ func can_obtain_quest_from_npc(
 ) -> bool:
 	if not quest or not npc_runtime:
 		return false
-
+	
 	# Validate NPC is quest giver for this quest
 	if not validate_quest_giver(quest, npc_runtime._npc_entity):
 		return false
-
+	
 	# Check if NPC is alive
 	if not npc_runtime.is_alive():
 		return false
@@ -481,18 +455,18 @@ func can_obtain_quest_from_npc(
 	var quest_data = quest.get_quest_data()
 	if not quest_data:
 		return false
-
+	
 	return can_start_quest(quest_data, completed_quest_ids)
 
 ## Gets all NPCs that can give a specific quest
 func find_quest_givers_for_quest(npcs: Array, quest: PPQuestEntity) -> Array:
 	var quest_givers: Array = []
-
+	
 	for npc in npcs:
 		if npc is PPRuntimeNPC:
 			if validate_quest_giver(quest, npc._npc_entity):
 				quest_givers.append(npc)
-
+	
 	return quest_givers
 
 ## Debug Utilities

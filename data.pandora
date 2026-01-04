@@ -255,11 +255,10 @@
 							"quest_type": 1,
 							"rewards": [
 								{
-									"currency_amount": 0,
-									"experience_amount": 30,
+									"currency_amount": 20,
 									"quantity": 1,
 									"reward_name": "Experience",
-									"reward_type": 2
+									"reward_type": 1
 								}
 							]
 						}
@@ -300,15 +299,13 @@
 							"quest_type": 1,
 							"rewards": [
 								{
-									"currency_amount": 20,
-									"experience_amount": 0,
+									"currency_amount": 100,
 									"quantity": 1,
 									"reward_name": "Gold",
 									"reward_type": 1
 								},
 								{
 									"currency_amount": 0,
-									"experience_amount": 0,
 									"quantity": 1,
 									"reward_entity_reference": {
 										"_entity_id": "1263.0",

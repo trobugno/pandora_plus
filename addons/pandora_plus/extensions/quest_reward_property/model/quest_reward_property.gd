@@ -7,8 +7,7 @@ class_name PPQuestReward extends RefCounted
 ## Reward Types
 enum RewardType {
 	ITEM,           ## Give item(s)
-	CURRENCY,       ## Give gold/currency
-	EXPERIENCE      ## Give experience points
+	CURRENCY        ## Give gold/currency
 }
 
 var _reward_name: String
@@ -16,7 +15,6 @@ var _reward_type: int
 var _reward_entity_reference: PandoraReference  ## For ITEM rewards
 var _quantity: int
 var _currency_amount: int
-var _experience_amount: int
 
 ## Constructor
 func _init(
@@ -24,15 +22,13 @@ func _init(
 	reward_type: int = RewardType.ITEM,
 	reward_entity_reference: PandoraReference = null,
 	quantity: int = 1,
-	currency_amount: int = 0,
-	experience_amount: int = 0
+	currency_amount: int = 0
 ) -> void:
 	_reward_name = reward_name
 	_reward_type = reward_type
 	_reward_entity_reference = reward_entity_reference
 	_quantity = quantity
 	_currency_amount = currency_amount
-	_experience_amount = experience_amount
 
 ## Getters
 
@@ -54,9 +50,6 @@ func get_quantity() -> int:
 func get_currency_amount() -> int:
 	return _currency_amount
 
-func get_experience_amount() -> int:
-	return _experience_amount
-
 ## Setters
 
 func set_reward_name(reward_name: String) -> void:
@@ -74,9 +67,6 @@ func set_quantity(quantity: int) -> void:
 func set_currency_amount(amount: int) -> void:
 	_currency_amount = amount
 
-func set_experience_amount(amount: int) -> void:
-	_experience_amount = amount
-
 ## Serialization (follows PPQuestObjective pattern)
 
 func load_data(data: Dictionary) -> void:
@@ -92,7 +82,6 @@ func load_data(data: Dictionary) -> void:
 
 	_quantity = data.get("quantity", 1)
 	_currency_amount = data.get("currency_amount", 0)
-	_experience_amount = data.get("experience_amount", 0)
 
 func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 	var result := {}
@@ -107,7 +96,6 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 	var reward_entity_field = find_field.call("Reward Entity")
 	var quantity_field = find_field.call("Quantity")
 	var currency_field = find_field.call("Currency Amount")
-	var experience_field = find_field.call("Experience Amount")
 
 	if reward_name_field["enabled"]:
 		result["reward_name"] = _reward_name
@@ -119,8 +107,6 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 		result["quantity"] = _quantity
 	if currency_field["enabled"]:
 		result["currency_amount"] = _currency_amount
-	if experience_field["enabled"]:
-		result["experience_amount"] = _experience_amount
 
 	return result
 
@@ -135,8 +121,7 @@ func duplicate() -> PPQuestReward:
 		_reward_type,
 		entity_ref_copy,
 		_quantity,
-		_currency_amount,
-		_experience_amount
+		_currency_amount
 	)
 
 func _to_string() -> String:

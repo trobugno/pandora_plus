@@ -10,7 +10,6 @@ const QuestRewardType = preload("uid://ig8sh17ax6op")
 @onready var quantity: SpinBox = $VBoxContainer/SecondLine/Quantity/SpinBox
 
 @onready var currency_amount: SpinBox = $VBoxContainer/ThirdLine/CurrencyAmount/SpinBox
-@onready var experience_amount: SpinBox = $VBoxContainer/FourthLine/ExperienceAmount/SpinBox
 
 # Container references for visibility control
 @onready var reward_name_container: VBoxContainer = $VBoxContainer/FirstLine/RewardName
@@ -22,9 +21,6 @@ const QuestRewardType = preload("uid://ig8sh17ax6op")
 
 @onready var third_line: HBoxContainer = $VBoxContainer/ThirdLine
 @onready var currency_amount_container: VBoxContainer = $VBoxContainer/ThirdLine/CurrencyAmount
-
-@onready var fourth_line: HBoxContainer = $VBoxContainer/FourthLine
-@onready var experience_amount_container: VBoxContainer = $VBoxContainer/FourthLine/ExperienceAmount
 
 var current_property: PPQuestReward = PPQuestReward.new()
 
@@ -45,8 +41,6 @@ func _ready() -> void:
 	quantity.focus_exited.connect(func(): unfocused.emit())
 	currency_amount.focus_entered.connect(func(): focused.emit())
 	currency_amount.focus_exited.connect(func(): unfocused.emit())
-	experience_amount.focus_entered.connect(func(): focused.emit())
-	experience_amount.focus_exited.connect(func(): unfocused.emit())
 
 	# Value changed signals
 	reward_name.text_changed.connect(
@@ -79,11 +73,6 @@ func _ready() -> void:
 			current_property.set_currency_amount(int(value))
 			_set_property_value())
 
-	experience_amount.value_changed.connect(
-		func(value: float):
-			current_property.set_experience_amount(int(value))
-			_set_property_value())
-
 func _set_property_value() -> void:
 	_property.set_default_value(current_property)
 	property_value_changed.emit(current_property)
@@ -113,11 +102,6 @@ func refresh() -> void:
 					currency_amount.min_value = field_settings["settings"]["min_value"]
 				if field_settings["settings"].has("max_value"):
 					currency_amount.max_value = field_settings["settings"]["max_value"]
-			elif field_settings["name"] == "Experience Amount":
-				if field_settings["settings"].has("min_value"):
-					experience_amount.min_value = field_settings["settings"]["min_value"]
-				if field_settings["settings"].has("max_value"):
-					experience_amount.max_value = field_settings["settings"]["max_value"]
 
 	if _property != null:
 		if _property.get_setting(QuestRewardType.SETTING_REWARD_ENTITY_FILTER):
@@ -143,7 +127,6 @@ func refresh() -> void:
 
 			quantity.value = current_property.get_quantity()
 			currency_amount.value = current_property.get_currency_amount()
-			experience_amount.value = current_property.get_experience_amount()
 
 			reward_name.caret_column = current_property.get_reward_name().length()
 
@@ -153,12 +136,11 @@ func _update_fields_visibility(reward_type_index: int) -> void:
 	# Hide all conditional fields first
 	second_line.visible = false
 	third_line.visible = false
-	fourth_line.visible = false
 
 	reward_entity_container.visible = false
 	quantity_container.visible = false
 
-	# Show fields based on reward type (CORE only: ITEM, CURRENCY, EXPERIENCE)
+	# Show fields based on reward type (CORE only: ITEM, CURRENCY)
 	match reward_type_index:
 		0: # ITEM
 			second_line.visible = true
@@ -166,8 +148,6 @@ func _update_fields_visibility(reward_type_index: int) -> void:
 			quantity_container.visible = true
 		1: # CURRENCY
 			third_line.visible = true
-		2: # EXPERIENCE
-			fourth_line.visible = true
 
 func _setting_changed(key: String) -> void:
 	if key == QuestRewardType.SETTING_MAX_QUANTITY or key == QuestRewardType.SETTING_MIN_QUANTITY or \
