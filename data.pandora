@@ -324,14 +324,34 @@
 				"_icon_color": "ffffff00",
 				"_id": "1261.0",
 				"_index": 0,
-				"_name": "Common"
+				"_name": "Common",
+				"_property_overrides": {
+					"name": {
+						"type": "string",
+						"value": "Common"
+					},
+					"percentage": {
+						"type": "float",
+						"value": 80.0
+					}
+				}
 			},
 			{
 				"_category_id": "1203.0",
 				"_icon_color": "ffffff00",
 				"_id": "1262.0",
 				"_index": 0,
-				"_name": "Rare"
+				"_name": "Rare",
+				"_property_overrides": {
+					"name": {
+						"type": "string",
+						"value": "Rare"
+					},
+					"percentage": {
+						"type": "float",
+						"value": 20.0
+					}
+				}
 			},
 			{
 				"_category_id": "1206.0",
