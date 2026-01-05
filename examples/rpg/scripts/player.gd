@@ -10,6 +10,9 @@ var current_direction: Vector2 = Vector2.DOWN
 var is_moving: bool = false
 var last_npc : NPC = null
 
+func _ready() -> void:
+	PPPlayerManager.initialize_new_player("Player")
+
 func _process(_delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept") and last_npc:
 		last_npc.interact()
@@ -25,6 +28,7 @@ func _physics_process(_delta: float) -> void:
 	if input_dir != Vector2.ZERO:
 		is_moving = true
 		current_direction = input_dir
+		PPPlayerManager.set_position(Vector3(global_position.x, global_position.y, 0))
 		update_animation()
 	else:
 		is_moving = false

@@ -272,7 +272,7 @@ func to_dict() -> Dictionary:
 	var location_id = null
 	if _current_location:
 		if _current_location is PandoraReference:
-			location_id = _current_location.get_id()
+			location_id = _current_location._entity_id
 		elif _current_location is String:
 			location_id = _current_location
 

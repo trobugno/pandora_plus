@@ -32,6 +32,14 @@ var player_data: Variant = null
 ## Each entry is a PPRuntimeQuest.to_dict() result
 @export var active_quests: Array = []
 
+## Array of completed quests serialized to dictionaries
+## Each entry is a PPRuntimeQuest.to_dict() result
+@export var completed_quests: Array = []
+
+## Array of failed quests serialized to dictionaries
+## Each entry is a PPRuntimeQuest.to_dict() result
+@export var failed_quests: Array = []
+
 ## Array of completed quest IDs
 @export var completed_quest_ids: Array[String] = []
 
@@ -106,6 +114,8 @@ func to_dict() -> Dictionary:
 		"player_data": _serialize_player_data(player_data),
 		"quests": {
 			"active": active_quests,
+			"completed": completed_quests,
+			"failed": failed_quests,
 			"completed_ids": completed_quest_ids,
 			"failed_ids": failed_quest_ids
 		},
@@ -139,6 +149,8 @@ static func from_dict(data: Dictionary) -> PPGameState:
 	if data.has("quests"):
 		var quests_data = data["quests"]
 		state.active_quests = quests_data.get("active", [])
+		state.completed_quests = quests_data.get("completed", [])
+		state.failed_quests = quests_data.get("failed", [])
 		state.completed_quest_ids.assign(quests_data.get("completed_ids", []))
 		state.failed_quest_ids.assign(quests_data.get("failed_ids", []))
 

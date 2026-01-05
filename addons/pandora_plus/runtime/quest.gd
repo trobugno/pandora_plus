@@ -29,7 +29,7 @@ var _rewards: Array[PPQuestReward] = []
 var _quest_status: QuestStatus = QuestStatus.NOT_STARTED
 var _start_timestamp: float = 0.0
 var _completion_timestamp: float = 0.0
-var _delivered_rewards: Array[String] = []  ## IDs of already delivered rewards
+var _delivered_rewards: Array = []  ## IDs of already delivered rewards
 
 ## Constructor
 func _init(p_quest: Variant = null) -> void:

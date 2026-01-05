@@ -3,10 +3,18 @@ class_name HUD extends CanvasLayer
 const UI_NOTIFICATION = preload("uid://bbf1gel8hepee")
 
 @onready var ui_notification_locator: Control = $UINotificationLocator
+@onready var save_game_button: Button = $VBoxContainer/SaveGame
+@onready var load_game_button: Button = $VBoxContainer/LoadGame
+@onready var delete_save_button: Button = $VBoxContainer/DeleteSave
 
 func _ready() -> void:
 	PPQuestManager.quest_added.connect(_on_quest_added)
 	PPQuestManager.quest_completed.connect(_on_quest_completed)
+
+func _process(_delta: float) -> void:
+	if not (PPSaveManager.get_save_slot(1) as PPSaveSlot).is_empty:
+		load_game_button.disabled = false
+		delete_save_button.disabled = false
 
 func _on_quest_added(runtime_quest: PPRuntimeQuest) -> void:
 	print("====================")

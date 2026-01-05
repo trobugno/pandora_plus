@@ -259,13 +259,13 @@ func load_state(game_state: PPGameState) -> void:
 		_add_quest(runtime_quest)
 
 	# Load completed quests (if available in save data)
-	if game_state.has("completed_quests"):
+	if game_state.completed_quests:
 		for quest_data in game_state.completed_quests:
 			var runtime_quest = PPRuntimeQuest.from_dict(quest_data)
 			_completed_quests.append(runtime_quest)
 
 	# Load failed quests (if available in save data)
-	if game_state.has("failed_quests"):
+	if game_state.failed_quests:
 		for quest_data in game_state.failed_quests:
 			var runtime_quest = PPRuntimeQuest.from_dict(quest_data)
 			_failed_quests.append(runtime_quest)
@@ -289,14 +289,14 @@ func save_state(game_state: PPGameState) -> void:
 		game_state.active_quests.append(quest.to_dict())
 
 	# Save completed quests
-	if not game_state.has("completed_quests"):
+	if not game_state.completed_quests:
 		game_state.completed_quests = []
 	game_state.completed_quests.clear()
 	for quest in _completed_quests:
 		game_state.completed_quests.append(quest.to_dict())
 
 	# Save failed quests
-	if not game_state.has("failed_quests"):
+	if not game_state.failed_quests:
 		game_state.failed_quests = []
 	game_state.failed_quests.clear()
 	for quest in _failed_quests:
