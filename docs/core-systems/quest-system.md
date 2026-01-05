@@ -74,12 +74,15 @@ if runtime_quest.get_status() == PPRuntimeQuest.QuestStatus.COMPLETED:
 ```
 PPQuestManager (Autoload)
 ├── Active Quests: Array[PPRuntimeQuest]
-├── Completed Quest IDs: Array[String]
-└── Failed Quest IDs: Array[String]
+├── Completed Quests: Array[PPRuntimeQuest] (full quest data)
+├── Failed Quests: Array[PPRuntimeQuest] (full quest data)
+├── Completed Quest IDs: Array[String] (backward compatibility)
+└── Failed Quest IDs: Array[String] (backward compatibility)
 
 PPRuntimeQuest (Runtime Instance)
 ├── Quest Data: PPQuest
 ├── Objectives Progress: Array[Dictionary]
+├── Rewards: Array[PPQuestReward] (runtime rewards)
 ├── Status: QuestStatus enum
 └── Timestamps: started_at, completed_at
 
@@ -87,7 +90,8 @@ PPQuest (Data Model)
 ├── Quest Info: id, name, description
 ├── Objectives: Array[PPQuestObjective]
 ├── Rewards: Array[PPQuestReward]
-└── Prerequisites: Array[String]
+├── Prerequisites: Array[String]
+└── duplicate() method for deep copying
 
 PPQuestUtils (Autoload)
 └── Quest operations and tracking
@@ -161,12 +165,14 @@ var obj = PPQuestObjective.create_custom("find_secret", 1)
 ```gdscript
 var reward = PPQuestReward.create_experience(100)
 # Awards 100 experience points
+# Automatically added to player via PPPlayerManager.add_experience()
 ```
 
 #### Currency Reward
 ```gdscript
 var reward = PPQuestReward.create_currency(50)
 # Awards 50 gold/currency
+# Automatically added to inventory.game_currency
 ```
 
 #### Item Reward
@@ -174,6 +180,7 @@ var reward = PPQuestReward.create_currency(50)
 var item_ref = PandoraReference.new("magic_sword", PandoraReference.Type.ENTITY)
 var reward = PPQuestReward.create_item(item_ref, 1)
 # Awards 1 magic sword
+# Automatically added to inventory via inventory.add_item()
 ```
 
 **💎 Premium Reward Types:**
@@ -187,6 +194,8 @@ var reward = PPQuestReward.new(
     recipe_ref
 )
 # Unlocks crafting recipe for player (Premium only)
+# Automatically added via PPPlayerManager.unlock_recipe()
+# Emits recipe_unlocked signal
 ```
 
 #### 💎 Stat Boost Reward
@@ -211,6 +220,7 @@ var reward = PPQuestReward.new(
     25          # +25 reputation
 )
 # Increases faction reputation (Premium only)
+# Automatically added via PPPlayerManager.modify_faction_reputation()
 ```
 
 #### 💎 Optional Rewards
@@ -252,8 +262,9 @@ var level_req = quest_entity.get_level_requirement()
 
 # Filter quests by player level in NPC
 var npc = PPNPCUtils.spawn_npc(npc_entity)
+var completed_ids = PPQuestManager.get_completed_quest_ids()
 var player_level = PPPlayerManager.get_player_data().level
-var available = npc.get_available_quests(player_level, completed_ids)
+var available = npc.get_available_quests(completed_ids, player_level)
 ```
 
 ---
@@ -606,7 +617,8 @@ var npc_entity = Pandora.get_entity("npc_village_elder") as PPNPCEntity
 var runtime_npc = PPNPCUtils.spawn_npc(npc_entity)
 
 var completed_ids = PPQuestManager.get_completed_quest_ids()
-var available_quests = runtime_npc.get_available_quests(completed_ids)
+var player_level = PPPlayerManager.get_player_data().level
+var available_quests = runtime_npc.get_available_quests(completed_ids, player_level)
 
 for quest_entity in available_quests:
     print("Available: ", quest_entity.get_quest_data().get_quest_name())
@@ -624,9 +636,10 @@ var game_state = PPGameState.new()
 PPQuestManager.save_state(game_state)
 
 # Game state contains:
-# - Active quests (with progress)
-# - Completed quest IDs
-# - Failed quest IDs
+# - Active quests (with progress and full quest data)
+# - Completed quests (full quest instances with rewards)
+# - Failed quests (full quest instances)
+# - Completed/Failed quest IDs (for backward compatibility)
 ```
 
 ### Loading Quest State
@@ -638,6 +651,7 @@ PPQuestManager.load_state(game_state)
 
 # All quests restored with progress
 print("Loaded %d active quests" % PPQuestManager.get_active_quest_count())
+print("Loaded %d completed quests" % PPQuestManager.get_completed_quests().size())
 ```
 
 ### Manual Serialization
@@ -807,7 +821,8 @@ func on_player_interact():
 
     # Get available quests
     var completed = PPQuestManager.get_completed_quest_ids()
-    var quests = runtime_npc.get_available_quests(completed)
+    var player_level = PPPlayerManager.get_player_data().level
+    var quests = runtime_npc.get_available_quests(completed, player_level)
 
     if quests.is_empty():
         show_dialogue("I have no quests for you right now.")

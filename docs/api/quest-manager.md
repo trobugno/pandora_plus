@@ -326,13 +326,66 @@ for quest in active:
 
 ---
 
+### get_completed_quests
+
+```gdscript
+func get_completed_quests() -> Array[PPRuntimeQuest]
+```
+
+Gets all completed quests with full quest data.
+
+**Returns:** `Array[PPRuntimeQuest]` - Copy of completed quests array
+
+**Example:**
+```gdscript
+var completed = PPQuestManager.get_completed_quests()
+
+for quest in completed:
+    print("Completed: %s" % quest.get_quest_name())
+    # Access rewards from completed quest
+    for reward in quest.get_rewards():
+        print("  Reward: %s" % reward.get_reward_name())
+```
+
+**Notes:**
+- Contains full quest data including rewards
+- Useful for displaying quest history with rewards
+- Serialized during save/load operations
+
+---
+
+### get_failed_quests
+
+```gdscript
+func get_failed_quests() -> Array[PPRuntimeQuest]
+```
+
+Gets all failed quests with full quest data.
+
+**Returns:** `Array[PPRuntimeQuest]` - Copy of failed quests array
+
+**Example:**
+```gdscript
+var failed = PPQuestManager.get_failed_quests()
+
+for quest in failed:
+    print("Failed: %s" % quest.get_quest_name())
+```
+
+**Notes:**
+- Contains full quest data
+- Can be used for quest retry mechanics
+- Serialized during save/load operations
+
+---
+
 ### get_completed_quest_ids
 
 ```gdscript
 func get_completed_quest_ids() -> Array[String]
 ```
 
-Gets completed quest IDs.
+Gets completed quest IDs (for backward compatibility).
 
 **Returns:** `Array[String]` - Copy of completed quest IDs array
 
@@ -342,6 +395,10 @@ var completed = PPQuestManager.get_completed_quest_ids()
 print("Completed %d quests" % completed.size())
 ```
 
+**Notes:**
+- Maintained for backward compatibility
+- For full quest data, use `get_completed_quests()` instead
+
 ---
 
 ### get_failed_quest_ids
@@ -350,9 +407,13 @@ print("Completed %d quests" % completed.size())
 func get_failed_quest_ids() -> Array[String]
 ```
 
-Gets failed quest IDs.
+Gets failed quest IDs (for backward compatibility).
 
 **Returns:** `Array[String]` - Copy of failed quest IDs array
+
+**Notes:**
+- Maintained for backward compatibility
+- For full quest data, use `get_failed_quests()` instead
 
 ---
 
@@ -362,12 +423,18 @@ Gets failed quest IDs.
 func find_quest(quest_id: String) -> PPRuntimeQuest
 ```
 
-Finds an active quest by ID.
+Finds a quest by ID in any state (active, completed, or failed).
 
 **Parameters:**
 - `quest_id` (String) - Quest identifier
 
 **Returns:** `PPRuntimeQuest` - Quest instance or `null` if not found
+
+**Notes:**
+- Searches active quests first (most common case)
+- Then searches completed quests
+- Finally searches failed quests
+- Use `find_active_quest()` if you only need active quests
 
 **Example:**
 ```gdscript
@@ -376,6 +443,44 @@ var quest = PPQuestManager.find_quest("quest_village_help")
 if quest:
     print("Quest status: %s" % quest.get_status_string())
     print("Progress: %.0f%%" % quest.get_progress_percentage())
+
+    # Can find completed quests too
+    if quest.is_completed():
+        print("Quest rewards:")
+        for reward in quest.get_rewards():
+            print("  - %s" % reward.get_reward_name())
+```
+
+---
+
+### find_active_quest
+
+```gdscript
+func find_active_quest(quest_id: String) -> PPRuntimeQuest
+```
+
+Finds an active quest by ID.
+
+**Parameters:**
+- `quest_id` (String) - Quest identifier
+
+**Returns:** `PPRuntimeQuest` - Active quest instance or `null` if not found
+
+**Notes:**
+- Only searches in active quests
+- Faster than `find_quest()` if you only need active quests
+- Returns `null` if quest is completed or failed
+
+**Example:**
+```gdscript
+var quest = PPQuestManager.find_active_quest("quest_village_help")
+
+if quest:
+    print("Active quest found!")
+    # Track progress
+    PPQuestUtils.track_item_collected(quest, item, 1)
+else:
+    print("Quest not active (may be completed or not started)")
 ```
 
 ---
@@ -477,6 +582,8 @@ Clears all quest state (for new game).
 
 **Notes:**
 - Removes all active quests
+- Clears completed quests array
+- Clears failed quests array
 - Clears completed and failed quest IDs
 - Emits `all_quests_cleared` signal
 
@@ -496,6 +603,10 @@ Loads quest state from GameState (called by SaveManager).
 **Notes:**
 - Called automatically by `PPSaveManager.restore_state()`
 - Clears existing quests and loads from save data
+- Loads active quests with full progress
+- Loads completed quests array (if available in save data)
+- Loads failed quests array (if available in save data)
+- Loads completed/failed IDs for backward compatibility
 
 ---
 
@@ -512,6 +623,10 @@ Saves quest state to GameState (called by SaveManager).
 
 **Notes:**
 - Called automatically by `PPSaveManager.save_game()`
+- Saves active quests with full progress and rewards
+- Saves completed quests array with full data
+- Saves failed quests array with full data
+- Saves completed/failed IDs for backward compatibility
 
 ---
 
@@ -576,15 +691,21 @@ func track_quest_progress():
 func complete_quest_at_npc():
     var quest_id = "quest_village_help"
 
-    if PPQuestManager.complete_quest(quest_id):
+    # Find the quest before completing it to access rewards
+    var quest = PPQuestManager.find_active_quest(quest_id)
+
+    if quest and PPQuestManager.complete_quest(quest_id):
         print("Quest completed!")
 
-        # Give rewards
-        var quest = PPQuestManager.find_quest(quest_id)
-        if quest:
-            var rewards = quest.get_rewards()
-            for reward in rewards:
-                apply_reward(reward)
+        # Give rewards (quest is now in completed quests, still accessible)
+        var rewards = quest.get_rewards()
+        for reward in rewards:
+            apply_reward(reward)
+
+        # Can also access from completed quests
+        var completed_quest = PPQuestManager.find_quest(quest_id)
+        if completed_quest:
+            print("Quest stored in completed quests with rewards")
 ```
 
 ---
