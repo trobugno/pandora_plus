@@ -92,6 +92,8 @@ func _init() -> void:
 	# Initialize with defaults
 	player_data = null
 	active_quests = []
+	completed_quests = []
+	failed_quests = []
 	completed_quest_ids = []
 	failed_quest_ids = []
 	spawned_npcs = []
