@@ -4,7 +4,7 @@ class_name PPRuntimeItem extends Resource
 ## Base class providing core functionality for per-instance item data
 ##
 ## Features:
-## - Per-instance identification with unique instance_id
+## - Per-instance identification with unique runtime_id
 ## - Custom naming support
 ## - Full serialization for save/load
 ## - Delegate pattern to underlying PPItemEntity
@@ -24,7 +24,7 @@ signal custom_name_changed(old_name: String, new_name: String)
 @export var item_data: Dictionary = {}
 
 ## Unique instance identifier
-var _instance_id: String = ""
+var _runtime_id: String = ""
 
 ## Reference to the static item entity template
 var _item_entity: PPItemEntity
@@ -41,7 +41,7 @@ func _init(p_item_data: Variant = null) -> void:
 		# Initialize from entity
 		_item_entity = p_item_data
 		item_data = _serialize_entity_data(p_item_data)
-		_instance_id = _generate_instance_id()
+		_runtime_id = _generate_runtime_id()
 	elif p_item_data is Dictionary:
 		# Initialize from dictionary (deserialization)
 		item_data = p_item_data
@@ -59,8 +59,8 @@ func _serialize_entity_data(entity: PPItemEntity) -> Dictionary:
 
 
 func _restore_from_dict(data: Dictionary) -> void:
-	# Restore instance ID
-	_instance_id = data.get("instance_id", _generate_instance_id())
+	# Restore runtime ID
+	_runtime_id = data.get("runtime_id", _generate_runtime_id())
 
 	# Restore entity reference
 	var entity_id = data.get("entity_id", item_data.get("entity_id", ""))
@@ -74,16 +74,16 @@ func _restore_from_dict(data: Dictionary) -> void:
 	_custom_name = data.get("custom_name", "")
 
 
-func _generate_instance_id() -> String:
+func _generate_runtime_id() -> String:
 	return str(Time.get_unix_time_from_system()) + "_" + str(randi())
 
 # ============================================================================
 # INSTANCE IDENTIFICATION
 # ============================================================================
 
-## Returns the unique instance ID
-func get_instance_id() -> String:
-	return _instance_id
+## Returns the unique runtime ID (instance ID)
+func get_runtime_id() -> String:
+	return _runtime_id
 
 
 ## Returns true if this is a valid runtime item with an entity
@@ -189,7 +189,7 @@ func get_rarity() -> PPRarityEntity:
 func is_same_instance(other: PPRuntimeItem) -> bool:
 	if not other:
 		return false
-	return _instance_id == other._instance_id
+	return _runtime_id == other._runtime_id
 
 
 ## Returns true if two runtime items reference the same entity type
@@ -219,7 +219,7 @@ func can_stack_with(other: PPRuntimeItem) -> bool:
 func to_dict() -> Dictionary:
 	return {
 		"entity_id": get_entity_id(),
-		"instance_id": _instance_id,
+		"runtime_id": _runtime_id,
 		"custom_name": _custom_name,
 		"item_data": item_data
 	}
@@ -236,4 +236,4 @@ static func from_dict(data: Dictionary) -> PPRuntimeItem:
 
 func _to_string() -> String:
 	var name = get_display_name()
-	return "<PPRuntimeItem:%s [%s]>" % [name, _instance_id.substr(0, 8)]
+	return "<PPRuntimeItem:%s [%s]>" % [name, _runtime_id.substr(0, 8)]
