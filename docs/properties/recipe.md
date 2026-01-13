@@ -8,9 +8,9 @@ Represents a crafting recipe that defines ingredients, result, crafting time, an
 
 ## Description
 
-`PPRecipe` is the core class for the crafting system. It combines multiple `PPIngredient` objects to define what items are needed, what item is produced, how long crafting takes, and what type of recipe it is (for categorization).
+`PPRecipe` is the core class for the crafting system. It combines multiple `PPIngredient` objects to define what items are needed, what item is produced, how long crafting takes, what type of recipe it is (for categorization), and optionally what waste item is produced as a byproduct.
 
-Recipes are used with `PPRecipeUtils` to validate if a player can craft and to execute the crafting process.
+Recipes are used with `PPRecipeUtils` to validate if a player can craft and to execute the crafting process. When a recipe with a waste item is crafted, the waste is automatically added to the inventory.
 
 
 ---
@@ -236,6 +236,44 @@ recipe.set_recipe_type("LEGENDARY_WEAPON")
 
 ---
 
+###### `set_waste(waste: PPIngredient) -> void`
+
+Sets the waste item produced as a byproduct when crafting this recipe.
+
+**Parameters:**
+- `waste`: A `PPIngredient` containing the waste item and quantity, or `null` to remove waste
+
+**Example:**
+```gdscript
+# Add slag as waste when smithing
+var slag = Pandora.get_entity("SLAG") as PPItemEntity
+recipe.set_waste(PPIngredient.new(slag, 2))
+
+# Remove waste
+recipe.set_waste(null)
+```
+
+---
+
+###### `get_waste() -> PPIngredient`
+
+Returns the waste item produced by this recipe, if any.
+
+**Returns:** `PPIngredient` or `null` if no waste defined
+
+**Example:**
+```gdscript
+var waste = recipe.get_waste()
+if waste:
+    var waste_item = waste.get_item_entity()
+    var waste_qty = waste.get_quantity()
+    print("Produces %d %s as waste" % [waste_qty, waste_item.get_item_name()])
+else:
+    print("No waste produced")
+```
+
+---
+
 ###### `load_data(data: Dictionary) -> void`
 
 Loads recipe data from a serialized dictionary.
@@ -407,6 +445,56 @@ var can_craft_now = get_craftable_recipes(player_inventory)
 
 ---
 
+### Example 4: Recipe with Waste
+
+```gdscript
+# Smithing recipe that produces slag as waste
+func create_smithing_recipe() -> PPRecipe:
+    var iron_ore = Pandora.get_entity("IRON_ORE") as PPItemEntity
+    var coal = Pandora.get_entity("COAL") as PPItemEntity
+    var iron_ingot = Pandora.get_entity("IRON_INGOT") as PPItemEntity
+    var slag = Pandora.get_entity("SLAG") as PPItemEntity
+
+    var recipe = PPRecipe.new(
+        [
+            PPIngredient.new(iron_ore, 2),
+            PPIngredient.new(coal, 1)
+        ],
+        PandoraReference.new(iron_ingot.get_entity_id(), PandoraReference.Type.ENTITY),
+        8.0,
+        "SMITHING"
+    )
+
+    # Add waste: 1 slag per crafting
+    recipe.set_waste(PPIngredient.new(slag, 1))
+
+    return recipe
+
+# Alchemy recipe with empty bottle as waste
+func create_potion_recipe() -> PPRecipe:
+    var herbs = Pandora.get_entity("HERBS") as PPItemEntity
+    var water_bottle = Pandora.get_entity("WATER_BOTTLE") as PPItemEntity
+    var health_potion = Pandora.get_entity("HEALTH_POTION") as PPItemEntity
+    var empty_bottle = Pandora.get_entity("EMPTY_BOTTLE") as PPItemEntity
+
+    var recipe = PPRecipe.new(
+        [
+            PPIngredient.new(herbs, 3),
+            PPIngredient.new(water_bottle, 1)
+        ],
+        PandoraReference.new(health_potion.get_entity_id(), PandoraReference.Type.ENTITY),
+        5.0,
+        "ALCHEMY"
+    )
+
+    # Empty bottle is returned as waste (recycling)
+    recipe.set_waste(PPIngredient.new(empty_bottle, 1))
+
+    return recipe
+```
+
+---
+
 ## Integration with PPRecipeUtils
 
 ```gdscript
@@ -415,19 +503,23 @@ var can_craft_now = get_craftable_recipes(player_inventory)
 # Check if can craft
 if PPRecipeUtils.can_craft(inventory, recipe):
     print("Can craft!")
-    
+
     # Show missing ingredients if can't craft
     for ingredient in recipe.get_ingredients():
         var item = ingredient.get_item_entity()
         var need = ingredient.get_quantity()
         var have = inventory.count_item(item)
-        
+
         if have < need:
             print("Missing: %d %s" % [need - have, item.get_item_name()])
 
-# Execute craft (removes ingredients, adds result)
+# Execute craft (removes ingredients, adds result and waste if defined)
 if PPRecipeUtils.craft_recipe(inventory, recipe):
     print("Crafted: %s" % recipe.get_result().get_item_name())
+
+    var waste = recipe.get_waste()
+    if waste:
+        print("Also produced: %d %s" % [waste.get_quantity(), waste.get_item_entity().get_item_name()])
 ```
 
 ---
@@ -453,9 +545,15 @@ if PPRecipeUtils.craft_recipe(inventory, recipe):
             "item": {"_entity_id": "STONE", "_type": 1},
             "quantity": 3
         }
-    ]
+    ],
+    "waste": {
+        "item": {"_entity_id": "SLAG", "_type": 1},
+        "quantity": 1
+    }
 }
 ```
+
+> **Note:** The `waste` field is optional and only present when a waste item is defined.
 
 ### Field Settings
 
@@ -466,9 +564,12 @@ recipe_fields_settings = [
     {"name": "Result", "enabled": true},
     {"name": "Recipe types", "enabled": true},
     {"name": "Ingredients", "enabled": true},
-    {"name": "Crafting Time", "enabled": true}
+    {"name": "Crafting Time", "enabled": true},
+    {"name": "Waste Item", "enabled": true}
 ]
 ```
+
+> **Note:** When "Waste Item" is disabled, waste data is not saved or loaded.
 
 ---
 

@@ -34,12 +34,12 @@ func has_item(item: PPItemEntity, quantity : int = 1) -> bool:
 	return false
 	
 func add_item(item: PPItemEntity, quantity: int = 1, new_slot: bool = false) -> void:
-	var inventory_slots = all_items.filter(func(s: PPInventorySlot): return s and s.item and s.item._id == item._id) \
+	var inventory_slots = all_items.filter(func(s: PPInventorySlot): return s and s.get_item() and s.get_item()._id == item._id) \
 		.filter(func(s: PPInventorySlot): return s.quantity < s.MAX_STACK_SIZE)
 	var inventory_slot = PPInventorySlot.new()
 	inventory_slot.item = item
 	inventory_slot.quantity = quantity
-	
+
 	if inventory_slots:
 		if inventory_slots[0].can_fully_merge_with(inventory_slot) and not new_slot:
 			inventory_slots[0].fully_merge_with(inventory_slot)
@@ -55,7 +55,60 @@ func add_item(item: PPItemEntity, quantity: int = 1, new_slot: bool = false) -> 
 			all_items[index] = inventory_slot
 		elif index == -1 and max_items_in_inventory == -1:
 			all_items.append(inventory_slot)
-	
+
+	item_added.emit(item, quantity)
+
+
+## Adds a runtime item to the inventory
+## Runtime items with custom data (custom name, etc.) are stored separately
+func add_runtime_item(runtime_item: PPRuntimeItem, quantity: int = 1, new_slot: bool = false) -> void:
+	var item = runtime_item.get_item_entity()
+	if not item:
+		push_error("PPInventory.add_runtime_item: Runtime item has no valid entity")
+		return
+
+	# Check if this runtime item can be merged with existing slots
+	var can_merge = runtime_item.is_stackable() and not runtime_item.has_custom_name()
+
+	if can_merge and not new_slot:
+		# Try to find a compatible slot to merge with
+		var compatible_slots = all_items.filter(func(s: PPInventorySlot):
+			if not s or not s.get_item():
+				return false
+			if s.get_item()._id != item._id:
+				return false
+			if s.quantity >= s.MAX_STACK_SIZE:
+				return false
+			# If slot has runtime item, check compatibility
+			if s.has_runtime_item():
+				return s.runtime_item.can_stack_with(runtime_item)
+			# If slot has no runtime item, can merge if runtime has no custom data
+			return not runtime_item.has_custom_name()
+		)
+
+		if compatible_slots:
+			var inventory_slot = PPInventorySlot.new()
+			inventory_slot.runtime_item = runtime_item
+			inventory_slot.item = item
+			inventory_slot.quantity = quantity
+
+			if compatible_slots[0].can_fully_merge_with(inventory_slot):
+				compatible_slots[0].fully_merge_with(inventory_slot)
+				item_added.emit(item, quantity)
+				return
+
+	# Create new slot for the runtime item
+	var inventory_slot = PPInventorySlot.new()
+	inventory_slot.runtime_item = runtime_item
+	inventory_slot.item = item
+	inventory_slot.quantity = quantity
+
+	var index = all_items.find(null)
+	if index > -1:
+		all_items[index] = inventory_slot
+	elif index == -1 and max_items_in_inventory == -1:
+		all_items.append(inventory_slot)
+
 	item_added.emit(item, quantity)
 
 func remove_item(item: PPItemEntity, quantity: int = 1, source: Array[PPInventorySlot] = all_items) -> void:
@@ -119,13 +172,7 @@ func to_dict() -> Dictionary:
 	var equipped_dict := {}
 	for slot_name in equipped_items.keys():
 		var slot = equipped_items[slot_name]
-		if slot and slot.item:
-			equipped_dict[slot_name] = {
-				"item_id": slot.item.get_entity_id(),
-				"quantity": slot.quantity
-			}
-		else:
-			equipped_dict[slot_name] = null
+		equipped_dict[slot_name] = _slot_to_dict(slot)
 
 	return {
 		"all_items": all_items.map(func(s): return _slot_to_dict(s)),
@@ -155,17 +202,12 @@ static func from_dict(data: Dictionary) -> PPInventory:
 	return inventory
 
 static func _slot_to_dict(slot: PPInventorySlot) -> Variant:
-	if not slot or not slot.item:
+	if not slot or not slot.get_item():
 		return null
-	return {
-		"item_id": slot.item.get_entity_id(),
-		"quantity": slot.quantity
-	}
+	return slot.to_dict()
+
 
 static func _slot_from_dict(slot_data: Variant) -> PPInventorySlot:
 	if slot_data == null:
 		return null
-	var slot = PPInventorySlot.new()
-	slot.item = Pandora.get_entity(slot_data["item_id"]) as PPItemEntity
-	slot.quantity = slot_data.get("quantity", 1)
-	return slot
+	return PPInventorySlot.from_dict(slot_data)

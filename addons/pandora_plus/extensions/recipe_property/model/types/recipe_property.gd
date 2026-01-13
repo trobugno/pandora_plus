@@ -59,7 +59,15 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 				var quantity = ing["quantity"]
 				var ingredient := PPIngredient.new(PandoraReference.new(entity_id, entity_type), quantity)
 				ingredients.append(ingredient)
-		return PPRecipe.new(ingredients, reference, crafting_time, recipe_type)
+		var recipe := PPRecipe.new(ingredients, reference, crafting_time, recipe_type)
+		# Parse waste if present
+		if variant.has("waste") and variant["waste"] is Dictionary:
+			var waste_data = variant["waste"] as Dictionary
+			if waste_data.has("item") and waste_data["item"] is Dictionary:
+				var waste_ref = PandoraReference.new(waste_data["item"]["_entity_id"], waste_data["item"]["_type"])
+				var waste_quantity = waste_data.get("quantity", 1)
+				recipe.set_waste(PPIngredient.new(waste_ref, waste_quantity))
+		return recipe
 	return variant
 
 func write_value(variant: Variant) -> Variant:

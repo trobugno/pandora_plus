@@ -68,7 +68,7 @@
 					"name": "Result",
 					"settings": {
 						"category_only": true,
-						"entity_id": "4"
+						"entity_id": "1206.0"
 					},
 					"type": "REFERENCE"
 				},
@@ -78,6 +78,24 @@
 					"settings": {
 						"max_value": 99999.0,
 						"min_value": 0.0
+					},
+					"type": "RANGE"
+				},
+				{
+					"enabled": true,
+					"name": "Waste Item",
+					"settings": {
+						"category_only": true,
+						"entity_id": "1206.0"
+					},
+					"type": "REFERENCE"
+				},
+				{
+					"enabled": true,
+					"name": "Waste Quantity",
+					"settings": {
+						"max_value": 99999.0,
+						"min_value": 1.0
 					},
 					"type": "RANGE"
 				}
@@ -288,8 +306,6 @@
 			"description": "Tracks progress and state of a single quest objective during gameplay",
 			"dir_name": "quest_objective_property",
 			"enabled": true,
-			"name": "PPQuestObjective",
-			"show_on_top": false,
 			"fields": [
 				{
 					"enabled": true,
@@ -338,15 +354,15 @@
 					},
 					"type": "RANGE"
 				}
-			]
+			],
+			"name": "PPQuestObjective",
+			"show_on_top": false
 		},
 		{
 			"dependencies": [],
 			"description": "Represents a reward that can be granted to the player",
 			"dir_name": "quest_reward_property",
 			"enabled": true,
-			"name": "PPQuestReward",
-			"show_on_top": false,
 			"fields": [
 				{
 					"enabled": true,
@@ -394,15 +410,15 @@
 					},
 					"type": "RANGE"
 				}
-			]
+			],
+			"name": "PPQuestReward",
+			"show_on_top": false
 		},
 		{
 			"dependencies": [],
 			"description": "Manages the state and progress of an active quest during gameplay",
 			"dir_name": "quest_property",
 			"enabled": true,
-			"name": "PPQuest",
-			"show_on_top": true,
 			"fields": [
 				{
 					"enabled": true,
@@ -485,7 +501,9 @@
 					},
 					"type": "STRING"
 				}
-			]
+			],
+			"name": "PPQuest",
+			"show_on_top": true
 		}
 	]
 }

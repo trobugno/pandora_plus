@@ -4,6 +4,7 @@ var _ingredients: Array[PPIngredient]
 var _result: PandoraReference
 var _crafting_time: float
 var _recipe_type: String
+var _waste: PPIngredient = null
 
 func _init(ingredients: Array[PPIngredient], result: PandoraReference, crafting_time: float, recipe_type: String) -> void:
 	_ingredients = ingredients
@@ -48,6 +49,12 @@ func get_crafting_time() -> float:
 func get_recipe_type() -> String:
 	return _recipe_type
 
+func set_waste(waste: PPIngredient) -> void:
+	_waste = waste
+
+func get_waste() -> PPIngredient:
+	return _waste
+
 func load_data(data: Dictionary) -> void:
 	if data.has("result"):
 		_result = PandoraReference.new(data["result"]["_entity_id"], data["result"]["_type"])
@@ -61,6 +68,11 @@ func load_data(data: Dictionary) -> void:
 			var ingredient := PPIngredient.new(PandoraReference.new(ing["item"]["_entity_id"], ing["item"]["_type"]), ing["quantity"])
 			ingredients.append(ingredient)
 		_ingredients = ingredients
+	if data.has("waste") and data["waste"] is Dictionary:
+		var waste_data = data["waste"] as Dictionary
+		if waste_data.has("item") and waste_data["item"] is Dictionary:
+			var item_ref = PandoraReference.new(waste_data["item"]["_entity_id"], waste_data["item"]["_type"])
+			_waste = PPIngredient.new(item_ref, waste_data.get("quantity", 1))
 
 func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: Array[Dictionary]) -> Dictionary:
 	var result := {}
@@ -91,6 +103,12 @@ func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: A
 		var recipe_type_field_settings := recipe_type_field_array[0] as Dictionary
 		if recipe_type_field_settings["enabled"]:
 			result["recipe_type"] = _recipe_type
+
+	var waste_item_field_array := fields_settings.filter(func(dic: Dictionary): return dic["name"] == "Waste Item")
+	if waste_item_field_array.size() > 0:
+		var waste_item_field_settings := waste_item_field_array[0] as Dictionary
+		if waste_item_field_settings["enabled"] and _waste != null:
+			result["waste"] = _waste.save_data(ingredient_fields_settings)
 
 	return result
 

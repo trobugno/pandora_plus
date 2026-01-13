@@ -93,7 +93,7 @@ else:
 
 ###### `craft_recipe(inventory: PPInventory, recipe: PPRecipe) -> bool`
 
-Executes a recipe if ingredients are available, removing them and adding the result.
+Executes a recipe if ingredients are available, removing them and adding the result (plus waste if defined).
 
 **Parameters:**
 - `inventory`: The inventory to craft from
@@ -107,8 +107,11 @@ Executes a recipe if ingredients are available, removing them and adding the res
 3. If validation succeeds:
    - Removes all required ingredients from inventory
    - Adds crafted result to inventory
+   - **Adds waste item to inventory (if defined)**
    - Emits signal with `success: true`
    - Returns `true`
+
+> **Note:** If the recipe has a waste item defined via `set_waste()`, it will be automatically added to the inventory with the specified quantity.
 
 **Example:**
 ```gdscript
@@ -246,7 +249,59 @@ func count_item_in_inventory(item: PPItemEntity) -> int:
 
 ---
 
-### Example 3: Batch Crafting System
+### Example 3: Crafting with Waste Handling
+
+```gdscript
+class_name SmithingStation
+extends Node
+
+var player_inventory: PPInventory
+
+func create_iron_ingot_recipe() -> PPRecipe:
+    var iron_ore = Pandora.get_entity("IRON_ORE") as PPItemEntity
+    var coal = Pandora.get_entity("COAL") as PPItemEntity
+    var iron_ingot = Pandora.get_entity("IRON_INGOT") as PPItemEntity
+    var slag = Pandora.get_entity("SLAG") as PPItemEntity
+
+    var recipe = PPRecipe.new(
+        [
+            PPIngredient.new(iron_ore, 2),
+            PPIngredient.new(coal, 1)
+        ],
+        PandoraReference.new(iron_ingot.get_entity_id(), PandoraReference.Type.ENTITY),
+        8.0,
+        "SMITHING"
+    )
+
+    # Smithing produces slag as waste
+    recipe.set_waste(PPIngredient.new(slag, 1))
+    return recipe
+
+func smelt_ore(recipe: PPRecipe):
+    if not RecipeUtils.can_craft(player_inventory, recipe):
+        show_error("Missing ingredients")
+        return
+
+    # Show smelting animation
+    show_smelting_ui(recipe)
+    await get_tree().create_timer(recipe.get_crafting_time()).timeout
+
+    # Execute craft - result AND waste are added automatically
+    if RecipeUtils.craft_recipe(player_inventory, recipe):
+        var result = recipe.get_result()
+        var waste = recipe.get_waste()
+
+        print("Smelted: %s" % result.get_item_name())
+        if waste:
+            print("Produced waste: %d %s" % [
+                waste.get_quantity(),
+                waste.get_item_entity().get_item_name()
+            ])
+```
+
+---
+
+### Example 4: Batch Crafting System
 
 ```gdscript
 class_name BatchCraftingSystem

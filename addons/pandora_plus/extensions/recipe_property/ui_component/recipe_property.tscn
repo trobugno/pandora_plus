@@ -80,6 +80,27 @@ text = "Result"
 custom_minimum_size = Vector2(0, 31)
 layout_mode = 2
 
+[node name="FifthLine" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+text = "Waste (optional)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+
+[node name="WasteEntityPicker" parent="VBoxContainer/FifthLine/HBoxContainer" instance=ExtResource("2_14vw1")]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WasteQuantitySpinBox" type="SpinBox" parent="VBoxContainer/FifthLine/HBoxContainer"]
+layout_mode = 2
+min_value = 1.0
+max_value = 99999.0
+value = 1.0
+
 [node name="IngredientsWindow" type="Window" parent="."]
 disable_3d = true
 oversampling_override = 1.0

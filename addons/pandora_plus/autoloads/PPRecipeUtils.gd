@@ -29,5 +29,13 @@ func craft_recipe(inventory: PPInventory, recipe: PPRecipe) -> bool:
 		inventory.remove_item(ingredient.get_item_entity(), ingredient.get_quantity())
 
 	inventory.add_item(result_item)
+
+	# Add waste item if defined
+	var waste = recipe.get_waste()
+	if waste:
+		var waste_item = waste.get_item_entity()
+		if waste_item:
+			inventory.add_item(waste_item, waste.get_quantity())
+
 	crafting_attempted.emit(result_item.get_entity_name(), true)
 	return true

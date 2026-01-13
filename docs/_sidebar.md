@@ -26,6 +26,7 @@
   - [🔸PPStatusEffect](/properties/status-effect.md)
   - [🔸PPInventory](/api/inventory.md)
   - [🔸PPInventorySlot](/api/inventory-slot.md)
+  - [🔸PPRuntimeItem](/api/runtime-item.md)
   - [🔸PPRarityEntity](/entities/rarity-entity.md)
   - [🔸PPItemEntity](/entities/item-entity.md)
   - [💎PPEquipmentEntity](/entities/equipment-entity.md)
