@@ -75,7 +75,6 @@ func _ready() -> void:
 	waste_picker.focus_exited.connect(func(): unfocused.emit())
 	waste_picker.focus_entered.connect(func(): focused.emit())
 	waste_picker.entity_selected.connect(_on_waste_entity_selected)
-	waste_picker.entity_cleared.connect(_on_waste_entity_cleared)
 
 	waste_quantity_spin_box.focus_entered.connect(func(): focused.emit())
 	waste_quantity_spin_box.focus_exited.connect(func(): unfocused.emit())
@@ -84,11 +83,6 @@ func _ready() -> void:
 func _on_waste_entity_selected(entity: PandoraEntity) -> void:
 	var quantity = int(waste_quantity_spin_box.value)
 	current_property.set_waste(PPIngredient.new(entity, quantity))
-	_property.set_default_value(current_property)
-	property_value_changed.emit(current_property)
-
-func _on_waste_entity_cleared() -> void:
-	current_property.set_waste(null)
 	_property.set_default_value(current_property)
 	property_value_changed.emit(current_property)
 
