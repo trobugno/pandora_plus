@@ -106,7 +106,7 @@ func refresh() -> void:
 				fourth_line.visible = field_settings["enabled"]
 			elif field_settings["name"] == "Ingredients":
 				first_line.visible = field_settings["enabled"]
-			elif field_settings["name"] == "Recipe Type":
+			elif field_settings["name"] == "Recipe types":
 				second_line.visible = field_settings["enabled"]
 				option_button.clear()
 				for option_value in field_settings["settings"]["options"]:
