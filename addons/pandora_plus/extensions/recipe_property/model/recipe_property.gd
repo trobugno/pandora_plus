@@ -108,7 +108,7 @@ func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: A
 	if waste_item_field_array.size() > 0:
 		var waste_item_field_settings := waste_item_field_array[0] as Dictionary
 		if waste_item_field_settings["enabled"]:
-			result["waste"] = _waste.save_data(ingredient_fields_settings)
+			result["waste"] = null if not _waste else _waste.save_data(ingredient_fields_settings)
 
 	return result
 
