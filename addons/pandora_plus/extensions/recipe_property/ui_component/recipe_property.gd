@@ -141,7 +141,6 @@ func refresh() -> void:
 					waste_picker.select.call_deferred(waste_entity)
 				waste_quantity_spin_box.value = waste.get_quantity()
 			else:
-				waste_picker.clear.call_deferred()
 				waste_quantity_spin_box.value = 1
 
 func _setting_changed(key:String) -> void:
