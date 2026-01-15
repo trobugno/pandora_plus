@@ -107,7 +107,8 @@ func refresh() -> void:
 			objective_target_quantity.max_value = _property.get_setting(QuestObjectiveType.SETTING_MAX_VALUE) as int
 		
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPQuestObjective
+			var default_value = _property.get_default_value() as PPQuestObjective
+			current_property = default_value.duplicate()
 			var entity = current_property.get_target_entity()
 			if entity != null:
 				objective_target.select.call_deferred(entity)

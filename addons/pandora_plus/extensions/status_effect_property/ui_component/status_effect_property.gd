@@ -135,7 +135,8 @@ func refresh() -> void:
 			ticks.max_value = _property.get_setting(StatusEffectType.SETTING_MAX_TICKS) as int
 		
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPStatusEffect
+			var default_value = _property.get_default_value() as PPStatusEffect
+			current_property = default_value.duplicate()
 			status_duration.value = current_property._duration
 			status_ID.text = current_property._status_ID
 			status_key.select(current_property._status_key) 

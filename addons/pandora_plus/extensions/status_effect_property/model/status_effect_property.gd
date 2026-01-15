@@ -81,5 +81,8 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+func duplicate() -> PPStatusEffect:
+	return PPStatusEffect.new(_status_ID, _status_key, _description, _duration, _value_in_percentage, _value_per_tick, _ticks, _tick_type)
+
 func _to_string() -> String:
 	return "<PPStatusEffect [ " + _status_ID + " ]>"

@@ -85,5 +85,8 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+func duplicate() -> PPStats:
+	return PPStats.new(_health, _mana, _defense, _attack, _att_speed, _crit_rate, _crit_damage, _mov_speed)
+
 func _to_string() -> String:
 	return "<PPStats>"

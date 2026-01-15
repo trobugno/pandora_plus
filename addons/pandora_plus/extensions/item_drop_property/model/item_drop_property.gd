@@ -60,5 +60,11 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+func duplicate() -> PPItemDrop:
+	var ref_copy: PandoraReference = null
+	if _reference != null:
+		ref_copy = PandoraReference.new(_reference._entity_id, _reference._type)
+	return PPItemDrop.new(ref_copy, _min_quantity, _max_quantity)
+
 func _to_string() -> String:
 	return "<PPItemDrop" + str(get_item_entity()) + ">"

@@ -121,7 +121,8 @@ func refresh() -> void:
 			spin_box.max_value = _property.get_setting(RecipeType.SETTING_MAX_VALUE) as float
 
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPRecipe
+			var default_value = _property.get_default_value() as PPRecipe
+			current_property = default_value.duplicate()
 			var entity = current_property.get_result()
 			ingredients_info.text = str(current_property.get_ingredients().size()) + " Items"
 			spin_box.value = current_property.get_crafting_time()

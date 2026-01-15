@@ -184,7 +184,8 @@ func refresh() -> void:
 			quest_giver.set_filter(_property.get_setting(QuestPropertyType.SETTING_QUEST_GIVER_FILTER) as String)
 
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPQuest
+			var default_value = _property.get_default_value() as PPQuest
+			current_property = default_value.duplicate()
 
 			quest_id.text = current_property.get_quest_id()
 			quest_name.text = current_property.get_quest_name()

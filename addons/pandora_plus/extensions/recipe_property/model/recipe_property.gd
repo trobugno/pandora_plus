@@ -112,5 +112,23 @@ func save_data(fields_settings: Array[Dictionary], ingredient_fields_settings: A
 
 	return result
 
+func duplicate() -> PPRecipe:
+	var duplicated_ingredients: Array[PPIngredient] = []
+	for ingredient in _ingredients:
+		duplicated_ingredients.append(PPIngredient.new(
+			PandoraReference.new(ingredient._item._entity_id, ingredient._item._type),
+			ingredient.get_quantity()
+		))
+	var duplicated_result: PandoraReference = null
+	if _result != null:
+		duplicated_result = PandoraReference.new(_result._entity_id, _result._type)
+	var duplicated_recipe = PPRecipe.new(duplicated_ingredients, duplicated_result, _crafting_time, _recipe_type)
+	if _waste != null:
+		duplicated_recipe.set_waste(PPIngredient.new(
+			PandoraReference.new(_waste._item._entity_id, _waste._item._type),
+			_waste.get_quantity()
+		))
+	return duplicated_recipe
+
 func _to_string() -> String:
 	return "<PPRecipe " + str(get_result()) + ">"

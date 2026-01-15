@@ -116,7 +116,8 @@ func refresh() -> void:
 			currency_amount.max_value = _property.get_setting(QuestRewardType.SETTING_MAX_CURRENCY) as int
 
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPQuestReward
+			var default_value = _property.get_default_value() as PPQuestReward
+			current_property = default_value.duplicate()
 
 			reward_name.text = current_property.get_reward_name()
 			reward_type.select(current_property.get_reward_type())

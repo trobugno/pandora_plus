@@ -46,7 +46,8 @@ func refresh() -> void:
 		if _property.get_setting(IngredientType.SETTING_MAX_VALUE):
 			spin_box.max_value = _property.get_setting(IngredientType.SETTING_MAX_VALUE) as int
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPIngredient
+			var default_value = _property.get_default_value() as PPIngredient
+			current_property = default_value.duplicate()
 			var entity = current_property.get_item_entity()
 			
 			if entity != null:

@@ -52,6 +52,12 @@ func save_data(fields_settings: Array[Dictionary]) -> Dictionary:
 
 	return result
 
+func duplicate() -> PPIngredient:
+	var ref_copy: PandoraReference = null
+	if _reference != null:
+		ref_copy = PandoraReference.new(_reference._entity_id, _reference._type)
+	return PPIngredient.new(ref_copy, _quantity)
+
 func _to_string() -> String:
 	var entity = get_item_entity()
 	if entity != null:
