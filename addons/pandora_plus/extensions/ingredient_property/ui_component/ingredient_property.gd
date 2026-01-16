@@ -49,10 +49,10 @@ func refresh() -> void:
 			var default_value = _property.get_default_value() as PPIngredient
 			current_property = default_value.duplicate()
 			var entity = current_property.get_item_entity()
-			
+			spin_box.value = current_property.get_quantity()
+
 			if entity != null:
 				entity_picker.select.call_deferred(entity)
-				spin_box.value = current_property.get_quantity()
 
 func _setting_changed(key:String) -> void:
 	if key == IngredientType.SETTING_MIN_VALUE || key == IngredientType.SETTING_MAX_VALUE || key == IngredientType.SETTING_CATEGORY_FILTER:

@@ -39,3 +39,14 @@ func craft_recipe(inventory: PPInventory, recipe: PPRecipe) -> bool:
 
 	crafting_attempted.emit(result_item.get_entity_name(), true)
 	return true
+
+## Filters recipes by recipe type
+## Returns an array of PPRecipe matching the specified type
+func get_recipes_by_type(recipes: Array[PPRecipe], recipe_type: String) -> Array[PPRecipe]:
+	var filtered: Array[PPRecipe] = []
+
+	for recipe in recipes:
+		if recipe and recipe.get_recipe_type() == recipe_type:
+			filtered.append(recipe)
+
+	return filtered

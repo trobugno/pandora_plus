@@ -62,11 +62,11 @@ func refresh() -> void:
 			var default_value = _property.get_default_value() as PPItemDrop
 			current_property = default_value.duplicate()
 			var entity = current_property.get_item_entity()
-			
+			min_quantity.value = current_property.get_min_quantity()
+			max_quantity.value = current_property.get_max_quantity()
+
 			if entity != null:
 				entity_picker.select.call_deferred(entity)
-				min_quantity.value = current_property.get_min_quantity()
-				max_quantity.value = current_property.get_max_quantity()
 
 func _setting_changed(key:String) -> void:
 	if key == ItemDropType.SETTING_MIN_VALUE || key == ItemDropType.SETTING_MAX_VALUE || key == ItemDropType.SETTING_CATEGORY_FILTER:

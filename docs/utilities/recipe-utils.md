@@ -127,11 +127,55 @@ func craft_with_delay(recipe: PPRecipe):
     if not RecipeUtils.can_craft(player_inventory, recipe):
         show_error("Missing ingredients")
         return
-    
+
     show_crafting_progress(recipe.get_crafting_time())
     await get_tree().create_timer(recipe.get_crafting_time()).timeout
-    
+
     RecipeUtils.craft_recipe(player_inventory, recipe)
+```
+
+---
+
+###### `get_recipes_by_type(recipes: Array[PPRecipe], recipe_type: String) -> Array[PPRecipe]`
+
+Filters an array of recipes by their recipe type.
+
+**Parameters:**
+- `recipes`: The array of PPRecipe to filter
+- `recipe_type`: The recipe type string to match (e.g., "Alchemy", "Cooking", "Smithing")
+
+**Returns:** A new array containing only recipes matching the specified type
+
+**Example:**
+```gdscript
+var all_recipes: Array[PPRecipe] = load_all_recipes()
+
+# Filter by type
+var alchemy_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Alchemy")
+var cooking_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Cooking")
+var smithing_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Smithing")
+
+print("Found %d alchemy recipes" % alchemy_recipes.size())
+```
+
+**Use Cases:**
+- Displaying recipes in categorized tabs (Alchemy Station, Cooking Pot, Forge)
+- Filtering available recipes based on current crafting station
+- Showing only relevant recipes to the player
+
+```gdscript
+# Example: Crafting station that only shows relevant recipes
+class_name CraftingStation
+extends Node
+
+@export var station_type: String = "Alchemy"  # Set in editor
+
+var available_recipes: Array[PPRecipe] = []
+
+func _ready():
+    var all_recipes = load_all_game_recipes()
+    available_recipes = RecipeUtils.get_recipes_by_type(all_recipes, station_type)
+    populate_recipe_ui(available_recipes)
 ```
 
 ---

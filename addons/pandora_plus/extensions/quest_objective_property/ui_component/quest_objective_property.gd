@@ -110,10 +110,11 @@ func refresh() -> void:
 			var default_value = _property.get_default_value() as PPQuestObjective
 			current_property = default_value.duplicate()
 			var entity = current_property.get_target_entity()
+			objective_target_quantity.value = current_property.get_target_quantity()
+
 			if entity != null:
 				objective_target.select.call_deferred(entity)
-				objective_target_quantity.value = current_property.get_target_quantity()
-			
+
 			objective_id.text = current_property.get_objective_id()
 			objective_description.text = current_property.get_description()
 			objective_type.select(current_property.get_objective_type())

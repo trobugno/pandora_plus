@@ -94,5 +94,6 @@ func open(original_ingredients: Array[PPIngredient]):
 	_load_items()
 
 func _on_close_requested():
+	close()
 	hide()
 	property_bar.queue_free()
