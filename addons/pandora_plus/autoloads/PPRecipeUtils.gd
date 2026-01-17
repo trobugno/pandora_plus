@@ -2,6 +2,25 @@ extends Node
 
 signal crafting_attempted(recipe_id: String, success: bool)
 
+const ITEM_RECIPES_CATEGORY_NAME := "ItemRecipes"
+
+func _get_item_recipes_category() -> PandoraCategory:
+	var all_categories := Pandora.get_all_categories()
+	var item_recipes_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == ITEM_RECIPES_CATEGORY_NAME)
+	if item_recipes_categories.size() > 0:
+		return item_recipes_categories[0]
+	return null
+
+func get_all_recipes() -> Array[PPRecipeEntity]:
+	var recipes: Array[PPRecipeEntity] = []
+	var category := _get_item_recipes_category()
+	if category:
+		var entities := Pandora.get_all_entities(category)
+		for entity in entities:
+			if entity is PPRecipeEntity:
+				recipes.append(entity)
+	return recipes
+
 func can_craft(inventory: PPInventory, recipe: PPRecipe) -> bool:
 	var ingredients_found : int = 0
 	for ingredient in recipe.get_ingredients():
@@ -41,12 +60,14 @@ func craft_recipe(inventory: PPInventory, recipe: PPRecipe) -> bool:
 	return true
 
 ## Filters recipes by recipe type
-## Returns an array of PPRecipe matching the specified type
-func get_recipes_by_type(recipes: Array[PPRecipe], recipe_type: String) -> Array[PPRecipe]:
-	var filtered: Array[PPRecipe] = []
+## Returns an array of PPRecipeEntity matching the specified type
+func get_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]:
+	var filtered: Array[PPRecipeEntity] = []
+	var all_recipes := get_all_recipes()
 
-	for recipe in recipes:
-		if recipe and recipe.get_recipe_type() == recipe_type:
-			filtered.append(recipe)
+	for recipe_entity in all_recipes:
+		var recipe_property := recipe_entity.get_recipe_property()
+		if recipe_property and recipe_property.get_recipe_type() == recipe_type:
+			filtered.append(recipe_entity)
 
 	return filtered

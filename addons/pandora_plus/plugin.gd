@@ -3,6 +3,7 @@ extends EditorPlugin
 
 const ITEMS_NAME := "Items"
 const RARITY_NAME := "Rarity"
+const ITEM_RECIPES_NAME := "ItemRecipes"
 
 func _enable_plugin() -> void:
 	var editor_config_plugins = ProjectSettings.get_setting("editor_plugins/enabled")
@@ -67,6 +68,7 @@ func _ready() -> void:
 	var item_category := _setup_item_categories(rarity_category)
 	_setup_equipment_sub_categories(item_category)
 	_setup_quest_categories()
+	_setup_item_recipes_categories()
 	var location_category := _setup_location_categories()
 	_setup_npc_categories(location_category)
 
@@ -289,22 +291,22 @@ func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
 	if not equipment_categories:
 		var equipment_category = Pandora.create_category(EQUIPMENT_NAME, item_category)
 		equipment_category.set_script_path("res://addons/pandora_plus/entities/equipment_entity.gd")
-		
+
 		# Equipment-specific: slot type
 		Pandora.create_property(equipment_category, "equipment_slot", "String")
-		
+
 		# Equipment-specific: stat bonuses
 		Pandora.create_property(equipment_category, "stats_property", "stats_property")
-		
+
 		# Set defaults
 		equipment_category.get_entity_property("equipment_slot").set_default_value("WEAPON")
-		
+
 		equipment_category.set_generate_ids(true)
-		
+
 		Pandora.save_data()
 	else:
 		var equipment_category : PandoraCategory = equipment_categories[0]
-		
+
 		# Ensure all properties exist (for updates)
 		if not equipment_category.has_entity_property("equipment_slot"):
 			Pandora.create_property(equipment_category, "equipment_slot", "String")
@@ -312,5 +314,33 @@ func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
 			Pandora.create_property(equipment_category, "stats_property", "stats_property")
 		if not equipment_category.is_generate_ids():
 			equipment_category.set_generate_ids(true)
-		
+
+		Pandora.save_data()
+
+func _setup_item_recipes_categories() -> void:
+	var all_categories := Pandora.get_all_categories()
+	var item_recipes_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == ITEM_RECIPES_NAME)
+
+	if not item_recipes_categories:
+		var item_recipes_category = Pandora.create_category(ITEM_RECIPES_NAME)
+		item_recipes_category.set_script_path("res://addons/pandora_plus/entities/recipe_entity.gd")
+
+		# Properties
+		Pandora.create_property(item_recipes_category, "description", "String")
+		Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
+
+		item_recipes_category.set_generate_ids(true)
+
+		Pandora.save_data()
+	else:
+		var item_recipes_category : PandoraCategory = item_recipes_categories[0]
+
+		# Ensure all properties exist (for updates)
+		if not item_recipes_category.has_entity_property("description"):
+			Pandora.create_property(item_recipes_category, "description", "String")
+		if not item_recipes_category.has_entity_property("recipe_property"):
+			Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
+		if not item_recipes_category.is_generate_ids():
+			item_recipes_category.set_generate_ids(true)
+
 		Pandora.save_data()

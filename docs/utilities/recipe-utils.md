@@ -136,26 +136,63 @@ func craft_with_delay(recipe: PPRecipe):
 
 ---
 
-###### `get_recipes_by_type(recipes: Array[PPRecipe], recipe_type: String) -> Array[PPRecipe]`
+###### `get_all_recipes() -> Array[PPRecipeEntity]`
 
-Filters an array of recipes by their recipe type.
+Retrieves all recipe entities from the `ItemRecipes` Pandora category.
 
-**Parameters:**
-- `recipes`: The array of PPRecipe to filter
-- `recipe_type`: The recipe type string to match (e.g., "Alchemy", "Cooking", "Smithing")
+**Returns:** An array of all `PPRecipeEntity` instances, including those from subcategories.
 
-**Returns:** A new array containing only recipes matching the specified type
+**Behavior:**
+- Finds the `ItemRecipes` category in Pandora
+- Retrieves all entities recursively (includes subcategory entities)
+- Returns only entities that are instances of `PPRecipeEntity`
 
 **Example:**
 ```gdscript
-var all_recipes: Array[PPRecipe] = load_all_recipes()
+# Get all recipes in the game
+var all_recipes = PPRecipeUtils.get_all_recipes()
+print("Total recipes: %d" % all_recipes.size())
 
-# Filter by type
-var alchemy_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Alchemy")
-var cooking_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Cooking")
-var smithing_recipes = RecipeUtils.get_recipes_by_type(all_recipes, "Smithing")
+# Iterate through recipes
+for recipe_entity in all_recipes:
+    print("Recipe: %s" % recipe_entity.get_description())
+    var recipe_property = recipe_entity.get_recipe_property()
+    print("  Type: %s" % recipe_property.get_recipe_type())
+    print("  Result: %s" % recipe_property.get_result().get_item_name())
+```
+
+---
+
+###### `get_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]`
+
+Filters recipes from Pandora's `ItemRecipes` category by their recipe type.
+
+**Parameters:**
+- `recipe_type`: The recipe type string to match (e.g., "Alchemy", "Cooking", "Smithing")
+
+**Returns:** An array of `PPRecipeEntity` matching the specified type
+
+**Behavior:**
+- Internally calls `get_all_recipes()` to fetch all recipes from Pandora
+- Filters by comparing `recipe_property.get_recipe_type()` with the specified type
+- Includes recipes from subcategories of `ItemRecipes`
+
+**Example:**
+```gdscript
+# Filter by type - no need to pass recipes array!
+var alchemy_recipes = PPRecipeUtils.get_recipes_by_type("Alchemy")
+var cooking_recipes = PPRecipeUtils.get_recipes_by_type("Cooking")
+var smithing_recipes = PPRecipeUtils.get_recipes_by_type("Smithing")
 
 print("Found %d alchemy recipes" % alchemy_recipes.size())
+
+# Access recipe data
+for recipe_entity in alchemy_recipes:
+    var recipe = recipe_entity.get_recipe_property()
+    print("- %s (crafting time: %.1fs)" % [
+        recipe.get_result().get_item_name(),
+        recipe.get_crafting_time()
+    ])
 ```
 
 **Use Cases:**
@@ -170,12 +207,17 @@ extends Node
 
 @export var station_type: String = "Alchemy"  # Set in editor
 
-var available_recipes: Array[PPRecipe] = []
+var available_recipes: Array[PPRecipeEntity] = []
 
 func _ready():
-    var all_recipes = load_all_game_recipes()
-    available_recipes = RecipeUtils.get_recipes_by_type(all_recipes, station_type)
+    # Recipes are fetched directly from Pandora!
+    available_recipes = PPRecipeUtils.get_recipes_by_type(station_type)
     populate_recipe_ui(available_recipes)
+
+func populate_recipe_ui(recipes: Array[PPRecipeEntity]):
+    for recipe_entity in recipes:
+        var recipe = recipe_entity.get_recipe_property()
+        add_recipe_button(recipe_entity.get_description(), recipe)
 ```
 
 ---
@@ -765,7 +807,8 @@ func craft_with_time(inventory: PPInventory, recipe: PPRecipe):
 
 ## See Also
 
-- [PPRecipe](../properties/recipe.md) - Recipe class
+- [PPRecipeEntity](../entities/recipe-entity.md) - Recipe entity class
+- [PPRecipe](../properties/recipe.md) - Recipe property class
 - [PPIngredient](../properties/ingredient.md) - Ingredient class
 - [PPInventory](../api/inventory.md) - Inventory system
 - [PPItemEntity](../entities/item-entity.md) - Item entities

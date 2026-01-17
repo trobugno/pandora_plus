@@ -34,6 +34,7 @@
   - [🔸PPIngredientEntity](/entities/ingredient-entity.md)
   - [🔸PPIngredient](/properties/ingredient.md)
   - [🔸PPRecipe](/properties/recipe.md)
+  - [🔸PPRecipeEntity](/entities/recipe-entity.md)
   - [🔸PPSaveManager](/api/save-manager.md)
   - [🔸PPSaveSlot](/api/save-slot.md)
   - [🔸PPGameState](/api/game-state.md)
