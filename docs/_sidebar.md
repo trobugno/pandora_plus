@@ -53,5 +53,5 @@
   - [🔸Create your first RPG](/coming_soon.md)
   - [🔸Building a Quest](/coming_soon.md)
   - [🔸Building an Inventory UI](/coming_soon.md)
-  - [💎 NPC Routine](/tutorials/npc-routine.md)
+  - [💎 NPC Routine](/coming_soon.md)
   - [💎 Skill Tree System - Coming Soon](/coming_soon.md)

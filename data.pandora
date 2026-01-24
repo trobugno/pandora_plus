@@ -54,12 +54,22 @@
 				"_index": 0,
 				"_name": "Quests",
 				"_script_path": "res://addons/pandora_plus/entities/quest_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1268.0",
+				"_index": 0,
+				"_name": "ItemRecipes",
+				"_script_path": "res://addons/pandora_plus/entities/recipe_entity.gd"
 			}
 		],
 		"_entities": [
 			{
 				"_category_id": "1227.0",
 				"_icon_color": "ffffff00",
+				"_icon_path": "res://addons/pandora/icons/Object.svg",
 				"_id": "1236.0",
 				"_index": 0,
 				"_name": "Boy",
@@ -437,20 +447,6 @@
 		],
 		"_properties": [
 			{
-				"_category_id": "1203.0",
-				"_default_value": "",
-				"_id": "1204.0",
-				"_name": "name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "1203.0",
-				"_default_value": 0.0,
-				"_id": "1205.0",
-				"_name": "percentage",
-				"_type": "float"
-			},
-			{
 				"_category_id": "1206.0",
 				"_default_value": "",
 				"_id": "1207.0",
@@ -585,13 +581,6 @@
 			{
 				"_category_id": "1227.0",
 				"_default_value": null,
-				"_id": "1230.0",
-				"_name": "texture",
-				"_type": "resource"
-			},
-			{
-				"_category_id": "1227.0",
-				"_default_value": null,
 				"_id": "1231.0",
 				"_name": "base_stats",
 				"_type": "stats_property"
@@ -655,12 +644,47 @@
 					"Quest Giver Category Filter": "1227.0"
 				},
 				"_type": "quest_property"
+			},
+			{
+				"_category_id": "1268.0",
+				"_default_value": "",
+				"_id": "1269.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1268.0",
+				"_default_value": null,
+				"_id": "1270.0",
+				"_name": "recipe_property",
+				"_type": "recipe_property"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": null,
+				"_id": "1271.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1203.0",
+				"_default_value": "",
+				"_id": "1278.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1203.0",
+				"_default_value": 0.0,
+				"_id": "1279.0",
+				"_name": "percentage",
+				"_type": "float"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 1267.0
+			"default": 1282.0
 		}
 	}
 }

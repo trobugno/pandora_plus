@@ -160,6 +160,16 @@ func _setup_quest_categories() -> void:
 		quest_category.set_generate_ids(true)
 
 		Pandora.save_data()
+	else:
+		var quest_category : PandoraCategory = quest_categories[0]
+
+		# Ensure all properties exist (for updates)
+		if not quest_category.has_entity_property("quest_data"):
+			Pandora.create_property(quest_category, "quest_data", "quest_property")
+		if not quest_category.is_generate_ids():
+			quest_category.set_generate_ids(true)
+
+		Pandora.save_data()
 
 func _setup_location_categories() -> PandoraCategory:
 	const LOCATIONS_NAME := "Locations"
