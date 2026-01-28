@@ -10,6 +10,15 @@ const UI_NOTIFICATION = preload("uid://bbf1gel8hepee")
 func _ready() -> void:
 	PPQuestManager.quest_added.connect(_on_quest_added)
 	PPQuestManager.quest_completed.connect(_on_quest_completed)
+	
+	save_game_button.pressed.connect(_on_button_pressed)
+	load_game_button.pressed.connect(_on_button_pressed)
+	delete_save_button.pressed.connect(_on_button_pressed)
+
+func _on_button_pressed() -> void:
+	save_game_button.focus_mode = Control.FOCUS_NONE
+	load_game_button.focus_mode = Control.FOCUS_NONE
+	delete_save_button.focus_mode = Control.FOCUS_NONE
 
 func _process(_delta: float) -> void:
 	if not (PPSaveManager.get_save_slot(1) as PPSaveSlot).is_empty:

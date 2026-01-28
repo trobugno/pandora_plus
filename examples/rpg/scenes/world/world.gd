@@ -3,10 +3,6 @@ extends Node2D
 @onready var player: Player = $Player
 
 func _ready() -> void:
-	PPQuestManager.clear_all()
-	PPNPCManager.clear_all()
-	PPPlayerManager.clear()
-	
 	var save_slots := PPSaveManager.get_save_slots()
 	if save_slots:
 		var game_state := PPSaveManager.load_game(1) as PPGameState
