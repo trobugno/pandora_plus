@@ -367,9 +367,9 @@ Use this checklist to track your migration progress:
 
 Explore new features:
 
-- 🔧 [Runtime Stats with Modifiers](core-systems/runtime-stats.md)
-- ⚔️ [New Combat Calculator](utilities/combat-calculator.md)
-- 🎒 [Improved Inventory](core-systems/inventory.md)
+- 🔧 [Runtime Stats with Modifiers](../core-systems/runtime-stats.md)
+- ⚔️ [New Combat Calculator](../utilities/combat-calculator.md)
+- 🎒 [Improved Inventory](../core-systems/inventory-system.md)
 
 ---
 

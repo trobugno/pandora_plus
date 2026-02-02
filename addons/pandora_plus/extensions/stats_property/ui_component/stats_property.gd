@@ -132,7 +132,8 @@ func refresh() -> void:
 			mov_speed_spin.max_value = _property.get_setting(StatsType.SETTING_MOV_SPEED_MAX_VALUE) as float
 		
 		if _property.get_default_value() != null:
-			current_property = _property.get_default_value() as PPStats
+			var default_value = _property.get_default_value() as PPStats
+			current_property = default_value.duplicate()
 			health_spin.value = current_property._health
 			mana_spin.value = current_property._mana
 			attack_spin.value = current_property._attack

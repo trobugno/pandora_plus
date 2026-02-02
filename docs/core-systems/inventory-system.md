@@ -2,6 +2,8 @@
 
 Complete guide to the Pandora+ inventory management system, including items, slots, utilities, and best practices.
 
+**Availability:** ✅ Core & Premium
+
 ---
 
 ## Overview
@@ -691,11 +693,11 @@ func add_item_new(item: PPItemEntity):
 
 ## See Also
 
-- [PPInventory](PPInventory.md) - Main inventory class
-- [PPInventorySlot](PPInventorySlot.md) - Slot management
-- [PPInventoryUtils](PPInventoryUtils.md) - Utility functions
-- [PPItemEntity](PPItemEntity.md) - Item system
-- [PPRecipe](PPRecipe.md) - Crafting integration
+- [PPInventory](../api/inventory.md) - Main inventory class
+- [PPInventorySlot](../api/inventory-slot.md) - Slot management
+- [PPInventoryUtils](../utilities/inventory-utils.md) - Utility functions
+- [PPItemEntity](../entities/item-entity.md) - Item system
+- [PPRecipe](../properties/recipe.md) - Crafting integration
 
 ---
 
@@ -706,4 +708,4 @@ Find complete working examples at:
 
 ---
 
-*Complete System Guide for Pandora+ v0.3.0-beta*
+*Complete System Guide for Pandora+ v1.0.0-core | v1.0.0-premium*

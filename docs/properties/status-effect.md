@@ -91,4 +91,4 @@ The **Stacking Rule** toggle (Yes/No in the UI) is a UI representation of logic 
 
 ---
 
-*API Reference generated from source code version 0.3.0-beta*
+*API Reference generated from source code v1.0.0-core | v1.0.0-premium*

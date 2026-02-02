@@ -26,7 +26,8 @@ func _on_update_fields_settings(type: String) -> void:
 
 func _update_fields_settings() -> void:
 	var extension_configuration := PandoraSettings.find_extension_configuration_property(_type_name)
-	var fields_settings := extension_configuration["fields"] as Array
+	var fields_settings : Array[Dictionary]
+	fields_settings.assign(extension_configuration["fields"] as Array)
 	for field_settings in fields_settings:
 		if field_settings["name"] == "Status Duration":
 			if field_settings["enabled"] == false:
@@ -70,7 +71,8 @@ func parse_value(variant: Variant, settings: Dictionary = {}) -> Variant:
 func write_value(variant: Variant) -> Variant:
 	if variant is PPStatusEffect:
 		var extension_configuration := PandoraSettings.find_extension_configuration_property(_type_name)
-		var fields_settings := extension_configuration["fields"] as Array
+		var fields_settings : Array[Dictionary]
+		fields_settings.assign(extension_configuration["fields"] as Array)
 		return variant.save_data(fields_settings)
 	return variant
 

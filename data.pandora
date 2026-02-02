@@ -5,7 +5,7 @@
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "1",
+				"_id": "1203.0",
 				"_index": 0,
 				"_name": "Rarity",
 				"_script_path": "res://addons/pandora_plus/entities/rarity_entity.gd"
@@ -14,88 +14,677 @@
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
-				"_id": "4",
+				"_id": "1206.0",
 				"_index": 0,
 				"_name": "Items",
 				"_script_path": "res://addons/pandora_plus/entities/item_entity.gd"
+			},
+			{
+				"_category_id": "1206.0",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1214.0",
+				"_index": 0,
+				"_name": "Equipment",
+				"_script_path": "res://addons/pandora_plus/entities/equipment_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1219.0",
+				"_index": 0,
+				"_name": "Locations",
+				"_script_path": "res://addons/pandora_plus/entities/location_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1227.0",
+				"_index": 0,
+				"_name": "NPCs",
+				"_script_path": "res://addons/pandora_plus/entities/npc_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1250.0",
+				"_index": 0,
+				"_name": "Quests",
+				"_script_path": "res://addons/pandora_plus/entities/quest_entity.gd"
+			},
+			{
+				"_category_id": "",
+				"_generate_ids": true,
+				"_icon_color": "ffffff00",
+				"_id": "1268.0",
+				"_index": 0,
+				"_name": "ItemRecipes",
+				"_script_path": "res://addons/pandora_plus/entities/recipe_entity.gd"
 			}
 		],
-		"_entities": [],
+		"_entities": [
+			{
+				"_category_id": "1227.0",
+				"_icon_color": "ffffff00",
+				"_icon_path": "res://addons/pandora/icons/Object.svg",
+				"_id": "1236.0",
+				"_index": 0,
+				"_name": "Boy",
+				"_property_overrides": {
+					"base_stats": {
+						"type": "stats_property",
+						"value": {
+							"att_speed": 1.0,
+							"attack": 2,
+							"crit_damage": 150.0,
+							"crit_rate": 0.0,
+							"defense": 10,
+							"health": 100,
+							"mana": 45,
+							"mov_speed": 60
+						}
+					},
+					"description": {
+						"type": "string",
+						"value": "Character 1"
+					},
+					"name": {
+						"type": "string",
+						"value": "Boy"
+					},
+					"quest_giver_for": {
+						"type": "array",
+						"value": {
+							"0": {
+								"type": "reference",
+								"value": {
+									"_entity_id": "1259.0",
+									"_type": 0
+								}
+							}
+						}
+					},
+					"spawn_location": {
+						"type": "reference",
+						"value": {
+							"_entity_id": "1239.0",
+							"_type": 0
+						}
+					},
+					"texture": {
+						"type": "resource",
+						"value": "res://examples/rpg/assets/BoyFace.png"
+					}
+				}
+			},
+			{
+				"_category_id": "1227.0",
+				"_icon_color": "ffffff00",
+				"_id": "1237.0",
+				"_index": 0,
+				"_name": "Master",
+				"_property_overrides": {
+					"base_stats": {
+						"type": "stats_property",
+						"value": {
+							"att_speed": 1.0,
+							"attack": 1,
+							"crit_damage": 150.0,
+							"crit_rate": 0.0,
+							"defense": 2,
+							"health": 40,
+							"mana": 10,
+							"mov_speed": 45
+						}
+					},
+					"description": {
+						"type": "string",
+						"value": "Character 2"
+					},
+					"name": {
+						"type": "string",
+						"value": "Master"
+					},
+					"quest_giver_for": {
+						"type": "array",
+						"value": {
+							"0": {
+								"type": "reference",
+								"value": {
+									"_entity_id": "1260.0",
+									"_type": 0
+								}
+							}
+						}
+					},
+					"spawn_location": {
+						"type": "reference",
+						"value": {
+							"_entity_id": "1238.0",
+							"_type": 0
+						}
+					},
+					"texture": {
+						"type": "resource",
+						"value": "res://examples/rpg/assets/MasterFace.png"
+					}
+				}
+			},
+			{
+				"_category_id": "1219.0",
+				"_icon_color": "ffffff00",
+				"_id": "1238.0",
+				"_index": 0,
+				"_name": "Capital City",
+				"_property_overrides": {
+					"area_name": {
+						"type": "string",
+						"value": "Central Region"
+					},
+					"description": {
+						"type": "string",
+						"value": "The capital of this RPG"
+					},
+					"is_safe_zone": {
+						"type": "bool",
+						"value": true
+					},
+					"location_type": {
+						"type": "string",
+						"value": "Town"
+					},
+					"name": {
+						"type": "string",
+						"value": "Capital City"
+					}
+				}
+			},
+			{
+				"_category_id": "1219.0",
+				"_icon_color": "ffffff00",
+				"_id": "1239.0",
+				"_index": 0,
+				"_name": "Black Market",
+				"_property_overrides": {
+					"area_name": {
+						"type": "string",
+						"value": "Central Region"
+					},
+					"description": {
+						"type": "string",
+						"value": "A bad place to trade"
+					},
+					"is_safe_zone": {
+						"type": "bool",
+						"value": true
+					},
+					"location_type": {
+						"type": "string",
+						"value": "Town"
+					},
+					"name": {
+						"type": "string",
+						"value": "Black Market"
+					}
+				}
+			},
+			{
+				"_category_id": "1250.0",
+				"_icon_color": "ffffff00",
+				"_id": "1259.0",
+				"_index": 0,
+				"_name": "Discover the market",
+				"_property_overrides": {
+					"quest_data": {
+						"type": "quest_property",
+						"value": {
+							"category": "Example Quest",
+							"description": "An example to show you how works Quest System and the objective REACH_LOCATION",
+							"objectives": [
+								{
+									"description": "An example of description for objective",
+									"objective_id": "EXSIDE_001_OBJ_REACH",
+									"objective_type": 3,
+									"target_quantity": 0,
+									"target_reference": {
+										"_entity_id": "1239.0",
+										"_type": 0
+									}
+								}
+							],
+							"prerequisites": [],
+							"quest_giver": {
+								"_entity_id": "1236.0",
+								"_type": 0
+							},
+							"quest_id": "EXSIDE_001",
+							"quest_name": "Discover the market",
+							"quest_type": 1,
+							"rewards": [
+								{
+									"currency_amount": 20,
+									"quantity": 1,
+									"reward_name": "Experience",
+									"reward_type": 1
+								}
+							]
+						}
+					}
+				}
+			},
+			{
+				"_category_id": "1250.0",
+				"_icon_color": "ffffff00",
+				"_id": "1260.0",
+				"_index": 0,
+				"_name": "Talk with Boy",
+				"_property_overrides": {
+					"quest_data": {
+						"type": "quest_property",
+						"value": {
+							"category": "Example Quest",
+							"description": "An example to show you how works Quest System and the objective TALK",
+							"objectives": [
+								{
+									"description": "An example of descritpion",
+									"objective_id": "EXSIDE_002_OBJ_TALK",
+									"objective_type": 2,
+									"target_quantity": 0,
+									"target_reference": {
+										"_entity_id": "1236.0",
+										"_type": 0
+									}
+								}
+							],
+							"prerequisites": [],
+							"quest_giver": {
+								"_entity_id": "1237.0",
+								"_type": 0
+							},
+							"quest_id": "EXSIDE_002",
+							"quest_name": "Talk with Boy",
+							"quest_type": 1,
+							"rewards": [
+								{
+									"currency_amount": 100,
+									"quantity": 1,
+									"reward_name": "Gold",
+									"reward_type": 1
+								},
+								{
+									"currency_amount": 0,
+									"quantity": 1,
+									"reward_entity_reference": {
+										"_entity_id": "1263.0",
+										"_type": 0
+									},
+									"reward_name": "A fruit",
+									"reward_type": 0
+								}
+							]
+						}
+					}
+				}
+			},
+			{
+				"_category_id": "1203.0",
+				"_icon_color": "ffffff00",
+				"_id": "1261.0",
+				"_index": 0,
+				"_name": "Common",
+				"_property_overrides": {
+					"name": {
+						"type": "string",
+						"value": "Common"
+					},
+					"percentage": {
+						"type": "float",
+						"value": 80.0
+					}
+				}
+			},
+			{
+				"_category_id": "1203.0",
+				"_icon_color": "ffffff00",
+				"_id": "1262.0",
+				"_index": 0,
+				"_name": "Rare",
+				"_property_overrides": {
+					"name": {
+						"type": "string",
+						"value": "Rare"
+					},
+					"percentage": {
+						"type": "float",
+						"value": 20.0
+					}
+				}
+			},
+			{
+				"_category_id": "1206.0",
+				"_icon_color": "ffffff00",
+				"_id": "1263.0",
+				"_index": 0,
+				"_name": "Apple",
+				"_property_overrides": {
+					"description": {
+						"type": "string",
+						"value": "A simple apple"
+					},
+					"name": {
+						"type": "string",
+						"value": "Apple"
+					},
+					"rarity": {
+						"type": "reference",
+						"value": {
+							"_entity_id": "1261.0",
+							"_type": 0
+						}
+					},
+					"stackable": {
+						"type": "bool",
+						"value": true
+					},
+					"value": {
+						"type": "float",
+						"value": 10.0
+					},
+					"weight": {
+						"type": "float",
+						"value": 0.200000762939453
+					}
+				}
+			},
+			{
+				"_category_id": "1214.0",
+				"_icon_color": "ffffff00",
+				"_id": "1264.0",
+				"_index": 0,
+				"_name": "Sword",
+				"_property_overrides": {
+					"description": {
+						"type": "string",
+						"value": "A simple sword"
+					},
+					"name": {
+						"type": "string",
+						"value": "Sword"
+					},
+					"rarity": {
+						"type": "reference",
+						"value": {
+							"_entity_id": "1262.0",
+							"_type": 0
+						}
+					},
+					"stats_property": {
+						"type": "stats_property",
+						"value": {
+							"att_speed": 0.0,
+							"attack": 5,
+							"crit_damage": 0.0,
+							"crit_rate": 2.0,
+							"defense": 0,
+							"health": 0,
+							"mana": 0,
+							"mov_speed": 0
+						}
+					},
+					"value": {
+						"type": "float",
+						"value": 120.0
+					},
+					"weight": {
+						"type": "float",
+						"value": 1.20000076293945
+					}
+				}
+			}
+		],
 		"_properties": [
 			{
-				"_category_id": "1",
+				"_category_id": "1206.0",
 				"_default_value": "",
-				"_id": "2",
+				"_id": "1207.0",
 				"_name": "name",
 				"_type": "string"
 			},
 			{
-				"_category_id": "1",
-				"_default_value": 0.0,
-				"_id": "3",
-				"_name": "percentage",
-				"_type": "float"
-			},
-			{
-				"_category_id": "4",
+				"_category_id": "1206.0",
 				"_default_value": "",
-				"_id": "5",
-				"_name": "name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "4",
-				"_default_value": "",
-				"_id": "6",
+				"_id": "1208.0",
 				"_name": "description",
 				"_type": "string"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1206.0",
 				"_default_value": false,
-				"_id": "7",
+				"_id": "1209.0",
 				"_name": "stackable",
 				"_type": "bool"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1206.0",
 				"_default_value": null,
-				"_id": "8",
+				"_id": "1210.0",
 				"_name": "texture",
 				"_type": "resource"
 			},
 			{
-				"_category_id": "4",
-				"_default_value": {
-					"_entity_id": "1",
-					"_type": 1
-				},
-				"_id": "12.0",
-				"_name": "rarity",
-				"_setting_overrides": {
-					"Category Filter": "1"
-				},
-				"_type": "reference"
-			},
-			{
-				"_category_id": "4",
+				"_category_id": "1206.0",
 				"_default_value": 0.0,
-				"_id": "14.0",
+				"_id": "1211.0",
 				"_name": "value",
 				"_type": "float"
 			},
 			{
-				"_category_id": "4",
+				"_category_id": "1206.0",
 				"_default_value": 0.0,
-				"_id": "15.0",
+				"_id": "1212.0",
 				"_name": "weight",
+				"_type": "float"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": {
+					"_entity_id": "1203.0",
+					"_type": 1
+				},
+				"_id": "1213.0",
+				"_name": "rarity",
+				"_setting_overrides": {
+					"Category Filter": "1203.0"
+				},
+				"_type": "reference"
+			},
+			{
+				"_category_id": "1214.0",
+				"_default_value": "WEAPON",
+				"_id": "1215.0",
+				"_name": "equipment_slot",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1214.0",
+				"_default_value": null,
+				"_id": "1216.0",
+				"_name": "stats_property",
+				"_type": "stats_property"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": "",
+				"_id": "1220.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": "",
+				"_id": "1221.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": null,
+				"_id": "1222.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": "(0.0,0.0)",
+				"_id": "1223.0",
+				"_name": "position",
+				"_type": "vector2"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": "",
+				"_id": "1224.0",
+				"_name": "area_name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": "Wilderness",
+				"_id": "1225.0",
+				"_name": "location_type",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1219.0",
+				"_default_value": false,
+				"_id": "1226.0",
+				"_name": "is_safe_zone",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": "",
+				"_id": "1228.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": "",
+				"_id": "1229.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": null,
+				"_id": "1231.0",
+				"_name": "base_stats",
+				"_type": "stats_property"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": "Neutral",
+				"_id": "1232.0",
+				"_name": "faction",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": false,
+				"_id": "1233.0",
+				"_name": "is_hostile",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": null,
+				"_id": "1234.0",
+				"_name": "spawn_location",
+				"_setting_overrides": {
+					"Category Filter": "1219.0"
+				},
+				"_type": "reference"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": {
+
+				},
+				"_id": "1235.0",
+				"_name": "quest_giver_for",
+				"_setting_overrides": {
+					"Array Type": "reference",
+					"Category Filter": "1250.0"
+				},
+				"_type": "array"
+			},
+			{
+				"_category_id": "1250.0",
+				"_default_value": {
+					"category": "",
+					"description": "",
+					"objectives": [],
+					"prerequisites": [],
+					"quest_giver": {
+						"_entity_id": "1237.0",
+						"_type": 0
+					},
+					"quest_id": "",
+					"quest_name": "",
+					"quest_type": 1,
+					"rewards": []
+				},
+				"_id": "1251.0",
+				"_name": "quest_data",
+				"_setting_overrides": {
+					"Quest Giver Category Filter": "1227.0"
+				},
+				"_type": "quest_property"
+			},
+			{
+				"_category_id": "1268.0",
+				"_default_value": "",
+				"_id": "1269.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1268.0",
+				"_default_value": null,
+				"_id": "1270.0",
+				"_name": "recipe_property",
+				"_type": "recipe_property"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": null,
+				"_id": "1271.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1203.0",
+				"_default_value": "",
+				"_id": "1278.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1203.0",
+				"_default_value": 0.0,
+				"_id": "1279.0",
+				"_name": "percentage",
 				"_type": "float"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 15.0
+			"default": 1282.0
 		}
 	}
 }

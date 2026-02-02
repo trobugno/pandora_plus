@@ -1,0 +1,160 @@
+[gd_scene load_steps=6 format=3 uid="uid://cbwudrsm6o8fl"]
+
+[ext_resource type="Script" uid="uid://cjl1fpy4emfgx" path="res://addons/pandora_plus/extensions/quest_property/ui_component/quest_property.gd" id="1_ikfcq"]
+[ext_resource type="PackedScene" uid="uid://bfhqt0xa4a2fh" path="res://addons/pandora/ui/components/entity_picker/entity_picker.tscn" id="2_entity_picker"]
+[ext_resource type="Texture2D" uid="uid://b0mt8ysdc5m4a" path="res://addons/pandora/icons/Edit.svg" id="3_6es32"]
+[ext_resource type="PackedScene" uid="uid://dmk87fvh6chp0" path="res://addons/pandora_plus/extensions/quest_property/ui_component/objectives_window.tscn" id="3_objectives_window"]
+[ext_resource type="PackedScene" uid="uid://dmk87fvh6chp1" path="res://addons/pandora_plus/extensions/quest_property/ui_component/rewards_window.tscn" id="4_rewards_window"]
+
+[node name="Quest" type="MarginContainer"]
+custom_minimum_size = Vector2(500, 0)
+script = ExtResource("1_ikfcq")
+type = "quest_property"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="FirstLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="QuestID" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/QuestID"]
+layout_mode = 2
+text = "Quest ID"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FirstLine/QuestID"]
+layout_mode = 2
+
+[node name="QuestName" type="VBoxContainer" parent="VBoxContainer/FirstLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FirstLine/QuestName"]
+layout_mode = 2
+text = "Quest Name"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/FirstLine/QuestName"]
+layout_mode = 2
+
+[node name="SecondLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Description" type="VBoxContainer" parent="VBoxContainer/SecondLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/SecondLine/Description"]
+layout_mode = 2
+text = "Description"
+
+[node name="TextEdit" type="TextEdit" parent="VBoxContainer/SecondLine/Description"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+wrap_mode = 1
+
+[node name="ThirdLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="QuestType" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/QuestType"]
+layout_mode = 2
+text = "Quest Type"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/ThirdLine/QuestType"]
+layout_mode = 2
+size_flags_vertical = 3
+item_count = 5
+popup/item_0/text = "MAIN_STORY"
+popup/item_0/id = 0
+popup/item_1/text = "SIDE_QUEST"
+popup/item_1/id = 1
+popup/item_2/text = "DAILY"
+popup/item_2/id = 2
+popup/item_3/text = "WEEKLY"
+popup/item_3/id = 3
+popup/item_4/text = "REPEATABLE"
+popup/item_4/id = 4
+
+[node name="Category" type="VBoxContainer" parent="VBoxContainer/ThirdLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/ThirdLine/Category"]
+layout_mode = 2
+text = "Category"
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/ThirdLine/Category"]
+layout_mode = 2
+
+[node name="FourthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="QuestGiver" type="VBoxContainer" parent="VBoxContainer/FourthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="VBoxContainer/FourthLine/QuestGiver"]
+layout_mode = 2
+text = "Quest Giver"
+
+[node name="EntityPicker" parent="VBoxContainer/FourthLine/QuestGiver" instance=ExtResource("2_entity_picker")]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="FifthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="ObjectivesLabel" type="Label" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+text = "Objectives"
+
+[node name="ObjectivesInfo" type="LineEdit" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0 Objectives"
+alignment = 1
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+flat = true
+
+[node name="EditObjectivesButton" type="Button" parent="VBoxContainer/FifthLine"]
+layout_mode = 2
+icon = ExtResource("3_6es32")
+
+[node name="SixthLine" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="RewardsLabel" type="Label" parent="VBoxContainer/SixthLine"]
+layout_mode = 2
+text = "Rewards"
+
+[node name="RewardsInfo" type="LineEdit" parent="VBoxContainer/SixthLine"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0 Rewards"
+alignment = 1
+editable = false
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+selecting_enabled = false
+flat = true
+
+[node name="EditRewardsButton" type="Button" parent="VBoxContainer/SixthLine"]
+layout_mode = 2
+icon = ExtResource("3_6es32")
+
+[node name="ObjectivesWindow" parent="." instance=ExtResource("3_objectives_window")]
+
+[node name="RewardsWindow" parent="." instance=ExtResource("4_rewards_window")]

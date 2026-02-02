@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cra6wmb116nfp"]
+
+[ext_resource type="Script" uid="uid://crr6rlkqtg6we" path="res://addons/pandora/ui/components/property_bar/property_button.gd" id="1_fvhe2"]
+[ext_resource type="Texture2D" uid="uid://b3j75eenv5ub0" path="res://addons/pandora_plus/assets/icons/icon_flag.png" id="1_huhfq"]
+[ext_resource type="PackedScene" uid="uid://bpflmyiodrljb" path="res://addons/pandora_plus/extensions/quest_objective_property/ui_component/quest_objective_property.tscn" id="2_mlw1g"]
+
+[node name="AddQuestObjectiveProperty" type="Button"]
+tooltip_text = "Quest objective property"
+icon = ExtResource("1_huhfq")
+script = ExtResource("1_fvhe2")
+scene = ExtResource("2_mlw1g")

@@ -20,10 +20,10 @@ Before starting, make sure you have:
 
 - ✅ **Godot Engine 4.5+** installed
 - ✅ **Pandora 1.0-alpha9+** installed and enabled
-- ✅ **Pandora+ 0.3.0-beta** installed and enabled
+- ✅ **Latest version of Pandora+** installed and enabled
 - ✅ Basic understanding of GDScript
 
-> **Haven't installed Pandora+ yet?** Go to [Installation Guide](getting-started/install.md) first.
+> **Haven't installed Pandora+ yet?** Go to [Installation Guide](install.md) first.
 
 ---
 
@@ -244,13 +244,13 @@ func craft_stone_sword() -> void:
 Now that you have the basics, explore more:
 
 ### Core Systems
-- [Runtime Stats System](core-systems/runtime-stats.md) - Deep dive into stats
-- [Inventory System](core-systems/inventory.md) - Advanced inventory features
-- [Recipe System](core-systems/recipe.md) - Recipes
+- [Runtime Stats System](../core-systems/runtime-stats.md) - Deep dive into stats
+- [Inventory System](../core-systems/inventory-system.md) - Advanced inventory features
+- [Recipe System](../properties/recipe.md) - Recipes
 
 ### Utilities
-- [CombatCalculator](utilities/combat-calculator.md) - Damage calculation
-- [RecipeUtils](utilities/recipe-utils.md) - Complex crafting recipes
+- [CombatCalculator](../utilities/combat-calculator.md) - Damage calculation
+- [RecipeUtils](../utilities/recipe-utils.md) - Complex crafting recipes
 
 ---
 

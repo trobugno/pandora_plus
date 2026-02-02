@@ -6,7 +6,70 @@ Welcome to the **Pandora+** documentation! This comprehensive guide will help yo
 
 Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with specialized RPG-oriented data properties and runtime systems. It provides everything you need to create complex RPG mechanics without reinventing the wheel.
 
-## ✨ Key Features
+**Pandora+ comes in two editions:**
+- **Core (Free & Open Source)** - *v1.0.0-core* : 
+  - Basic **Quest System** (Talk, Collect, Kill) + Rewards (Item, Experience, Currency) ![new](assets/new.png)
+  - Basic **NPC System** (Strongly related to Quests) ![new](assets/new.png)
+  - **Player Data & Manager** ![new](assets/new.png)
+  - **Save/Load Framework** ![new](assets/new.png)
+  - **Inventory System** 
+  - **Stats & Modifiers System**
+  - **Crafting/Recipe System**
+  - **Item Drop System**
+- **💎 Premium** - *v1.0.0-premium* : 
+  - <u>All Core features</u>
+  - NPC extended with **Merchant/Trading System** ![new](assets/new.png)
+  - NPC extended with **Scheduled/Routine System** ![new](assets/new.png)
+  - **Equipment System** with bonuses, etc ![new](assets/new.png)
+  - Player extended with **Leveling & Progression** ![new](assets/new.png)
+
+[See full comparison →](core-vs-premium.md)
+
+---
+
+## ✨ Core Features (Free)
+
+### 📜 Quest System
+Complete quest management with objectives, rewards, and state tracking. Build complex quest chains with prerequisites.
+
+```gdscript
+# Start a quest
+var quest_entity = Pandora.get_entity("QUEST_VILLAGE_HELP") as PPQuestEntity
+var runtime_quest = PPQuestManager.start_quest(quest_entity)
+
+# Track progress
+PPQuestUtils.track_item_collected(runtime_quest, item, 5)
+PPQuestUtils.track_enemy_killed(runtime_quest, "goblin")
+```
+
+[Learn more →](core-systems/quest-system.md)
+
+### 👥 NPC System
+Dynamic NPC management with dialogue, quest giving, and runtime state. NPCs can give quests, track health, and interact with the world.
+
+```gdscript
+# Spawn NPC
+var npc_entity = Pandora.get_entity("NPC_VILLAGE_ELDER") as PPNPCEntity
+var runtime_npc = PPNPCUtils.spawn_npc(npc_entity)
+
+# Get available quests from NPC
+var quests = runtime_npc.get_available_quests(completed_quest_ids)
+```
+
+[Learn more →](core-systems/npc-system.md)
+
+### 💾 Player Data
+Centralized player state management with save/load support.
+
+```gdscript
+# Access player data
+var player_data = PPPlayerData.new()
+player_data.set_player_name("Hero")
+
+# Automatically integrated with quest and NPC systems
+```
+
+[Learn more →](core-systems/player-data.md)
 
 ### 📊 Runtime Stats System
 Dynamic stat calculation with support for temporary and permanent modifiers. Perfect for buffs, debuffs, equipment bonuses, and level-up systems.
@@ -18,6 +81,17 @@ runtime_stats.add_modifier(buff)
 ```
 
 [Learn more →](core-systems/runtime-stats.md)
+
+### 🎒 Inventory System
+Flexible inventory with weight limits, auto-stacking, and comprehensive serialization.
+
+```gdscript
+var inventory := PPInventory.new()
+var health_potion := Pandora.get_entity(EntityIds.HEALTH_POTION) as PPItemEntity
+inventory.add_item(health_potion, 5)
+```
+
+[Learn more →](core-systems/inventory-system.md)
 
 ### 📓 Recipe System
 Want to create crafting recipes? Potions? Anything that can be created by combining items? Then the Recipe system is for you!
@@ -39,18 +113,9 @@ if PPRecipeUtils.can_craft(player_inventory, recipe):
 ```
 At the end of the process, the used items will **automatically** disappear from your inventory and the newly created one will appear!
 
-[Learn more →](core-systems/recipe.md)
+[Learn more →](properties/recipe.md)
 
-### 🎒 Inventory System
-Flexible inventory with weight limits, auto-stacking, and comprehensive serialization.
-
-```gdscript
-var inventory := PPInventory.new()
-var health_potion := Pandora.get_entity(EntityIds.HEALTH_POTION) as PPItemEntity
-inventory.add_item(health_potion, 5)
-```
-
-[Learn more →](core-systems/inventory.md)
+---
 
 ## 🎮 Use Cases
 
@@ -65,9 +130,11 @@ Pandora+ is perfect for:
 
 ## 🗺️ Roadmap
 
-| Current v0.3.0-beta | Coming in v1.0.0-core | Planned for v1.0.0-premium|
-|---------|--------|---------|
-|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Stats Modifier<br>✅ CombatCalculator|🔜 Equipment System<br>🔜 Quest System<br>🔜 Save/Load Framework|💎 Visual Quest Editor<br>💎 Advanced Combat System<br>💎 Skill Tree System<br>💎 More..|
+| Version | Core (Free) | Premium | Status |
+|---------|-------------|---------|--------|
+|**v0.3.0-beta**|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Recipe/Crafting<br>✅ Combat Calculator<br>✅ Status Effects<br>✅ Item System with Rarity|N/A|Released (14 Dec 2025)|
+|**v1.0.0**|✅ All previous features<br>✅ Quest System<br>✅ NPC System<br>✅ Player Data<br>✅ Quest Objectives & Rewards<br>✅ Save/Load Framework|💎 All Core features<br>💎 Merchant/Trading System<br>💎 NPC Scheduled/Routine<br>💎 Save/Load Framework<br>💎 Equipment System<br>💎 Leveling & Progression|Coming Soon (Jan 2025)|
+|**Future**|N/A|💎 Advanced Status Effect<br>💎 Visual Quest Editor<br>💎 Skill Tree System<br>💎 Advanced Combat System<br>💎 Procedural Quest Generation|Planned|
 
 ## 🤝 Contributing
 

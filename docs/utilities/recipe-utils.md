@@ -93,7 +93,7 @@ else:
 
 ###### `craft_recipe(inventory: PPInventory, recipe: PPRecipe) -> bool`
 
-Executes a recipe if ingredients are available, removing them and adding the result.
+Executes a recipe if ingredients are available, removing them and adding the result (plus waste if defined).
 
 **Parameters:**
 - `inventory`: The inventory to craft from
@@ -107,8 +107,11 @@ Executes a recipe if ingredients are available, removing them and adding the res
 3. If validation succeeds:
    - Removes all required ingredients from inventory
    - Adds crafted result to inventory
+   - **Adds waste item to inventory (if defined)**
    - Emits signal with `success: true`
    - Returns `true`
+
+> **Note:** If the recipe has a waste item defined via `set_waste()`, it will be automatically added to the inventory with the specified quantity.
 
 **Example:**
 ```gdscript
@@ -124,11 +127,97 @@ func craft_with_delay(recipe: PPRecipe):
     if not RecipeUtils.can_craft(player_inventory, recipe):
         show_error("Missing ingredients")
         return
-    
+
     show_crafting_progress(recipe.get_crafting_time())
     await get_tree().create_timer(recipe.get_crafting_time()).timeout
-    
+
     RecipeUtils.craft_recipe(player_inventory, recipe)
+```
+
+---
+
+###### `get_all_recipes() -> Array[PPRecipeEntity]`
+
+Retrieves all recipe entities from the `ItemRecipes` Pandora category.
+
+**Returns:** An array of all `PPRecipeEntity` instances, including those from subcategories.
+
+**Behavior:**
+- Finds the `ItemRecipes` category in Pandora
+- Retrieves all entities recursively (includes subcategory entities)
+- Returns only entities that are instances of `PPRecipeEntity`
+
+**Example:**
+```gdscript
+# Get all recipes in the game
+var all_recipes = PPRecipeUtils.get_all_recipes()
+print("Total recipes: %d" % all_recipes.size())
+
+# Iterate through recipes
+for recipe_entity in all_recipes:
+    print("Recipe: %s" % recipe_entity.get_description())
+    var recipe_property = recipe_entity.get_recipe_property()
+    print("  Type: %s" % recipe_property.get_recipe_type())
+    print("  Result: %s" % recipe_property.get_result().get_item_name())
+```
+
+---
+
+###### `get_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]`
+
+Filters recipes from Pandora's `ItemRecipes` category by their recipe type.
+
+**Parameters:**
+- `recipe_type`: The recipe type string to match (e.g., "Alchemy", "Cooking", "Smithing")
+
+**Returns:** An array of `PPRecipeEntity` matching the specified type
+
+**Behavior:**
+- Internally calls `get_all_recipes()` to fetch all recipes from Pandora
+- Filters by comparing `recipe_property.get_recipe_type()` with the specified type
+- Includes recipes from subcategories of `ItemRecipes`
+
+**Example:**
+```gdscript
+# Filter by type - no need to pass recipes array!
+var alchemy_recipes = PPRecipeUtils.get_recipes_by_type("Alchemy")
+var cooking_recipes = PPRecipeUtils.get_recipes_by_type("Cooking")
+var smithing_recipes = PPRecipeUtils.get_recipes_by_type("Smithing")
+
+print("Found %d alchemy recipes" % alchemy_recipes.size())
+
+# Access recipe data
+for recipe_entity in alchemy_recipes:
+    var recipe = recipe_entity.get_recipe_property()
+    print("- %s (crafting time: %.1fs)" % [
+        recipe.get_result().get_item_name(),
+        recipe.get_crafting_time()
+    ])
+```
+
+**Use Cases:**
+- Displaying recipes in categorized tabs (Alchemy Station, Cooking Pot, Forge)
+- Filtering available recipes based on current crafting station
+- Showing only relevant recipes to the player
+
+```gdscript
+# Example: Crafting station that only shows relevant recipes
+class_name CraftingStation
+extends Node
+
+@export var station_type: String = "Alchemy"  # Set in editor
+
+var available_recipes: Array[PPRecipeEntity] = []
+
+func _ready():
+    # Recipes are fetched directly from Pandora!
+    available_recipes = PPRecipeUtils.get_recipes_by_type(station_type)
+    populate_recipe_ui(available_recipes)
+
+func populate_recipe_ui(recipes: Array[PPRecipeEntity]):
+    for recipe_entity in recipes:
+        var recipe = recipe_entity.get_recipe_property()
+        add_recipe_button(recipe_entity.get_description(), recipe)
 ```
 
 ---
@@ -246,7 +335,59 @@ func count_item_in_inventory(item: PPItemEntity) -> int:
 
 ---
 
-### Example 3: Batch Crafting System
+### Example 3: Crafting with Waste Handling
+
+```gdscript
+class_name SmithingStation
+extends Node
+
+var player_inventory: PPInventory
+
+func create_iron_ingot_recipe() -> PPRecipe:
+    var iron_ore = Pandora.get_entity("IRON_ORE") as PPItemEntity
+    var coal = Pandora.get_entity("COAL") as PPItemEntity
+    var iron_ingot = Pandora.get_entity("IRON_INGOT") as PPItemEntity
+    var slag = Pandora.get_entity("SLAG") as PPItemEntity
+
+    var recipe = PPRecipe.new(
+        [
+            PPIngredient.new(iron_ore, 2),
+            PPIngredient.new(coal, 1)
+        ],
+        PandoraReference.new(iron_ingot.get_entity_id(), PandoraReference.Type.ENTITY),
+        8.0,
+        "SMITHING"
+    )
+
+    # Smithing produces slag as waste
+    recipe.set_waste(PPIngredient.new(slag, 1))
+    return recipe
+
+func smelt_ore(recipe: PPRecipe):
+    if not RecipeUtils.can_craft(player_inventory, recipe):
+        show_error("Missing ingredients")
+        return
+
+    # Show smelting animation
+    show_smelting_ui(recipe)
+    await get_tree().create_timer(recipe.get_crafting_time()).timeout
+
+    # Execute craft - result AND waste are added automatically
+    if RecipeUtils.craft_recipe(player_inventory, recipe):
+        var result = recipe.get_result()
+        var waste = recipe.get_waste()
+
+        print("Smelted: %s" % result.get_item_name())
+        if waste:
+            print("Produced waste: %d %s" % [
+                waste.get_quantity(),
+                waste.get_item_entity().get_item_name()
+            ])
+```
+
+---
+
+### Example 4: Batch Crafting System
 
 ```gdscript
 class_name BatchCraftingSystem
@@ -666,7 +807,8 @@ func craft_with_time(inventory: PPInventory, recipe: PPRecipe):
 
 ## See Also
 
-- [PPRecipe](../properties/recipe.md) - Recipe class
+- [PPRecipeEntity](../entities/recipe-entity.md) - Recipe entity class
+- [PPRecipe](../properties/recipe.md) - Recipe property class
 - [PPIngredient](../properties/ingredient.md) - Ingredient class
 - [PPInventory](../api/inventory.md) - Inventory system
 - [PPItemEntity](../entities/item-entity.md) - Item entities

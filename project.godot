@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Pandora+"
-config/version="0.3.0"
+config/version="1.0.0-core"
 config/tags=PackedStringArray("addon", "data", "godot4", "rpg")
 config/features=PackedStringArray("4.5", "Forward Plus")
 boot_splash/image="uid://lg3gxxm6wy8m"
@@ -24,6 +24,19 @@ PPStatsUtils="*res://addons/pandora_plus/autoloads/PPCombatCalculator.gd"
 PPCombatCalculator="*res://addons/pandora_plus/autoloads/PPCombatCalculator.gd"
 PPInventoryUtils="*res://addons/pandora_plus/autoloads/PPInventoryUtils.gd"
 PPRecipeUtils="*res://addons/pandora_plus/autoloads/PPRecipeUtils.gd"
+PPQuestUtils="*res://addons/pandora_plus/autoloads/PPQuestUtils.gd"
+PPNPCUtils="*res://addons/pandora_plus/autoloads/PPNPCUtils.gd"
+PPEquipmentUtils="*res://addons/pandora_plus/autoloads/PPEquipmentUtils.gd"
+PPPlayerManager="*res://addons/pandora_plus/managers/player_manager.gd"
+PPQuestManager="*res://addons/pandora_plus/managers/quest_manager.gd"
+PPNPCManager="*res://addons/pandora_plus/managers/npc_manager.gd"
+PPTimeManager="*res://addons/pandora_plus/managers/time_manager.gd"
+PPSaveManager="*res://addons/pandora_plus/save_system/save_manager.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/scale_mode="integer"
 
 [editor_plugins]
 
@@ -38,3 +51,7 @@ ui/inspector/tree_sort_mode=1
 [pandora]
 
 config/extensions=[&"res://pandora/extensions", &"res://addons/pandora_plus/extensions"]
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0

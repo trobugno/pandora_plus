@@ -1,9 +1,10 @@
 extends Node
 
-var DEFENSE_REDUCTION_FACTOR : float
-var ARMOR_DIMINISHING_RETURNS : float
-var CRIT_DAMAGE_BASE : float
-var CRIT_RATE_CAP : float
+# Initialize with sensible defaults in case methods are called before _ready()
+var DEFENSE_REDUCTION_FACTOR : float = 0.01
+var ARMOR_DIMINISHING_RETURNS : float = 100.0
+var CRIT_DAMAGE_BASE : float = 1.5
+var CRIT_RATE_CAP : float = 100.0
 
 func _ready() -> void:
 	ProjectSettings.settings_changed.connect(_on_settings_changed)
