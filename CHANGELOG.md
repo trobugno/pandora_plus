@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.0.0-core] (Current) - 2026-01-03
+## [1.0.0-core] (Current) - 2026-02-03
 
 #### 🎯 Major Features
 
@@ -89,6 +89,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 🔧 Fixed uninitialized variables in `PPCombatCalculator` with sensible defaults
 - 🔧 Added inventory space validation in `grant_reward()`
 - 🔧 Added null checks in `inventory_data.has_item()`
+
+**Other Fixes**
+- 🔧 Minor bug fixing to improve performance
 
 ---
 
