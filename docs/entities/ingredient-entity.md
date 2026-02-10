@@ -334,4 +334,4 @@ If using many `PPIngredientEntity` objects, cache them on startup rather than ca
 
 ---
 
-*API Reference generated from source code v1.0.0-core | v1.0.0-premium*
+*API Reference generated from source code v1.1.0-core | v1.0.0-premium*

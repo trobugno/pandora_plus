@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/pandora_plus/update_system/pp_update_dialog.gd" id="1_dialog"]
+
+[node name="PPUpdateDialog" type="AcceptDialog"]
+title = "Pandora+ Update Available"
+initial_position = 2
+size = Vector2i(550, 420)
+unresizable = true
+ok_button_text = ""
+script = ExtResource("1_dialog")

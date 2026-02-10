@@ -8,6 +8,7 @@ const CATEGORY_CONFIG_COMBAT : StringName = CATEGORY_CONFIG + "/combat_calculato
 const CATEGORY_CONFIG_SAVE : StringName = CATEGORY_CONFIG + "/save_system"
 const CATEGORY_CONFIG_PLAYER : StringName = CATEGORY_CONFIG + "/player"
 const CATEGORY_CONFIG_TIME : StringName = CATEGORY_CONFIG + "/time"
+const CATEGORY_CONFIG_UPDATES : StringName = CATEGORY_CONFIG + "/updates"
 
 const COMBAT_SETTING_DEFENSE_REDUCTION_FACTOR : StringName = CATEGORY_CONFIG_COMBAT + "/defense_reduction_factor"
 const COMBAT_SETTING_DEFENSE_REDUCTION_FACTOR_VALUE : float = 0.5
@@ -55,6 +56,13 @@ const TIME_SETTING_STARTING_HOUR_VALUE : int = 12
 
 const TIME_SETTING_TIME_SCALE_DEFAULT : StringName = CATEGORY_CONFIG_TIME + "/time_scale_default"
 const TIME_SETTING_TIME_SCALE_DEFAULT_VALUE : float = 1.0
+
+# Update Settings
+const UPDATE_SETTING_AUTO_CHECK : StringName = CATEGORY_CONFIG_UPDATES + "/auto_check_enabled"
+const UPDATE_SETTING_AUTO_CHECK_VALUE : bool = true
+
+const UPDATE_SETTING_CHECK_INTERVAL : StringName = CATEGORY_CONFIG_UPDATES + "/check_interval_hours"
+const UPDATE_SETTING_CHECK_INTERVAL_VALUE : int = 24
 
 static func initialize() -> void:
 	init_setting(

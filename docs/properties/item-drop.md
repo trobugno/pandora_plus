@@ -424,4 +424,4 @@ var rare_drop = PPItemDrop.new(item_ref, 0, 1)
 
 ---
 
-*API Reference generated from source code v1.0.0-core | v1.0.0-premium*
+*API Reference generated from source code v1.1.0-core | v1.0.0-premium*

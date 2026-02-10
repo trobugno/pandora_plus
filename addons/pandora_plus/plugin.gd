@@ -61,6 +61,8 @@ func _disable_plugin() -> void:
 	# Unregister Save System
 	remove_autoload_singleton("PPSaveManager")
 
+var _update_checker: Node = null
+
 func _ready() -> void:
 	PandoraPlusSettings.initialize()
 
@@ -71,6 +73,20 @@ func _ready() -> void:
 	_setup_item_recipes_categories()
 	var location_category := _setup_location_categories()
 	_setup_npc_categories(location_category)
+
+	# Initialize update checker (non-blocking, deferred)
+	call_deferred("_start_update_check")
+
+
+func _start_update_check() -> void:
+	var checker_script = load("res://addons/pandora_plus/update_system/pp_update_checker.gd")
+	if checker_script == null:
+		push_warning("Pandora+: Could not load update checker script")
+		return
+	_update_checker = checker_script.new()
+	_update_checker.name = "PPUpdateChecker"
+	_update_checker.set_meta("editor_plugin", self)
+	add_child(_update_checker)
 
 func _setup_rarity_categories() -> PandoraCategory:
 	var all_categories = Pandora.get_all_categories()

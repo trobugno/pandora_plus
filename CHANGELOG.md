@@ -5,7 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.0.0-core] (Current) - 2026-02-03
+## [1.1.0-core] (Current) - 2026-02-11
+
+#### ✨ New Features
+
+**In-Editor Update System**
+- ✨ Automatic update checking from GitHub Pages version manifest
+- ✨ Update dialog with changelog display, progress bar, and version comparison
+- ✨ One-click download and installation from GitHub Releases
+- ✨ Automatic preservation of `configuration.json` during updates
+- ✨ "Skip This Version" and "Remind Me Later" (24h) options
+- ✨ Configurable auto-check interval via Project Settings (`pandora_plus/config/updates/`)
+
+---
+## [1.0.0-core] - 2026-02-03
 
 #### 🎯 Major Features
 
