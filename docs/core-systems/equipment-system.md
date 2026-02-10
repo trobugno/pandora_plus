@@ -2,7 +2,7 @@
 
 Complete guide to the Pandora+ equipment management system, including equippable items, stat bonuses, and character progression.
 
-**Availability:** ✅ Core & Premium
+**Availability:** 💎 Premium
 
 ---
 
