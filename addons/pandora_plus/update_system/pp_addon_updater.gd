@@ -37,6 +37,20 @@ func download_update(url: String, parent_node: Node, headers: PackedStringArray 
 		update_completed.emit(false, "Failed to start download (error %d)" % err)
 
 
+## Installs an update from ZIP data already loaded in memory.
+## Use this when the ZIP file was selected locally (e.g. via FileDialog)
+## instead of downloaded via HTTP.
+func install_from_zip_data(zip_data: PackedByteArray) -> void:
+	progress_updated.emit("Installing update...")
+
+	var success := _extract_and_install(zip_data)
+
+	if success:
+		update_completed.emit(true, "Update installed successfully! Please restart the editor.")
+	else:
+		update_completed.emit(false, "Failed to extract and install update.")
+
+
 func _on_download_completed(
 	result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray
 ) -> void:
