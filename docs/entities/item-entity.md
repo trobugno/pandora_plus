@@ -502,4 +502,4 @@ The `@tool` annotation allows the script to run in the editor, enabling:
 
 ---
 
-*API Reference generated from source code v1.1.0-core | v1.0.0-premium*
+*API Reference generated from source code v1.1.1-core | v1.0.0-premium*

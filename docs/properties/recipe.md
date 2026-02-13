@@ -747,4 +747,4 @@ Currently, `PPRecipe` doesn't have a `result_quantity` field in the code shown. 
 
 ---
 
-*API Reference generated from source code v1.1.0-core | v1.0.0-premium*
+*API Reference generated from source code v1.1.1-core | v1.0.0-premium*

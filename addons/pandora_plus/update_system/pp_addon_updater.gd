@@ -164,12 +164,19 @@ func request_editor_restart(editor_plugin: EditorPlugin) -> void:
 		editor_plugin.get_editor_interface().restart_editor(true)
 
 
-## Find the base path prefix in the ZIP (e.g. "username-repo-hash/" or "pandora_plus/").
+## Find the base path prefix in the ZIP that should be stripped during extraction.
+## Supports multiple ZIP structures:
+## - "pandora_plus/..." (test ZIPs, GitHub releases)
+## - "addons/pandora_plus/..." (distribution ZIPs)
+## - "username-repo-hash/..." (GitHub auto-generated ZIPs)
 func _find_base_path(files: PackedStringArray) -> String:
-	# Look for the first directory entry, or derive from the first file
+	# First, check if the ZIP uses "addons/pandora_plus/" structure
+	for path in files:
+		if path.begins_with("addons/pandora_plus/"):
+			return "addons/pandora_plus/"
+	# Then look for the first root-level directory entry
 	for path in files:
 		if path.ends_with("/"):
-			# Check if this looks like a root-level directory
 			var parts := path.trim_suffix("/").split("/")
 			if parts.size() == 1:
 				return path

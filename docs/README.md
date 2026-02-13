@@ -7,7 +7,7 @@ Welcome to the **Pandora+** documentation! This comprehensive guide will help yo
 Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with specialized RPG-oriented data properties and runtime systems. It provides everything you need to create complex RPG mechanics without reinventing the wheel.
 
 **Pandora+ comes in two editions:**
-- **Core (Free & Open Source)** - *v1.1.0-core* : 
+- **Core (Free & Open Source)** - *v1.1.1-core* : 
   - Basic **Quest System** (Talk, Collect, Kill) + Rewards (Item, Experience, Currency) ![new](assets/new.png)
   - Basic **NPC System** (Strongly related to Quests) ![new](assets/new.png)
   - **Player Data & Manager** ![new](assets/new.png)
@@ -133,7 +133,7 @@ Pandora+ is perfect for:
 | Version | Core (Free) | Premium | Status |
 |---------|-------------|---------|--------|
 |**v0.3.0-beta**|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Recipe/Crafting<br>✅ Combat Calculator<br>✅ Status Effects<br>✅ Item System with Rarity|N/A|Released (14 Dec 2025)|
-|**v1.0.0**|✅ All previous features<br>✅ Quest System<br>✅ NPC System<br>✅ Player Data<br>✅ Quest Objectives & Rewards<br>✅ Save/Load Framework|💎 All Core features<br>💎 Merchant/Trading System<br>💎 NPC Scheduled/Routine<br>💎 Save/Load Framework<br>💎 Equipment System<br>💎 Leveling & Progression|Coming Soon (Jan 2025)|
+|**v1.0.0**|✅ All previous features<br>✅ Quest System<br>✅ NPC System<br>✅ Player Data<br>✅ Quest Objectives & Rewards<br>✅ Save/Load Framework|💎 All Core features<br>💎 Merchant/Trading System<br>💎 NPC Scheduled/Routine<br>💎 Save/Load Framework<br>💎 Equipment System<br>💎 Leveling & Progression|Released (Feb 2026)|
 |**Future**|N/A|💎 Advanced Status Effect<br>💎 Visual Quest Editor<br>💎 Skill Tree System<br>💎 Advanced Combat System<br>💎 Procedural Quest Generation|Planned|
 
 ## 🤝 Contributing

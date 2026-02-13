@@ -199,7 +199,7 @@ Full equipment management:
 - **Distribution**: ✅ Allowed
 
 ### 💎 Premium
-- **Price**: *Price & Links Coming Soon* (One-time purchase)
+- **Price**: [$17.99 or above](https://trobugno.itch.io/pandora-plus-premium) (One-time purchase)
 - **License**: Commercial License (per-developer)
 - **Support**: Priority email & Discord support
 - **Updates**: All future features and improvements

@@ -1,8 +1,8 @@
 {
   "core": {
-    "version": "1.1.0-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.1.0-core/pandora_plus.zip",
-    "changelog": "- In-Editor Update System: automatic update checking from GitHub Pages\n- Update dialog with changelog display, progress bar, and version comparison\n- One-click download and installation from GitHub Releases\n- Automatic preservation of configuration.json during updates\n- Skip This Version and Remind Me Later options\n- Configurable auto-check interval via Project Settings"
+    "version": "1.1.1-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.1.1-core/pandora_plus.zip",
+    "changelog": "- Fixed update system ZIP extraction for distribution packages"
   },
   "premium": {
     "version": "1.0.0-premium",
