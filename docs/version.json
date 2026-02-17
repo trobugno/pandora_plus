@@ -1,8 +1,8 @@
 {
   "core": {
-    "version": "1.1.1-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.1.1-core/pandora_plus.zip",
-    "changelog": "- Fixed update system ZIP extraction for distribution packages"
+    "version": "1.1.2-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.1.2-core/pandora_plus.zip",
+    "changelog": "- Fixed Equipment sub-category not inheriting Items fields\n- Fixed PPNPCUtils.gd compile error with autoload self-reference"
   },
   "premium": {
     "version": "1.0.0-premium",

@@ -19,7 +19,7 @@ Complete installation guide for **Pandora+** in your Godot project.
 #### Step 1: Download Pandora+
 
 1. Go to [Pandora+ Releases](https://github.com/trobugno/pandora_plus/releases)
-2. Download the latest version: `pandora_plus-v1.1.1-core.zip`
+2. Download the latest version: `pandora_plus-v1.1.2-core.zip`
 3. Extract the archive to a temporary location
 
 #### Step 2: Install in Project

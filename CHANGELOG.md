@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.1.1-core] (Current) - 2026-02-12
+## [1.1.2-core] (Current) - 2026-02-17
+
+#### 🐛 Bug Fixes
+
+- 🔧 Fixed Equipment sub-category not inheriting Items fields when categories are created from scratch (timing issue with intermediate `save_data()` calls)
+- 🔧 Fixed `PPNPCUtils.gd` compile error: autoload self-reference in signal emissions (`npc_died`, `npc_revived`)
+
+---
+## [1.1.1-core] - 2026-02-12
 
 #### 🐛 Bug Fixes
 

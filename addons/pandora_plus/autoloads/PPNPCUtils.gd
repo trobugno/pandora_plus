@@ -89,7 +89,7 @@ func kill_npc(runtime_npc: PPRuntimeNPC) -> void:
 		return
 
 	runtime_npc.die()
-	PPNPCUtils.npc_died.emit(runtime_npc)
+	npc_died.emit(runtime_npc)
 
 ## Revives NPC with specified health percentage
 func revive_npc(runtime_npc: PPRuntimeNPC, health_percentage: float = 1.0) -> void:
@@ -98,7 +98,7 @@ func revive_npc(runtime_npc: PPRuntimeNPC, health_percentage: float = 1.0) -> vo
 		return
 
 	runtime_npc.revive(health_percentage)
-	PPNPCUtils.npc_revived.emit(runtime_npc)
+	npc_revived.emit(runtime_npc)
 
 ## Checks if NPC can engage in combat (only hostile NPCs)
 func can_engage_combat(runtime_npc: PPRuntimeNPC) -> bool:

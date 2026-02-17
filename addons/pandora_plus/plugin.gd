@@ -74,6 +74,12 @@ func _ready() -> void:
 	var location_category := _setup_location_categories()
 	_setup_npc_categories(location_category)
 
+	# Save all data once after all categories have been created/verified.
+	# This avoids intermediate saves that can cause side effects (file regeneration,
+	# editor reimports) before sub-categories like Equipment are created,
+	# which would prevent proper property inheritance from parent categories.
+	Pandora.save_data()
+
 	# Initialize update checker (non-blocking, deferred)
 	call_deferred("_start_update_check")
 
@@ -100,7 +106,6 @@ func _setup_rarity_categories() -> PandoraCategory:
 		Pandora.create_property(rarity_category, "name", "String")
 		Pandora.create_property(rarity_category, "percentage", "float")
 		rarity_category.set_generate_ids(true)
-		Pandora.save_data()
 	else:
 		rarity_category = rarity_categories[0]
 		if not rarity_category.has_entity_property("name"):
@@ -109,7 +114,6 @@ func _setup_rarity_categories() -> PandoraCategory:
 			Pandora.create_property(rarity_category, "percentage", "float")
 		if not rarity_category.is_generate_ids():
 			rarity_category.set_generate_ids(true)
-		Pandora.save_data()
 	
 	return rarity_category
 
@@ -134,7 +138,6 @@ func _setup_item_categories(rarity_category: PandoraCategory) -> PandoraCategory
 		item_category.get_entity_property("rarity").set_default_value(rarity_category)
 		rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
 		item_category.set_generate_ids(true)
-		Pandora.save_data()
 	else:
 		item_category = item_categories[0]
 		if not item_category.has_entity_property("name"):
@@ -155,7 +158,6 @@ func _setup_item_categories(rarity_category: PandoraCategory) -> PandoraCategory
 			rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
 		if not item_category.is_generate_ids():
 			item_category.set_generate_ids(true)
-		Pandora.save_data()
 	
 	return item_category
 
@@ -174,8 +176,6 @@ func _setup_quest_categories() -> void:
 		# Use the custom quest_property type which handles objectives and rewards internally
 		Pandora.create_property(quest_category, "quest_data", "quest_property")
 		quest_category.set_generate_ids(true)
-
-		Pandora.save_data()
 	else:
 		var quest_category : PandoraCategory = quest_categories[0]
 
@@ -184,8 +184,6 @@ func _setup_quest_categories() -> void:
 			Pandora.create_property(quest_category, "quest_data", "quest_property")
 		if not quest_category.is_generate_ids():
 			quest_category.set_generate_ids(true)
-
-		Pandora.save_data()
 
 func _setup_location_categories() -> PandoraCategory:
 	const LOCATIONS_NAME := "Locations"
@@ -216,8 +214,6 @@ func _setup_location_categories() -> PandoraCategory:
 		location_category.get_entity_property("is_safe_zone").set_default_value(false)
 		
 		location_category.set_generate_ids(true)
-
-		Pandora.save_data()
 	else:
 		location_category = location_categories[0]
 
@@ -238,8 +234,6 @@ func _setup_location_categories() -> PandoraCategory:
 			Pandora.create_property(location_category, "is_safe_zone", "bool")
 		if not location_category.is_generate_ids():
 			location_category.set_generate_ids(true)
-			
-		Pandora.save_data()
 
 	return location_category
 
@@ -278,8 +272,6 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 		npc_category.get_entity_property("is_hostile").set_default_value(false)
 		
 		npc_category.set_generate_ids(true)
-		
-		Pandora.save_data()
 	else:
 		var npc_category : PandoraCategory = npc_categories[0]
 
@@ -304,7 +296,6 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			Pandora.create_property(npc_category, "quest_giver_for", "array")
 		if not npc_category.is_generate_ids():
 			npc_category.set_generate_ids(true)
-		Pandora.save_data()
 
 func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
 	const EQUIPMENT_NAME := "Equipment"
@@ -328,8 +319,6 @@ func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
 		equipment_category.get_entity_property("equipment_slot").set_default_value("WEAPON")
 
 		equipment_category.set_generate_ids(true)
-
-		Pandora.save_data()
 	else:
 		var equipment_category : PandoraCategory = equipment_categories[0]
 
@@ -340,8 +329,6 @@ func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
 			Pandora.create_property(equipment_category, "stats_property", "stats_property")
 		if not equipment_category.is_generate_ids():
 			equipment_category.set_generate_ids(true)
-
-		Pandora.save_data()
 
 func _setup_item_recipes_categories() -> void:
 	var all_categories := Pandora.get_all_categories()
@@ -356,8 +343,6 @@ func _setup_item_recipes_categories() -> void:
 		Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
 
 		item_recipes_category.set_generate_ids(true)
-
-		Pandora.save_data()
 	else:
 		var item_recipes_category : PandoraCategory = item_recipes_categories[0]
 
@@ -368,5 +353,3 @@ func _setup_item_recipes_categories() -> void:
 			Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
 		if not item_recipes_category.is_generate_ids():
 			item_recipes_category.set_generate_ids(true)
-
-		Pandora.save_data()

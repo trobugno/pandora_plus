@@ -7,7 +7,7 @@ Welcome to the **Pandora+** documentation! This comprehensive guide will help yo
 Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with specialized RPG-oriented data properties and runtime systems. It provides everything you need to create complex RPG mechanics without reinventing the wheel.
 
 **Pandora+ comes in two editions:**
-- **Core (Free & Open Source)** - *v1.1.1-core* : 
+- **Core (Free & Open Source)** - *v1.1.2-core* : 
   - Basic **Quest System** (Talk, Collect, Kill) + Rewards (Item, Experience, Currency) ![new](assets/new.png)
   - Basic **NPC System** (Strongly related to Quests) ![new](assets/new.png)
   - **Player Data & Manager** ![new](assets/new.png)
