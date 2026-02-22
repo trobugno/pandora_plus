@@ -5,7 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.1.2-core] (Current) - 2026-02-17
+## [1.2.0-core] (Current) - 2026-02-22
+
+#### ⚠️ Breaking Changes
+
+- **Removed Equipment System from Core** — Equipment System (PPEquipmentEntity, PPEquipmentUtils, equipment slots, equip/unequip API) was erroneously included in Core but is a **Premium-only feature**. The v1.1.x Core release contained incomplete and non-functional equipment code that has now been properly removed.
+  - Removed `PPEquipmentEntity` class (`entities/equipment_entity.gd`)
+  - Removed `PPEquipmentUtils` autoload (`autoloads/PPEquipmentUtils.gd`)
+  - Removed equipment signals, methods, and properties from `PPPlayerManager`
+  - Removed `equipped_stats` from `PPPlayerData`
+  - Removed `equipped_items`, equipment slots, and equipment signals from `PPInventory`
+  - Removed Equipment sub-category setup from `plugin.gd`
+  - **Migration**: If you were using any equipment API in Core, upgrade to [Pandora+ Premium](https://trobugno.itch.io/pandora-plus-premium) for full Equipment System support
+
+---
+## [1.1.2-core] - 2026-02-17
 
 #### 🐛 Bug Fixes
 

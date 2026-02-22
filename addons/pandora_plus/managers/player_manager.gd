@@ -6,7 +6,7 @@ extends Node
 ## Responsibilities:
 ## - Maintains the player's PPPlayerData singleton
 ## - Provides centralized API for player operations
-## - Integrates with InventoryUtils, EquipmentUtils, CombatCalculator
+## - Integrates with InventoryUtils, CombatCalculator
 ## - Tracks unlocked content (recipes, locations, achievements)
 ## - Integrates with SaveManager
 ##
@@ -41,10 +41,6 @@ signal checkpoint_set(position: Vector3, scene_path: String)
 signal item_added(item: PPItemEntity, quantity: int)
 signal item_removed(item: PPItemEntity, quantity: int)
 signal currency_changed(old_amount: int, new_amount: int)
-
-# Equipment signals
-signal item_equipped(item: PPItemEntity)
-signal item_unequipped(item: PPItemEntity)
 
 # ============================================================================
 # STATE
@@ -246,121 +242,6 @@ func get_currency() -> int:
 		return 0
 
 	return _player_data.inventory.game_currency
-
-# ============================================================================
-# PUBLIC API - Equipment
-# ============================================================================
-
-## Gets all equipped items
-## @return Dictionary: Dictionary of equipped items
-func get_equipped_items() -> Dictionary:
-	if not _player_data or not _player_data.inventory:
-		return {
-			"HEAD": null,
-			"CHEST": null,
-			"LEGS": null,
-			"WEAPON": null,
-			"SHIELD": null,
-			"ACCESSORY_1": null,
-			"ACCESSORY_2": null
-		}
-
-	return _player_data.inventory.equipped_items
-
-## Equips an item
-## @param item: Item to equip (must be PPEquipmentEntity)
-## @return bool: True if item was equipped
-func equip_item(item: PPItemEntity) -> bool:
-	if not _player_data or not _player_data.inventory or not _player_data.runtime_stats:
-		return false
-
-	# Item must be PPEquipmentEntity
-	if not item is PPEquipmentEntity:
-		push_warning("PlayerManager: Cannot equip non-equipment item '%s'" % item.get_entity_name())
-		return false
-
-	# Use PPEquipmentUtils for validation and equipping
-	var success = PPEquipmentUtils.equip_item(_player_data.inventory, item as PPEquipmentEntity, _player_data.runtime_stats)
-	if success:
-		item_equipped.emit(item)
-
-	return success
-
-## Unequips an item
-## @param item: Item to unequip (must be PPEquipmentEntity)
-## @return bool: True if item was unequipped
-func unequip_item(item: PPItemEntity) -> bool:
-	if not _player_data or not _player_data.inventory or not _player_data.runtime_stats:
-		return false
-
-	# Item must be PPEquipmentEntity
-	if not item is PPEquipmentEntity:
-		push_warning("PlayerManager: Cannot unequip non-equipment item '%s'" % item.get_entity_name())
-		return false
-
-	# Find which slot the item is equipped in
-	var equipment_item = item as PPEquipmentEntity
-	var slot_name = equipment_item.get_equipment_slot()
-
-	# Check if item is actually equipped in that slot
-	if not _player_data.inventory.has_equipment_in_slot(slot_name):
-		return false
-
-	var equipped_slot = _player_data.inventory.get_equipped_item(slot_name)
-	if not equipped_slot or equipped_slot.item.get_entity_id() != item.get_entity_id():
-		return false
-
-	# Use PPEquipmentUtils for unequipping
-	var success = PPEquipmentUtils.unequip_item(_player_data.inventory, slot_name, _player_data.runtime_stats)
-	if success:
-		item_unequipped.emit(item)
-
-	return success
-
-## Unequips item from a specific slot
-## @param slot_name: Equipment slot name (e.g., "HEAD", "WEAPON")
-## @return bool: True if item was unequipped
-func unequip_slot(slot_name: String) -> bool:
-	if not _player_data or not _player_data.inventory or not _player_data.runtime_stats:
-		return false
-
-	# Check if slot has equipment
-	if not _player_data.inventory.has_equipment_in_slot(slot_name):
-		return false
-
-	var equipped_slot = _player_data.inventory.get_equipped_item(slot_name)
-	var item = equipped_slot.item
-
-	# Use PPEquipmentUtils for unequipping
-	var success = PPEquipmentUtils.unequip_item(_player_data.inventory, slot_name, _player_data.runtime_stats)
-	if success:
-		item_unequipped.emit(item)
-
-	return success
-
-## Checks if item is equipped
-## @param item: Item to check (must be PPEquipmentEntity)
-## @return bool: True if equipped
-func is_item_equipped(item: PPItemEntity) -> bool:
-	if not _player_data or not _player_data.inventory:
-		return false
-
-	# Item must be PPEquipmentEntity
-	if not item is PPEquipmentEntity:
-		return false
-
-	# Check if item is in any equipment slot
-	var equipment_item = item as PPEquipmentEntity
-	var slot_name = equipment_item.get_equipment_slot()
-
-	if not _player_data.inventory.has_equipment_in_slot(slot_name):
-		return false
-
-	var equipped_slot = _player_data.inventory.get_equipped_item(slot_name)
-	if not equipped_slot:
-		return false
-
-	return equipped_slot.item.get_entity_id() == item.get_entity_id()
 
 # ============================================================================
 # PUBLIC API - Stats & Combat

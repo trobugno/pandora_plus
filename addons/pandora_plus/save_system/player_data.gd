@@ -6,7 +6,7 @@ class_name PPPlayerData
 ##
 ## Includes:
 ## - Basic info (name)
-## - Inventory and equipment
+## - Inventory
 ## - Stats and modifiers
 ## - Position and scene
 ## - Active status effects
@@ -21,22 +21,17 @@ class_name PPPlayerData
 @export var player_name: String = "Hero"
 
 # ============================================================================
-# INVENTORY & EQUIPMENT
+# INVENTORY
 # ============================================================================
 
 ## Player's inventory (PPInventory instance)
 var inventory: PPInventory = null
 
-## Reference to equipped stats for quick access
-## This is derived from inventory.equipped_items but stored separately
-## for runtime calculations
-var equipped_stats: PPRuntimeStats = null
-
 # ============================================================================
 # STATS & COMBAT
 # ============================================================================
 
-## Player's base stats (without equipment modifiers)
+## Player's base stats (without modifiers)
 var base_stats: PPStats = null
 
 ## Player's runtime stats (with all modifiers applied)
@@ -92,7 +87,6 @@ func _init() -> void:
 	# Initialize empty stats (will be set by game)
 	base_stats = null
 	runtime_stats = null
-	equipped_stats = null
 
 	# Initialize empty arrays
 	active_status_effects = []

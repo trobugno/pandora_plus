@@ -26,8 +26,6 @@ func _enable_plugin() -> void:
 	add_autoload_singleton("PPRecipeUtils", "res://addons/pandora_plus/autoloads/PPRecipeUtils.gd")
 	add_autoload_singleton("PPQuestUtils", "res://addons/pandora_plus/autoloads/PPQuestUtils.gd")
 	add_autoload_singleton("PPNPCUtils", "res://addons/pandora_plus/autoloads/PPNPCUtils.gd")
-	add_autoload_singleton("PPEquipmentUtils", "res://addons/pandora_plus/autoloads/PPEquipmentUtils.gd")
-
 	# Register Managers
 	add_autoload_singleton("PPPlayerManager", "res://addons/pandora_plus/managers/player_manager.gd")
 	add_autoload_singleton("PPQuestManager", "res://addons/pandora_plus/managers/quest_manager.gd")
@@ -50,8 +48,6 @@ func _disable_plugin() -> void:
 	remove_autoload_singleton("PPRecipeUtils")
 	remove_autoload_singleton("PPQuestUtils")
 	remove_autoload_singleton("PPNPCUtils")
-	remove_autoload_singleton("PPEquipmentUtils")
-
 	# Unregister Managers
 	remove_autoload_singleton("PPPlayerManager")
 	remove_autoload_singleton("PPQuestManager")
@@ -67,8 +63,7 @@ func _ready() -> void:
 	PandoraPlusSettings.initialize()
 
 	var rarity_category := _setup_rarity_categories()
-	var item_category := _setup_item_categories(rarity_category)
-	_setup_equipment_sub_categories(item_category)
+	_setup_item_categories(rarity_category)
 	_setup_quest_categories()
 	_setup_item_recipes_categories()
 	var location_category := _setup_location_categories()
@@ -76,7 +71,7 @@ func _ready() -> void:
 
 	# Save all data once after all categories have been created/verified.
 	# This avoids intermediate saves that can cause side effects (file regeneration,
-	# editor reimports) before sub-categories like Equipment are created,
+	# editor reimports) before sub-categories are created,
 	# which would prevent proper property inheritance from parent categories.
 	Pandora.save_data()
 
@@ -296,39 +291,6 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			Pandora.create_property(npc_category, "quest_giver_for", "array")
 		if not npc_category.is_generate_ids():
 			npc_category.set_generate_ids(true)
-
-func _setup_equipment_sub_categories(item_category: PandoraCategory) -> void:
-	const EQUIPMENT_NAME := "Equipment"
-	const REFERENCE_TYPE = preload("uid://bs8pju4quv8m3")
-
-	var all_categories := Pandora.get_all_categories()
-	var all_sub_categories := Pandora.get_all_categories(item_category)
-	var equipment_categories := all_sub_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == EQUIPMENT_NAME)
-
-	if not equipment_categories:
-		var equipment_category = Pandora.create_category(EQUIPMENT_NAME, item_category)
-		equipment_category.set_script_path("res://addons/pandora_plus/entities/equipment_entity.gd")
-
-		# Equipment-specific: slot type
-		Pandora.create_property(equipment_category, "equipment_slot", "String")
-
-		# Equipment-specific: stat bonuses
-		Pandora.create_property(equipment_category, "stats_property", "stats_property")
-
-		# Set defaults
-		equipment_category.get_entity_property("equipment_slot").set_default_value("WEAPON")
-
-		equipment_category.set_generate_ids(true)
-	else:
-		var equipment_category : PandoraCategory = equipment_categories[0]
-
-		# Ensure all properties exist (for updates)
-		if not equipment_category.has_entity_property("equipment_slot"):
-			Pandora.create_property(equipment_category, "equipment_slot", "String")
-		if not equipment_category.has_entity_property("stats_property"):
-			Pandora.create_property(equipment_category, "stats_property", "stats_property")
-		if not equipment_category.is_generate_ids():
-			equipment_category.set_generate_ids(true)
 
 func _setup_item_recipes_categories() -> void:
 	var all_categories := Pandora.get_all_categories()
