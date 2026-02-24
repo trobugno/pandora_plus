@@ -239,6 +239,65 @@ func grant_reward(reward: PPQuestReward, inventory: PPInventory = null, quest_id
 			return true
 	return false
 
+## Gets all ITEM reward objects from a runtime quest
+## Returns array of {reward: PPQuestReward, item: PPItemEntity, quantity: int}
+func get_item_reward_objects(runtime_quest: PPRuntimeQuest) -> Array[Dictionary]:
+	var item_rewards: Array[Dictionary] = []
+
+	for reward in runtime_quest.get_rewards():
+		if reward.get_reward_type() == PPQuestReward.RewardType.ITEM:
+			var item = reward.get_reward_entity() as PPItemEntity
+			if item:
+				item_rewards.append({
+					"reward": reward,
+					"item": item,
+					"quantity": reward.get_quantity()
+				})
+
+	return item_rewards
+
+## Checks if the inventory can hold all ITEM rewards from a runtime quest
+func can_inventory_hold_item_rewards(runtime_quest: PPRuntimeQuest, inventory: PPInventory) -> bool:
+	if not inventory:
+		return false
+
+	# If no max slots, inventory is unlimited
+	if inventory.max_items_in_inventory <= -1:
+		return true
+
+	var item_rewards = get_item_reward_objects(runtime_quest)
+	if item_rewards.is_empty():
+		return true
+
+	# Count available empty slots
+	var empty_slots = inventory.all_items.filter(func(s): return s == null).size()
+
+	# For each item reward, check if it fits in an existing stack or needs a new slot
+	var slots_needed = 0
+	for reward_info in item_rewards:
+		var item: PPItemEntity = reward_info["item"]
+		var existing_stackable = inventory.all_items.filter(
+			func(s: PPInventorySlot):
+				return s and s.item and s.item._id == item._id and s.quantity < s.MAX_STACK_SIZE
+		)
+		if existing_stackable.is_empty():
+			slots_needed += 1
+
+	return empty_slots >= slots_needed
+
+## Grants all non-ITEM rewards from a runtime quest
+## Returns array of successfully granted reward names
+func grant_non_item_rewards(runtime_quest: PPRuntimeQuest, inventory: PPInventory = null) -> Array[String]:
+	var granted_rewards: Array[String] = []
+	var quest_id = runtime_quest.get_quest_id()
+
+	for reward in runtime_quest.get_rewards():
+		if reward.get_reward_type() != PPQuestReward.RewardType.ITEM:
+			if grant_reward(reward, inventory, quest_id):
+				granted_rewards.append(reward.get_reward_name())
+
+	return granted_rewards
+
 ## Calculates total currency from all rewards
 func calculate_total_currency(quest: PPQuest) -> int:
 	var total = 0

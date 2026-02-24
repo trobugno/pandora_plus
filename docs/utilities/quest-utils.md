@@ -518,11 +518,111 @@ func grant_reward(
 - **EXPERIENCE**: Added to player via `PPPlayerManager.add_experience()` (requires player data initialized)
 - 💎 **REPUTATION** (Premium): Added via `PPPlayerManager.modify_faction_reputation()`
 - 💎 **UNLOCK_RECIPE** (Premium): Added via `PPPlayerManager.unlock_recipe()` (emits `recipe_unlocked` signal)
+- 💎 **UNLOCK_QUEST** (Premium): Starts the quest immediately via `PPQuestManager.start_quest()`. If prerequisites or level requirements aren't met, adds the quest to a pending unlock queue that is checked on quest completion, player level up, and game load.
+
+- 💎 **STAT_BOOST** (Premium): Adds a permanent FLAT modifier via `PPRuntimeStats.add_modifier()`. Uses source `"quest_reward_{quest_id}"` for traceability. Stackable — completing the same quest multiple times accumulates the boost. Can be removed with `runtime_stats.remove_modifiers_by_source()`.
 
 **Externally Handled Rewards:**
-- 💎 **UNLOCK_QUEST** (Premium): Use quest prerequisites instead for quest unlocking logic
-- 💎 **STAT_BOOST** (Premium): Listen to `rewards_granted` signal to apply permanent stat changes
 - **CUSTOM**: Handle via custom script in reward definition
+
+---
+
+### get_item_reward_objects()
+
+Gets all item rewards from a runtime quest as detailed objects.
+
+```gdscript
+func get_item_reward_objects(runtime_quest: PPRuntimeQuest) -> Array[Dictionary]
+```
+
+**Parameters:**
+- `runtime_quest`: Runtime quest instance
+
+**Returns:** Array of dictionaries with keys:
+- `reward`: PPQuestReward - The reward object
+- `item`: PPItemEntity - The item entity
+- `quantity`: int - Number of items
+
+**Notes:**
+- Filters rewards by `RewardType.ITEM` only
+- Used internally by `PPQuestManager.complete_quest()` for inventory space checks
+- Useful for UI display of pending item rewards
+
+**Example:**
+```gdscript
+var item_rewards = PPQuestUtils.get_item_reward_objects(runtime_quest)
+
+for reward_info in item_rewards:
+    print("Item: %s x%d" % [
+        reward_info["item"].get_item_name(),
+        reward_info["quantity"]
+    ])
+```
+
+---
+
+### can_inventory_hold_item_rewards()
+
+Checks if the player's inventory has enough space for all item rewards.
+
+```gdscript
+func can_inventory_hold_item_rewards(runtime_quest: PPRuntimeQuest, inventory: PPInventory) -> bool
+```
+
+**Parameters:**
+- `runtime_quest`: Runtime quest with rewards to check
+- `inventory`: Player's inventory
+
+**Returns:** `true` if inventory can hold all item rewards
+
+**Notes:**
+- Returns `true` if inventory is unlimited (`max_items_in_inventory == -1`)
+- Returns `true` if there are no item rewards
+- Returns `false` if inventory is `null`
+- Considers existing stackable slots when calculating needed space
+- Used internally by `PPQuestManager.complete_quest()` when `auto_grant_rewards` is enabled
+
+**Example:**
+```gdscript
+var inventory = PPPlayerManager.get_inventory()
+
+if PPQuestUtils.can_inventory_hold_item_rewards(runtime_quest, inventory):
+    print("Inventory has room for all rewards")
+else:
+    print("Inventory full - need to free space!")
+```
+
+---
+
+### grant_non_item_rewards()
+
+Grants only non-item rewards (currency, experience, etc.) from a quest, skipping item rewards.
+
+```gdscript
+func grant_non_item_rewards(runtime_quest: PPRuntimeQuest, inventory: PPInventory = null) -> Array[String]
+```
+
+**Parameters:**
+- `runtime_quest`: Runtime quest with rewards
+- `inventory`: Player's inventory (needed for currency rewards)
+
+**Returns:** Array of successfully granted reward names
+
+**Notes:**
+- Grants all reward types except `ITEM`
+- Used internally when `inventory_full_behavior` is `COMPLETE_AND_NOTIFY` and inventory is full
+- Useful for partial reward granting when inventory space is limited
+
+**Example:**
+```gdscript
+var inventory = PPPlayerManager.get_inventory()
+var granted = PPQuestUtils.grant_non_item_rewards(runtime_quest, inventory)
+print("Granted %d non-item rewards" % granted.size())
+
+# Handle remaining item rewards separately
+var pending_items = PPQuestUtils.get_item_reward_objects(runtime_quest)
+store_pending_items_for_later(pending_items)
+```
 
 ---
 
@@ -963,4 +1063,4 @@ Find the Lost Sword - 25.00%
 
 ---
 
-*API Reference for Pandora+ v1.0.0*
+*API Reference for Pandora+ v1.2.1-core*

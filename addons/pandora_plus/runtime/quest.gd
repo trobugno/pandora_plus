@@ -20,6 +20,7 @@ signal quest_abandoned()
 signal quest_progress_updated(completed_objectives: int, total_objectives: int, progress_percentage: float)
 signal objective_completed(objective_index: int)
 signal objective_activated(objective_index: int)
+signal quest_ready_to_auto_complete()
 
 @export var quest_data: Dictionary = {}
 
@@ -378,7 +379,7 @@ func _on_objective_completed(objective_index: int) -> void:
 	# Check if quest is completed
 	if are_all_required_objectives_completed():
 		if is_auto_complete():
-			complete()
+			quest_ready_to_auto_complete.emit()
 		else:
 			quest_progress_updated.emit(
 				get_completed_required_objectives_count(),

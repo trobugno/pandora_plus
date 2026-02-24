@@ -446,10 +446,67 @@ PPQuestManager.complete_quest("quest_id")
 # Happens automatically when tracking objectives
 PPQuestUtils.track_enemy_killed(runtime_quest, "goblin")
 # If this was the last objective, quest auto-completes
+```
 
-# Check completion
-if runtime_quest.is_completed():
-    apply_rewards(runtime_quest)
+#### Auto-Grant Rewards (v1.2.1+)
+
+By default, `PPQuestManager.complete_quest()` automatically grants quest rewards to the player. This behavior is controlled by two Project Settings under `pandora_plus/config/quest/`:
+
+| Setting | Type | Default | Description |
+|---------|------|---------|-------------|
+| `auto_grant_rewards` | bool | `true` | Enables automatic reward granting on quest completion |
+| `inventory_full_behavior` | enum | `BLOCK_COMPLETION` | What happens when inventory is full for item rewards |
+
+**Auto-Granted Reward Types:**
+The following reward types are handled automatically by `grant_reward()`:
+- **ITEM** → added to inventory via `inventory.add_item()`
+- **CURRENCY** → added to `inventory.game_currency`
+- **EXPERIENCE** → added via `PPPlayerManager.add_experience()`
+- 💎 **REPUTATION** → added via `PPPlayerManager.modify_faction_reputation()`
+- 💎 **UNLOCK_RECIPE** → added via `PPPlayerManager.unlock_recipe()`
+- 💎 **UNLOCK_QUEST** → starts the quest immediately, or adds it to a pending queue if prerequisites/level aren't met yet (see below)
+
+- 💎 **STAT_BOOST** → adds a permanent FLAT modifier to the player's runtime stats via `PPRuntimeStats.add_modifier()`. Stackable — completing the same quest multiple times accumulates the boost. Source is `"quest_reward_{quest_id}"` for traceability.
+
+**Rewards Requiring Manual Handling:**
+These reward types are **not** auto-granted — listen to the `rewards_granted` signal on `PPQuestUtils` to handle them:
+- **CUSTOM** — handle via custom script in reward definition
+
+**💎 Pending Quest Unlock Queue (Premium):**
+When an `UNLOCK_QUEST` reward is granted but the target quest's prerequisites or level requirements aren't met, the quest is added to a **pending unlock queue**. The queue is automatically checked when:
+- Another quest is completed (prerequisites may now be satisfied)
+- The player levels up (level requirement may now be met)
+- A saved game is loaded
+
+When a pending quest is unlocked, `PPQuestManager` emits the `pending_quest_unlocked` signal.
+
+**Inventory Full Behaviors:**
+- **BLOCK_COMPLETION** — Quest stays active, emits `quest_completion_blocked` signal. No rewards are granted.
+- **COMPLETE_AND_NOTIFY** — Quest completes, non-item rewards (currency, experience, etc.) are granted, and `quest_rewards_pending` signal is emitted with the pending item rewards for you to handle.
+
+```gdscript
+# Default behavior (auto_grant_rewards = true):
+# Rewards are granted automatically when quest completes
+PPQuestManager.complete_quest("quest_id")
+# No need to call PPQuestUtils.grant_quest_rewards() manually!
+
+# Handle inventory full edge cases
+PPQuestManager.quest_completion_blocked.connect(
+    func(quest_id, runtime_quest):
+        show_notification("Inventory full! Make room before completing the quest.")
+)
+
+PPQuestManager.quest_rewards_pending.connect(
+    func(quest_id, runtime_quest, pending_items):
+        # Non-item rewards (currency, etc.) already granted
+        # pending_items contains item rewards that couldn't be granted
+        show_notification("Some item rewards are pending - free up inventory space!")
+)
+
+# Disable auto-grant if you want manual control:
+# Set pandora_plus/config/quest/auto_grant_rewards = false in Project Settings
+# Then grant rewards manually:
+# PPQuestUtils.grant_quest_rewards(quest_data, inventory)
 ```
 
 ### Failing Quests
@@ -679,12 +736,37 @@ PPQuestManager.quest_completed.connect(_on_quest_completed)
 PPQuestManager.quest_failed.connect(_on_quest_failed)
 PPQuestManager.quest_abandoned.connect(_on_quest_abandoned)
 
+# Auto-grant reward signals (v1.2.1+)
+PPQuestManager.quest_completion_blocked.connect(_on_quest_blocked)
+PPQuestManager.quest_rewards_pending.connect(_on_rewards_pending)
+
+# 💎 Pending quest unlock signal (Premium)
+PPQuestManager.pending_quest_unlocked.connect(_on_pending_quest_unlocked)
+
 func _on_quest_added(runtime_quest: PPRuntimeQuest):
     print("New quest: ", runtime_quest.get_quest_name())
 
 func _on_quest_completed(quest_id: String):
     print("Quest completed: ", quest_id)
     show_completion_ui(quest_id)
+
+func _on_quest_blocked(quest_id: String, runtime_quest: PPRuntimeQuest):
+    # Emitted when auto_grant_rewards is true and inventory is full
+    # with inventory_full_behavior = BLOCK_COMPLETION
+    print("Quest blocked - inventory full!")
+
+func _on_rewards_pending(quest_id: String, runtime_quest: PPRuntimeQuest, pending_items: Array):
+    # Emitted when auto_grant_rewards is true and inventory is full
+    # with inventory_full_behavior = COMPLETE_AND_NOTIFY
+    # Non-item rewards (currency, etc.) were already granted
+    print("Item rewards pending: %d items" % pending_items.size())
+
+# 💎 Premium only
+func _on_pending_quest_unlocked(quest_id: String, runtime_quest: PPRuntimeQuest):
+    # Emitted when a quest from the pending unlock queue is finally started
+    # (prerequisites/level requirements were met)
+    print("Quest unlocked: %s" % runtime_quest.get_quest_name())
+    show_notification("New quest available: %s" % runtime_quest.get_quest_name())
 ```
 
 ### Runtime Quest Signals
@@ -937,4 +1019,4 @@ for obj in progress:
 
 ---
 
-*Complete System Guide for Pandora+ v1.0.0*
+*Complete System Guide for Pandora+ v1.2.1-core*

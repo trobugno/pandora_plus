@@ -113,6 +113,92 @@ Emitted when a quest is abandoned.
 
 ---
 
+### quest_completion_blocked
+
+```gdscript
+signal quest_completion_blocked(quest_id: String, runtime_quest: PPRuntimeQuest)
+```
+
+Emitted when quest completion is blocked because the player's inventory is full and `inventory_full_behavior` is set to `BLOCK_COMPLETION`. The quest remains active — no rewards are granted.
+
+**Parameters:**
+- `quest_id` (String) - Quest identifier
+- `runtime_quest` (PPRuntimeQuest) - The quest that was blocked
+
+**Notes:**
+- Only emitted when `auto_grant_rewards` is enabled (default: `true`)
+- Requires `inventory_full_behavior` = `BLOCK_COMPLETION` (default)
+- The quest stays active, allowing the player to free inventory space and try again
+
+**Example:**
+```gdscript
+PPQuestManager.quest_completion_blocked.connect(func(quest_id, runtime_quest):
+    var item_rewards = PPQuestUtils.get_item_reward_objects(runtime_quest)
+    show_notification("Inventory full! Need %d free slots." % item_rewards.size())
+)
+```
+
+---
+
+### quest_rewards_pending
+
+```gdscript
+signal quest_rewards_pending(quest_id: String, runtime_quest: PPRuntimeQuest, pending_item_rewards: Array)
+```
+
+Emitted when quest is completed but item rewards could not be granted due to full inventory. Non-item rewards (currency, experience, etc.) are granted normally. Only emitted when `inventory_full_behavior` is `COMPLETE_AND_NOTIFY`.
+
+**Parameters:**
+- `quest_id` (String) - Quest identifier
+- `runtime_quest` (PPRuntimeQuest) - The completed quest
+- `pending_item_rewards` (Array) - Array of dictionaries with `reward`, `item`, and `quantity` keys
+
+**Notes:**
+- Only emitted when `auto_grant_rewards` is enabled (default: `true`)
+- Requires `inventory_full_behavior` = `COMPLETE_AND_NOTIFY`
+- Non-item rewards are already granted when this signal fires
+- Your game logic is responsible for granting the pending item rewards later
+
+**Example:**
+```gdscript
+PPQuestManager.quest_rewards_pending.connect(
+    func(quest_id, runtime_quest, pending_items):
+        for item_info in pending_items:
+            var item_name = item_info["item"].get_item_name()
+            var qty = item_info["quantity"]
+            add_to_pending_rewards_ui(item_name, qty)
+        show_notification("Some rewards are waiting - free up inventory!")
+)
+```
+
+---
+
+### 💎 pending_quest_unlocked
+
+```gdscript
+signal pending_quest_unlocked(quest_id: String, runtime_quest: PPRuntimeQuest)
+```
+
+**Premium only.** Emitted when a quest from the pending unlock queue is automatically started because its requirements (prerequisites and/or level) are now met.
+
+**Parameters:**
+- `quest_id` (String) - Quest identifier of the unlocked quest
+- `runtime_quest` (PPRuntimeQuest) - The newly started quest instance
+
+**Notes:**
+- Only emitted for quests that were previously added to the pending queue via `UNLOCK_QUEST` rewards
+- The queue is checked after quest completion, player level up, and game load
+- Useful for showing "New quest unlocked!" notifications to the player
+
+**Example:**
+```gdscript
+PPQuestManager.pending_quest_unlocked.connect(func(quest_id, runtime_quest):
+    show_notification("New quest unlocked: %s" % runtime_quest.get_quest_name())
+)
+```
+
+---
+
 ### all_quests_cleared
 
 ```gdscript
@@ -203,24 +289,35 @@ Adds an existing runtime quest (used during save/load).
 func complete_quest(quest_id: String) -> bool
 ```
 
-Completes a quest by ID.
+Completes a quest by ID. When `auto_grant_rewards` is enabled (default), this method also handles reward granting with inventory space checks.
 
 **Parameters:**
 - `quest_id` (String) - Quest identifier
 
-**Returns:** `bool` - `true` if quest was completed
+**Returns:** `bool` - `true` if quest was completed, `false` if quest not found, not active, or blocked by `BLOCK_COMPLETION`
 
 **Notes:**
-- Moves quest from active to completed list
 - Quest must be active to be completed
-- Emits `quest_completed` signal
+- When `auto_grant_rewards` is `true` (default):
+  - Checks inventory space for item rewards
+  - If space available: grants all rewards, completes quest, emits `quest_completed`
+  - If inventory full + `BLOCK_COMPLETION`: quest stays active, emits `quest_completion_blocked`, returns `false`
+  - If inventory full + `COMPLETE_AND_NOTIFY`: grants non-item rewards, completes quest, emits `quest_completed` + `quest_rewards_pending`
+- When `auto_grant_rewards` is `false`: completes quest without granting any rewards (legacy behavior)
+- Settings are in Project Settings under `pandora_plus/config/quest/`
 
 **Example:**
 ```gdscript
-# Complete quest manually
+# With auto_grant_rewards enabled (default) — rewards granted automatically
 if PPQuestManager.complete_quest("quest_village_help"):
-    print("Quest completed!")
-    give_rewards()
+    print("Quest completed! Rewards granted automatically.")
+else:
+    print("Could not complete quest (not found, not active, or inventory full)")
+
+# With auto_grant_rewards disabled — manual reward granting
+if PPQuestManager.complete_quest("quest_village_help"):
+    var quest_data = runtime_quest.get_quest_data_instance()
+    PPQuestUtils.grant_quest_rewards(quest_data, inventory)
 ```
 
 ---
@@ -896,4 +993,4 @@ func show_quest_statistics():
 
 ---
 
-*API Reference for Pandora+ v1.0.0*
+*API Reference for Pandora+ v1.2.1-core*

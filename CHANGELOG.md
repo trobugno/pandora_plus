@@ -5,7 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.0-core] (Current) - 2026-02-22
+## [1.2.1-core] (Current) - 2026-02-23
+
+#### ✨ New Features
+
+- 🎁 **Auto-grant Rewards on Quest Completion** — `complete_quest()` now automatically grants rewards to the player's inventory
+  - New ProjectSetting `pandora_plus/config/quest/auto_grant_rewards` (default: `true`) — toggle auto-granting on/off
+  - New ProjectSetting `pandora_plus/config/quest/inventory_full_behavior` — choose behavior when inventory is full:
+    - `BLOCK_COMPLETION`: Quest stays active, emits `quest_completion_blocked` signal
+    - `COMPLETE_AND_NOTIFY`: Quest completes, non-item rewards granted, emits `quest_rewards_pending` signal with pending items for developer handling
+  - New signal `quest_completion_blocked(quest_id, runtime_quest)` on PPQuestManager
+  - New signal `quest_rewards_pending(quest_id, runtime_quest, pending_item_rewards)` on PPQuestManager
+  - New signal `quest_ready_to_auto_complete()` on PPRuntimeQuest — intercepted by quest manager for reward processing
+  - New helper methods on PPQuestUtils: `get_item_reward_objects()`, `can_inventory_hold_item_rewards()`, `grant_non_item_rewards()`
+
+---
+## [1.2.0-core] - 2026-02-22
 
 #### ⚠️ Breaking Changes
 

@@ -24,6 +24,8 @@ signal quest_removed(quest_id: String)
 signal quest_completed(quest_id: String)
 signal quest_failed(quest_id: String)
 signal quest_abandoned(quest_id: String)
+signal quest_completion_blocked(quest_id: String, runtime_quest: PPRuntimeQuest)
+signal quest_rewards_pending(quest_id: String, runtime_quest: PPRuntimeQuest, pending_item_rewards: Array)
 signal all_quests_cleared()
 
 # ============================================================================
@@ -87,6 +89,7 @@ func add_existing_quest(runtime_quest: PPRuntimeQuest) -> void:
 	_add_quest(runtime_quest)
 
 ## Completes a quest by ID
+## If auto_grant_rewards is enabled, handles reward granting and inventory full behavior
 ## @param quest_id: Quest identifier
 ## @return bool: True if quest was completed
 func complete_quest(quest_id: String) -> bool:
@@ -99,10 +102,42 @@ func complete_quest(quest_id: String) -> bool:
 		push_warning("Cannot complete quest: quest is not active (%s)" % quest_id)
 		return false
 
+	# Check auto_grant_rewards setting
+	var auto_grant := ProjectSettings.get_setting(
+		PandoraPlusSettings.QUEST_SETTING_AUTO_GRANT_REWARDS,
+		PandoraPlusSettings.QUEST_SETTING_AUTO_GRANT_REWARDS_VALUE
+	) as bool
+
+	if auto_grant:
+		var inventory := PPPlayerManager.get_inventory()
+
+		# Check if inventory can hold all item rewards
+		if not PPQuestUtils.can_inventory_hold_item_rewards(runtime_quest, inventory):
+			var behavior := ProjectSettings.get_setting(
+				PandoraPlusSettings.QUEST_SETTING_INVENTORY_FULL_BEHAVIOR,
+				PandoraPlusSettings.QUEST_SETTING_INVENTORY_FULL_BEHAVIOR_VALUE
+			) as String
+
+			if behavior == "BLOCK_COMPLETION":
+				quest_completion_blocked.emit(quest_id, runtime_quest)
+				return false
+			else:
+				# COMPLETE_AND_NOTIFY: grant non-item rewards, complete, notify pending items
+				PPQuestUtils.grant_non_item_rewards(runtime_quest, inventory)
+				var pending_items = PPQuestUtils.get_item_reward_objects(runtime_quest)
+				runtime_quest.complete()
+				_move_to_completed(quest_id)
+				quest_completed.emit(quest_id)
+				quest_rewards_pending.emit(quest_id, runtime_quest, pending_items)
+				return true
+		else:
+			# Inventory has space: grant all rewards
+			for reward in runtime_quest.get_rewards():
+				PPQuestUtils.grant_reward(reward, inventory, quest_id)
+
 	runtime_quest.complete()
 	_move_to_completed(quest_id)
 	quest_completed.emit(quest_id)
-
 	return true
 
 ## Fails a quest by ID
@@ -317,11 +352,13 @@ func _add_quest(runtime_quest: PPRuntimeQuest) -> void:
 
 	_active_quests.append(runtime_quest)
 
-	# Connect to quest completion signal for auto-completion tracking
+	# Connect to quest signals
 	if not runtime_quest.quest_completed.is_connected(_on_quest_completed):
 		runtime_quest.quest_completed.connect(_on_quest_completed.bind(runtime_quest.get_quest_id()))
 	if not runtime_quest.quest_failed.is_connected(_on_quest_failed):
 		runtime_quest.quest_failed.connect(_on_quest_failed.bind(runtime_quest.get_quest_id()))
+	if not runtime_quest.quest_ready_to_auto_complete.is_connected(_on_quest_ready_to_auto_complete):
+		runtime_quest.quest_ready_to_auto_complete.connect(_on_quest_ready_to_auto_complete.bind(runtime_quest.get_quest_id()))
 
 	quest_added.emit(runtime_quest)
 
@@ -335,6 +372,8 @@ func _remove_quest(quest_id: String) -> void:
 				quest.quest_completed.disconnect(_on_quest_completed)
 			if quest.quest_failed.is_connected(_on_quest_failed):
 				quest.quest_failed.disconnect(_on_quest_failed)
+			if quest.quest_ready_to_auto_complete.is_connected(_on_quest_ready_to_auto_complete):
+				quest.quest_ready_to_auto_complete.disconnect(_on_quest_ready_to_auto_complete)
 
 			_active_quests.remove_at(i)
 			quest_removed.emit(quest_id)
@@ -376,8 +415,13 @@ func _move_to_failed(quest_id: String) -> void:
 # SIGNAL HANDLERS
 # ============================================================================
 
+func _on_quest_ready_to_auto_complete(quest_id: String) -> void:
+	# Quest objectives are all completed and auto_complete is enabled
+	# Route through complete_quest() to apply reward granting logic
+	complete_quest(quest_id)
+
 func _on_quest_completed(quest_id: String) -> void:
-	# Quest completed itself (via auto-complete), move to completed list
+	# Quest completed itself (via direct complete() call), move to completed list
 	_move_to_completed(quest_id)
 	quest_completed.emit(quest_id)
 

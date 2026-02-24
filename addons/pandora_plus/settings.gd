@@ -8,6 +8,7 @@ const CATEGORY_CONFIG_COMBAT : StringName = CATEGORY_CONFIG + "/combat_calculato
 const CATEGORY_CONFIG_SAVE : StringName = CATEGORY_CONFIG + "/save_system"
 const CATEGORY_CONFIG_PLAYER : StringName = CATEGORY_CONFIG + "/player"
 const CATEGORY_CONFIG_TIME : StringName = CATEGORY_CONFIG + "/time"
+const CATEGORY_CONFIG_QUEST : StringName = CATEGORY_CONFIG + "/quest"
 const CATEGORY_CONFIG_UPDATES : StringName = CATEGORY_CONFIG + "/updates"
 
 const COMBAT_SETTING_DEFENSE_REDUCTION_FACTOR : StringName = CATEGORY_CONFIG_COMBAT + "/defense_reduction_factor"
@@ -56,6 +57,13 @@ const TIME_SETTING_STARTING_HOUR_VALUE : int = 12
 
 const TIME_SETTING_TIME_SCALE_DEFAULT : StringName = CATEGORY_CONFIG_TIME + "/time_scale_default"
 const TIME_SETTING_TIME_SCALE_DEFAULT_VALUE : float = 1.0
+
+# Quest Settings
+const QUEST_SETTING_AUTO_GRANT_REWARDS : StringName = CATEGORY_CONFIG_QUEST + "/auto_grant_rewards"
+const QUEST_SETTING_AUTO_GRANT_REWARDS_VALUE : bool = true
+
+const QUEST_SETTING_INVENTORY_FULL_BEHAVIOR : StringName = CATEGORY_CONFIG_QUEST + "/inventory_full_behavior"
+const QUEST_SETTING_INVENTORY_FULL_BEHAVIOR_VALUE : String = "BLOCK_COMPLETION"
 
 # Update Settings
 const UPDATE_SETTING_AUTO_CHECK : StringName = CATEGORY_CONFIG_UPDATES + "/auto_check_enabled"
@@ -138,6 +146,21 @@ static func initialize() -> void:
 		TYPE_FLOAT,
 		PROPERTY_HINT_RANGE,
 		"0.0,1.0,0.1"
+	)
+	
+	# Quest Settings
+	init_setting(
+		QUEST_SETTING_AUTO_GRANT_REWARDS,
+		QUEST_SETTING_AUTO_GRANT_REWARDS_VALUE,
+		TYPE_BOOL,
+		PROPERTY_HINT_NONE
+	)
+	init_setting(
+		QUEST_SETTING_INVENTORY_FULL_BEHAVIOR,
+		QUEST_SETTING_INVENTORY_FULL_BEHAVIOR_VALUE,
+		TYPE_STRING,
+		PROPERTY_HINT_ENUM,
+		"BLOCK_COMPLETION,COMPLETE_AND_NOTIFY"
 	)
 
 	# Time Settings
