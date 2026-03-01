@@ -50,10 +50,13 @@ func set_entity(entity: PandoraEntity) -> void:
 
 	if entity != null:
 		entity_attributes.init(entity)
+		property_bar.ensure_extensions_loaded()
 		var properties = entity.get_entity_properties()
 
 		for property in properties:
 			var scene = property_bar.get_scene_by_type(property.get_property_type().get_type_name())
+			if scene == null:
+				continue
 			var control = scene.instantiate() as PandoraPropertyControl
 			_add_property_control(control, property)
 

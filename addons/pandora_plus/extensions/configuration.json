@@ -470,8 +470,7 @@
 					"enabled": true,
 					"name": "Rewards",
 					"settings": {
-						"category_only": true,
-						"entity_id": ""
+						"type": "quest_reward_property"
 					},
 					"type": "ARRAY"
 				},
@@ -479,8 +478,7 @@
 					"enabled": true,
 					"name": "Prerequisites",
 					"settings": {
-						"category_only": true,
-						"entity_id": ""
+						"type": "quest_property"
 					},
 					"type": "ARRAY"
 				},
