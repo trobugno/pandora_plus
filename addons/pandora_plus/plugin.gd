@@ -130,7 +130,6 @@ func _setup_item_categories(rarity_category: PandoraCategory) -> PandoraCategory
 		Pandora.create_property(item_category, "value", "float")
 		Pandora.create_property(item_category, "weight", "float")
 		var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
-		item_category.get_entity_property("rarity").set_default_value(rarity_category)
 		rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
 		item_category.set_generate_ids(true)
 	else:
@@ -149,7 +148,6 @@ func _setup_item_categories(rarity_category: PandoraCategory) -> PandoraCategory
 			Pandora.create_property(item_category, "weight", "float")
 		if not item_category.has_entity_property("rarity"):
 			var rarity_property = Pandora.create_property(item_category, "rarity", "reference")
-			item_category.get_entity_property("rarity").set_default_value(rarity_category)
 			rarity_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(rarity_category._id))
 		if not item_category.is_generate_ids():
 			item_category.set_generate_ids(true)

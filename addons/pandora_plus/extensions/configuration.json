@@ -15,7 +15,7 @@
 					"name": "Item",
 					"settings": {
 						"category_only": true,
-						"entity_id": "1"
+						"entity_id": ""
 					},
 					"type": "REFERENCE"
 				},
@@ -68,7 +68,7 @@
 					"name": "Result",
 					"settings": {
 						"category_only": true,
-						"entity_id": "1206.0"
+						"entity_id": ""
 					},
 					"type": "REFERENCE"
 				},
@@ -86,7 +86,7 @@
 					"name": "Waste Item",
 					"settings": {
 						"category_only": true,
-						"entity_id": "1206.0"
+						"entity_id": ""
 					},
 					"type": "REFERENCE"
 				},
@@ -114,7 +114,7 @@
 					"name": "Item",
 					"settings": {
 						"category_only": true,
-						"entity_id": "4"
+						"entity_id": ""
 					},
 					"type": "REFERENCE"
 				},
@@ -341,7 +341,7 @@
 					"name": "Target Entity",
 					"settings": {
 						"category_only": true,
-						"entity_id": "4"
+						"entity_id": ""
 					},
 					"type": "REFERENCE"
 				},
