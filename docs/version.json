@@ -1,8 +1,8 @@
 {
   "core": {
-    "version": "1.2.1-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.1-core/pandora_plus.zip",
-    "changelog": "- 🎁 Auto-grant Rewards on Quest Completion\n- New quest settings: auto_grant_rewards, inventory_full_behavior\n- New signals: quest_completion_blocked, quest_rewards_pending\n- New PPQuestUtils helpers for inventory reward checks"
+    "version": "1.2.2-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.2-core/pandora_plus.zip",
+    "changelog": "- 🔧 Fixed all first-installation errors (entity_picker, property_bar, property_editor crashes)\n- 🔧 Fixed extension property types not loading on first install (ensure_extensions_loaded)\n- 🔧 Fixed configuration.json Rewards/Prerequisites ARRAY settings\n- 🔧 Cleared hardcoded entity IDs, removed debug prints"
   },
   "premium": {
     "version": "1.0.0-premium",

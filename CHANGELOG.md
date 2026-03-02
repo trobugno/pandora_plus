@@ -5,7 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.1-core] (Current) - 2026-02-23
+## [1.2.2-core] (Current) - 2026-03-01
+
+#### 🐛 Bug Fixes
+
+**First-Installation Error Elimination**
+- 🔧 Fixed persistent `entity_picker.gd` crash (`Invalid access to property or key`) caused by rarity category being set as default value for rarity reference property — removed `set_default_value(rarity_category)` from `plugin.gd`
+- 🔧 Fixed `entity_picker.gd` `select()` crashing when passed entities not in its filtered list — added null and existence guard
+- 🔧 Fixed `property_bar.gd` crash on unknown property types (`Invalid access to property or key 'undefined'`) — `get_scene_by_type()` now returns `null` safely for unregistered types
+- 🔧 Fixed `property_editor.gd` crash (`Nonexistent function 'instantiate' in base 'Nil'`) when extension types not yet loaded — added null scene guard
+- 🔧 Fixed extension property types (quest, recipe, stats, etc.) not appearing on first installation due to plugin initialization order — added `ensure_extensions_loaded()` lazy-loading in `PropertyBar`
+- 🔧 Fixed `array_field_settings.gd` crash when ARRAY fields lack `"type"` in settings — added guard for missing key
+- 🔧 Fixed `reference_field_settings.gd` crash on empty or invalid entity IDs in extension configurations — added `is_empty()` and null checks
+- 🔧 Fixed `configuration.json` "Rewards" and "Prerequisites" fields in quest_property having REFERENCE-style settings instead of ARRAY-style (`"type": "quest_reward_property"` / `"type": "quest_property"`)
+- 🔧 Cleared hardcoded developer-specific entity IDs from `configuration.json` that caused errors on new installations
+- 🔧 Removed leftover debug `print()` from `property_control.gd`
+
+---
+## [1.2.1-core] - 2026-02-23
 
 #### ✨ New Features
 

@@ -1019,4 +1019,4 @@ for obj in progress:
 
 ---
 
-*Complete System Guide for Pandora+ v1.2.1-core*
+*Complete System Guide for Pandora+ v1.2.2-core*
