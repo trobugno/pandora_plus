@@ -106,8 +106,8 @@ func _ready() -> void:
 		refresh.call_deferred()
 	)
 
-	objectives_window.item_removed.connect(func(item: Variant):
-		current_property.remove_objective(item)
+	objectives_window.item_removed.connect(func(idx: int):
+		current_property.remove_objective_at(idx)
 		_property.set_default_value(current_property)
 		property_value_changed.emit(current_property)
 		refresh.call_deferred()
@@ -132,8 +132,8 @@ func _ready() -> void:
 		refresh.call_deferred()
 	)
 
-	rewards_window.item_removed.connect(func(item: Variant):
-		current_property.remove_reward(item)
+	rewards_window.item_removed.connect(func(idx: int):
+		current_property.remove_reward_at(idx)
 		_property.set_default_value(current_property)
 		property_value_changed.emit(current_property)
 		refresh.call_deferred()

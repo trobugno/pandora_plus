@@ -134,6 +134,10 @@ func add_objective(objective: PPQuestObjective) -> void:
 func remove_objective(objective: PPQuestObjective) -> void:
 	_objectives.erase(objective)
 
+func remove_objective_at(idx: int) -> void:
+	if idx >= 0 and idx < _objectives.size():
+		_objectives.remove_at(idx)
+
 func update_objective_at(idx: int, objective: PPQuestObjective) -> void:
 	if _objectives.size() < idx + 1:
 		_objectives.append(objective)
@@ -147,6 +151,10 @@ func add_reward(reward: PPQuestReward) -> void:
 
 func remove_reward(reward: PPQuestReward) -> void:
 	_rewards.erase(reward)
+
+func remove_reward_at(idx: int) -> void:
+	if idx >= 0 and idx < _rewards.size():
+		_rewards.remove_at(idx)
 
 func update_reward_at(idx: int, reward: PPQuestReward) -> void:
 	if _rewards.size() < idx + 1:

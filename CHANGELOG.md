@@ -5,10 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.3-core] (Current) - 2026-03-06
+## [1.2.3-core] (Current) - 2026-03-09
 
 #### 🐛 Bug Fixes
 
+- 🔧 Fixed quest property objectives/rewards not saving when adding new items — `_add_new_item()` now creates proper default instances (`PPQuestReward.new()` / `PPQuestObjective.new()`) instead of relying on null `get_default_value()`
+- 🔧 Fixed quest property objectives/rewards not saving when removing items — removal now uses index-based approach (`item.get_index()` + `remove_*_at()`) instead of reference-based `erase()` which failed after `duplicate()` broke reference equality
+- 🔧 Removed leftover debug `print()` from `quest_property.gd`
 - 🔧 Fixed quest deserialization crash: `_delivered_rewards` typed array assignment now uses `assign()` pattern instead of direct assignment (prevents `Invalid assignment` error with `Array[String]`)
 - 🔧 Fixed `quest_manager.gd` `load_state()` / `save_state()` with redundant guards on PPGameState Resource properties (`.has()` is invalid on Resources)
 

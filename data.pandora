@@ -20,15 +20,6 @@
 				"_script_path": "res://addons/pandora_plus/entities/item_entity.gd"
 			},
 			{
-				"_category_id": "1206.0",
-				"_generate_ids": true,
-				"_icon_color": "ffffff00",
-				"_id": "1214.0",
-				"_index": 0,
-				"_name": "Equipment",
-				"_script_path": "res://addons/pandora_plus/entities/equipment_entity.gd"
-			},
-			{
 				"_category_id": "",
 				"_generate_ids": true,
 				"_icon_color": "ffffff00",
@@ -400,9 +391,9 @@
 				}
 			},
 			{
-				"_category_id": "1214.0",
+				"_category_id": "1206.0",
 				"_icon_color": "ffffff00",
-				"_id": "1264.0",
+				"_id": "1283.0",
 				"_index": 0,
 				"_name": "Sword",
 				"_property_overrides": {
@@ -421,19 +412,6 @@
 							"_type": 0
 						}
 					},
-					"stats_property": {
-						"type": "stats_property",
-						"value": {
-							"att_speed": 0.0,
-							"attack": 5,
-							"crit_damage": 0.0,
-							"crit_rate": 2.0,
-							"defense": 0,
-							"health": 0,
-							"mana": 0,
-							"mov_speed": 0
-						}
-					},
 					"value": {
 						"type": "float",
 						"value": 120.0
@@ -446,75 +424,6 @@
 			}
 		],
 		"_properties": [
-			{
-				"_category_id": "1206.0",
-				"_default_value": "",
-				"_id": "1207.0",
-				"_name": "name",
-				"_type": "string"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": "",
-				"_id": "1208.0",
-				"_name": "description",
-				"_type": "string"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": false,
-				"_id": "1209.0",
-				"_name": "stackable",
-				"_type": "bool"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": null,
-				"_id": "1210.0",
-				"_name": "texture",
-				"_type": "resource"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": 0.0,
-				"_id": "1211.0",
-				"_name": "value",
-				"_type": "float"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": 0.0,
-				"_id": "1212.0",
-				"_name": "weight",
-				"_type": "float"
-			},
-			{
-				"_category_id": "1206.0",
-				"_default_value": {
-					"_entity_id": "1203.0",
-					"_type": 1
-				},
-				"_id": "1213.0",
-				"_name": "rarity",
-				"_setting_overrides": {
-					"Category Filter": "1203.0"
-				},
-				"_type": "reference"
-			},
-			{
-				"_category_id": "1214.0",
-				"_default_value": "WEAPON",
-				"_id": "1215.0",
-				"_name": "equipment_slot",
-				"_type": "string"
-			},
-			{
-				"_category_id": "1214.0",
-				"_default_value": null,
-				"_id": "1216.0",
-				"_name": "stats_property",
-				"_type": "stats_property"
-			},
 			{
 				"_category_id": "1219.0",
 				"_default_value": "",
@@ -684,7 +593,7 @@
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 1282.0
+			"default": 1283.0
 		}
 	}
 }

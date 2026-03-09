@@ -4,8 +4,8 @@ class_name EntityIds
 
 const COMMON = "1261.0"
 const RARE = "1262.0"
-const SWORD = "1264.0"
 const APPLE = "1263.0"
+const SWORD = "1283.0"
 const CAPITAL_CITY = "1238.0"
 const BLACK_MARKET = "1239.0"
 const BOY = "1236.0"

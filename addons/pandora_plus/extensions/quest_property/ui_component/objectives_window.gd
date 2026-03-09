@@ -5,7 +5,7 @@ const ArrayItem = preload("res://addons/pandora/ui/components/array_editor/array
 const PropertyBarScene = "res://addons/pandora/ui/components/property_bar/property_bar.tscn"
 
 signal item_added(item: Variant)
-signal item_removed(item: Variant)
+signal item_removed(idx: int)
 signal item_updated(idx: int, new_item: Variant)
 
 @onready var close_button: Button = %CloseButton
@@ -31,9 +31,11 @@ func _add_new_item():
 	var scene = property_bar.get_scene_by_type("quest_objective_property")
 	var control = scene.instantiate() as PandoraPropertyControl
 	var item_property = PandoraProperty.new("", "array_item", "quest_objective_property")
-	_items.append(item_property.get_default_value())
+	var new_objective = PPQuestObjective.new()
+	_items.append(new_objective)
+	item_property.set_default_value(new_objective)
 	_add_property_control(control, item_property, _items.size() - 1)
-	item_added.emit(_items[_items.size() - 1])
+	item_added.emit(new_objective)
 
 func _clear():
 	_items.clear()
@@ -46,21 +48,20 @@ func _add_property_control(control: PandoraPropertyControl, item_property: Pando
 	control.init(item_property)
 	control.property_value_changed.connect(func(value: Variant): item_updated.emit(idx, value))
 	item.item_removal_requested.connect(
-		func(): item_removed.emit(control._property.get_default_value())
+		func():
+			var current_idx = item.get_index()
+			if current_idx >= 0 and current_idx < _items.size():
+				_items.remove_at(current_idx)
+			item_removed.emit(current_idx)
 	)
 	item.init(item_property, control, Pandora._entity_backend)
 	items_container.add_child(item)
 
 func _remove_empty_items():
-	var indices_to_remove := []
-	for index in range(_items.size()):
+	for index in range(_items.size() - 1, -1, -1):
 		if _items[index] == null:
-			indices_to_remove.append(index)
-
-	for index in range(indices_to_remove.size() - 1, -1, -1):
-		var item_to_remove = _items[indices_to_remove[index]]
-		_items.remove_at(indices_to_remove[index])
-		item_removed.emit(item_to_remove)
+			_items.remove_at(index)
+			item_removed.emit(index)
 
 func _load_items():
 	var scene = property_bar.get_scene_by_type("quest_objective_property")
