@@ -740,7 +740,7 @@ else:
 
 ### sell_to_merchant()
 
-Player sells item to merchant NPC.
+Player sells item to merchant NPC. If the item is not part of the merchant's original shop inventory, a temporary `PPMerchantItem` config is automatically created so the item can be displayed and bought back.
 
 ```gdscript
 func sell_to_merchant(
@@ -760,6 +760,15 @@ var old_sword = Pandora.get_entity("RUSTY_SWORD") as PPItemEntity
 if PPNPCUtils.sell_to_merchant(merchant_npc, player.inventory, old_sword, 1):
     print("Sold rusty sword!")
 ```
+
+> **⚠️ Important — Save/Load:** After loading a save, you must re-fetch your `PPRuntimeNPC` reference from `PPNPCManager`, otherwise you may be operating on a stale instance:
+> ```gdscript
+> # After loading a save
+> PPSaveManager.load_and_apply(slot)
+> # Re-fetch NPC reference
+> runtime_npc = PPNPCManager.find_npc_by_entity_id(npc_entity.get_entity_id())
+> ```
+> Or connect to `PPNPCManager.npc_spawned` to automatically update your reference.
 
 ---
 

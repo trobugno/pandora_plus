@@ -600,7 +600,7 @@ Checks if merchant needs to restock inventory.
 
 ###### 💎 `perform_restock() -> void`
 
-Performs merchant inventory restock based on configuration.
+Performs merchant inventory restock based on configuration. If `clear_sold_items_on_restock` is enabled on the NPC entity (default: `true`), all player-sold items are removed from the shop before restocking.
 
 **Emits:** `shop_restocked` signal
 
@@ -616,6 +616,51 @@ func _process_merchants():
         if merchant.needs_restock(current_time):
             merchant.perform_restock()
 ```
+
+---
+
+###### 💎 `add_to_shop(item_entity: PPItemEntity, quantity: int) -> void`
+
+Adds an item to the merchant's shop inventory. If the item is not part of the merchant's original configuration, a temporary `PPMerchantItem` config is automatically created and tracked in `_sold_item_configs`.
+
+**Parameters:**
+- `item_entity`: Item entity to add
+- `quantity`: Number of items to add
+
+**Premium Only**
+
+> **Note:** This method is called automatically by `PPNPCUtils.sell_to_merchant()`. You typically don't need to call it directly.
+
+---
+
+###### 💎 `get_merchant_item_config(item: PPItemEntity) -> PPMerchantItem`
+
+Gets the merchant item configuration for a given item. Returns the entity-level config if the item is part of the original shop inventory, or the temporary config from `_sold_item_configs` if the item was sold by the player.
+
+**Parameters:**
+- `item`: Item entity to look up
+
+**Returns:** `PPMerchantItem` config, or `null` if no config exists
+
+**Premium Only**
+
+**Example:**
+```gdscript
+var config = merchant.get_merchant_item_config(item_entity)
+if config:
+    var price_mult = config.get_price_multiplier()
+```
+
+---
+
+###### 💎 `cleanup_sold_item_config(item: PPItemEntity) -> void`
+
+Removes the temporary sold-item config for an item if the item is no longer in the shop inventory. Called automatically by `PPNPCUtils.buy_from_merchant()` when a player buys back a previously sold item.
+
+**Parameters:**
+- `item`: Item entity to clean up
+
+**Premium Only**
 
 ---
 

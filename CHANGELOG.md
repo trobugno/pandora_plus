@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.2-core] (Current) - 2026-03-01
+## [1.2.3-core] (Current) - 2026-03-06
+
+#### 🐛 Bug Fixes
+
+- 🔧 Fixed quest deserialization crash: `_delivered_rewards` typed array assignment now uses `assign()` pattern instead of direct assignment (prevents `Invalid assignment` error with `Array[String]`)
+- 🔧 Fixed `quest_manager.gd` `load_state()` / `save_state()` with redundant guards on PPGameState Resource properties (`.has()` is invalid on Resources)
+
+---
+## [1.2.2-core] - 2026-03-01
 
 #### 🐛 Bug Fixes
 

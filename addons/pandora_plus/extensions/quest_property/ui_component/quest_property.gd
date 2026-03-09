@@ -151,6 +151,11 @@ func _set_property_value() -> void:
 	property_value_changed.emit(current_property)
 
 func refresh() -> void:
+	# Skip refresh while a text field is being edited to prevent focus loss.
+	# Data is already saved via _set_property_value(), so no stale state.
+	if quest_id != null and (quest_id.has_focus() or quest_name.has_focus() or category.has_focus() or description.has_focus()):
+		return
+
 	if _fields_settings:
 		for field_settings in _fields_settings:
 			if field_settings["name"] == "Quest ID":

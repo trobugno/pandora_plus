@@ -290,7 +290,7 @@ static func from_dict(data: Dictionary) -> PPRuntimeQuest:
 	runtime._quest_status = data.get("quest_status", QuestStatus.NOT_STARTED)
 	runtime._start_timestamp = data.get("start_timestamp", 0.0)
 	runtime._completion_timestamp = data.get("completion_timestamp", 0.0)
-	runtime._delivered_rewards = data.get("delivered_rewards", [])
+	runtime._delivered_rewards.assign(data.get("delivered_rewards", []))
 
 	# Load runtime objectives
 	var objectives_data = data.get("runtime_objectives", [])

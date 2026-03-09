@@ -242,6 +242,21 @@ Returns merchant's initial currency amount.
 
 ---
 
+###### 💎 `clear_sold_items_on_restock() -> bool`
+
+Returns `true` if non-original items (sold by the player) should be cleared from the shop inventory during restock. Default: `true`.
+
+**Premium Only**
+
+**Example:**
+```gdscript
+# Check if merchant clears player-sold items on restock
+if npc_entity.clear_sold_items_on_restock():
+    print("Sold items will be removed on next restock")
+```
+
+---
+
 ### 💎 Schedule System (Premium Only)
 
 ###### 💎 `has_schedule() -> bool`

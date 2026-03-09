@@ -1,8 +1,8 @@
 {
   "core": {
-    "version": "1.2.2-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.2-core/pandora_plus.zip",
-    "changelog": "- 🔧 Fixed all first-installation errors (entity_picker, property_bar, property_editor crashes)\n- 🔧 Fixed extension property types not loading on first install (ensure_extensions_loaded)\n- 🔧 Fixed configuration.json Rewards/Prerequisites ARRAY settings\n- 🔧 Cleared hardcoded entity IDs, removed debug prints"
+    "version": "1.2.3-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.3-core/pandora_plus.zip",
+    "changelog": "- 🔧 Fixed quest deserialization: _delivered_rewards typed array assignment (assign() pattern)\n- 🔧 Fixed quest_manager.gd redundant guards on PPGameState Resource properties\n- 🔧 Improved code consistency between Core and Premium editions"
   },
   "premium": {
     "version": "1.0.0-premium",

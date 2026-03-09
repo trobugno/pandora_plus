@@ -708,4 +708,4 @@ Find complete working examples at:
 
 ---
 
-*Complete System Guide for Pandora+ v1.2.2-core | v1.0.0-premium*
+*Complete System Guide for Pandora+ v1.2.3-core | v1.0.0-premium*
