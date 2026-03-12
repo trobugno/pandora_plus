@@ -162,7 +162,7 @@ The Premium edition includes **all Core features** plus advanced systems for com
 #### All Core Features
 All features developed for Core version are inherited by Premium version
 
-#### ![new](assets/new.png) New in v1.0.0-premium
+#### ![new](assets/new.png) New in v1.0.1-premium
 
 #### 🏪 Merchant/Trading System
 Complete trading and shop system:

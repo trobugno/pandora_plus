@@ -16,7 +16,7 @@ Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with
   - **Stats & Modifiers System**
   - **Crafting/Recipe System**
   - **Item Drop System**
-- **💎 Premium** - *v1.0.0-premium* : 
+- **💎 Premium** - *v1.0.1-premium* : 
   - <u>All Core features</u>
   - NPC extended with **Merchant/Trading System** ![new](assets/new.png)
   - NPC extended with **Scheduled/Routine System** ![new](assets/new.png)
