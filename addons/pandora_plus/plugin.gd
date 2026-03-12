@@ -5,6 +5,10 @@ const ITEMS_NAME := "Items"
 const RARITY_NAME := "Rarity"
 const ITEM_RECIPES_NAME := "ItemRecipes"
 
+func _enter_tree() -> void:
+	_ensure_extensions_dir()
+
+
 func _enable_plugin() -> void:
 	var editor_config_plugins = ProjectSettings.get_setting("editor_plugins/enabled")
 	if editor_config_plugins == null:
@@ -14,12 +18,8 @@ func _enable_plugin() -> void:
 		if not plugins.has("res://addons/pandora/plugin.cfg"):
 			push_error("Pandora is not installed or enabled. Please make sure you enable Pandora before using Pandora+")
 		else:
-			var extensions_dir : Array = []
-			for exdir in PandoraSettings.get_extensions_dirs():
-				extensions_dir.append(exdir)
-			extensions_dir.append(&"res://addons/pandora_plus/extensions")
-			PandoraSettings.set_extensions_dir(extensions_dir)
-	
+			_ensure_extensions_dir()
+
 	# Register Utils Autoloaders
 	add_autoload_singleton("PPCombatCalculator", "res://addons/pandora_plus/autoloads/PPCombatCalculator.gd")
 	add_autoload_singleton("PPInventoryUtils", "res://addons/pandora_plus/autoloads/PPInventoryUtils.gd")
@@ -58,6 +58,18 @@ func _disable_plugin() -> void:
 	remove_autoload_singleton("PPSaveManager")
 
 var _update_checker: Node = null
+
+
+func _ensure_extensions_dir() -> void:
+	var current_dirs = PandoraSettings.get_extensions_dirs()
+	var pp_ext_dir := &"res://addons/pandora_plus/extensions"
+	if not current_dirs.has(pp_ext_dir):
+		var extensions_dir: Array = []
+		for exdir in current_dirs:
+			extensions_dir.append(exdir)
+		extensions_dir.append(pp_ext_dir)
+		PandoraSettings.set_extensions_dir(extensions_dir)
+
 
 func _ready() -> void:
 	PandoraPlusSettings.initialize()

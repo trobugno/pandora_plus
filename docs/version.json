@@ -1,8 +1,8 @@
 {
   "core": {
-    "version": "1.2.3-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.3-core/pandora_plus.zip",
-    "changelog": "- 🔧 Fixed quest deserialization: _delivered_rewards typed array assignment (assign() pattern)\n- 🔧 Fixed quest_manager.gd redundant guards on PPGameState Resource properties\n- 🔧 Improved code consistency between Core and Premium editions"
+    "version": "1.2.4-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.4-core/pandora_plus.zip",
+    "changelog": "- 🔧 Fixed extension properties (recipe_property, etc.) not appearing on new project installations due to plugin initialization timing"
   },
   "premium": {
     "version": "1.0.0-premium",

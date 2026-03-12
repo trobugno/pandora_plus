@@ -5,7 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.3-core] (Current) - 2026-03-09
+## [1.2.4-core] (Current) - 2026-03-13
+
+#### 🐛 Bug Fixes
+
+- 🔧 Fixed extension properties (recipe_property, etc.) not appearing on new project installations — extensions directory was registered in `_enable_plugin()` which runs AFTER `_ready()`, causing property types to resolve as `UndefinedType` and be permanently saved with type `"undefined"`. Moved registration to `_enter_tree()` via idempotent `_ensure_extensions_dir()` method
+
+---
+## [1.2.3-core] - 2026-03-09
 
 #### 🐛 Bug Fixes
 
