@@ -1063,4 +1063,4 @@ Find the Lost Sword - 25.00%
 
 ---
 
-*API Reference for Pandora+ v1.2.3-core*
+*API Reference for Pandora+ v1.2.4-core*
