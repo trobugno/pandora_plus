@@ -71,3 +71,53 @@ func get_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]:
 			filtered.append(recipe_entity)
 
 	return filtered
+
+# ============================================================================
+# RECIPE DISCOVERY
+# ============================================================================
+
+## Gets only the recipes the player has unlocked
+## Uses PPPlayerManager.get_unlocked_recipes() to filter
+## @return Array[PPRecipeEntity]: Unlocked recipe entities
+func get_unlocked_recipes() -> Array[PPRecipeEntity]:
+	var unlocked_ids := PPPlayerManager.get_unlocked_recipes()
+	return get_all_recipes().filter(
+		func(r: PPRecipeEntity): return r.get_entity_id() in unlocked_ids
+	)
+
+## Gets unlocked recipes filtered by recipe type
+## @param recipe_type: Recipe type to filter (e.g. "Crafting", "Smithing", "Alchemy")
+## @return Array[PPRecipeEntity]: Unlocked recipes of the specified type
+func get_unlocked_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]:
+	var unlocked_ids := PPPlayerManager.get_unlocked_recipes()
+	return get_recipes_by_type(recipe_type).filter(
+		func(r: PPRecipeEntity): return r.get_entity_id() in unlocked_ids
+	)
+
+## Gets unlocked recipes that the player can currently craft with their inventory
+## @param inventory: Player's inventory to check ingredients against
+## @return Array[PPRecipeEntity]: Craftable unlocked recipes
+func get_craftable_recipes(inventory: PPInventory) -> Array[PPRecipeEntity]:
+	var craftable: Array[PPRecipeEntity] = []
+	for recipe_entity in get_unlocked_recipes():
+		var recipe := recipe_entity.get_recipe_property()
+		if recipe and can_craft(inventory, recipe):
+			craftable.append(recipe_entity)
+	return craftable
+
+## Unlocks a recipe for the player
+## Convenience wrapper around PPPlayerManager.unlock_recipe()
+## @param recipe: PPRecipeEntity to unlock
+func unlock_recipe(recipe: PPRecipeEntity) -> void:
+	if not recipe:
+		push_error("PPRecipeUtils.unlock_recipe: recipe is null")
+		return
+	PPPlayerManager.unlock_recipe(recipe.get_entity_id())
+
+## Checks if a recipe is unlocked
+## @param recipe: PPRecipeEntity to check
+## @return bool: True if the recipe is unlocked
+func is_recipe_unlocked(recipe: PPRecipeEntity) -> bool:
+	if not recipe:
+		return false
+	return PPPlayerManager.has_recipe(recipe.get_entity_id())

@@ -588,12 +588,64 @@
 				"_id": "1279.0",
 				"_name": "percentage",
 				"_type": "float"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": "",
+				"_id": "1284.0",
+				"_name": "name",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": "",
+				"_id": "1285.0",
+				"_name": "description",
+				"_type": "string"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": false,
+				"_id": "1286.0",
+				"_name": "stackable",
+				"_type": "bool"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": null,
+				"_id": "1287.0",
+				"_name": "texture",
+				"_type": "resource"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": 0.0,
+				"_id": "1288.0",
+				"_name": "value",
+				"_type": "float"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": 0.0,
+				"_id": "1289.0",
+				"_name": "weight",
+				"_type": "float"
+			},
+			{
+				"_category_id": "1206.0",
+				"_default_value": null,
+				"_id": "1290.0",
+				"_name": "rarity",
+				"_setting_overrides": {
+					"Category Filter": "1203.0"
+				},
+				"_type": "reference"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 1283.0
+			"default": 1290.0
 		}
 	}
 }

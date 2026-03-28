@@ -5,7 +5,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.4-core] (Current) - 2026-03-13
+## [1.2.5-core] (Current) - 2026-03-28
+
+#### ✨ New Features
+
+- 🎁 **Recipe Discovery System** — New methods in `PPRecipeUtils` for managing unlocked recipes:
+  - `get_unlocked_recipes()` — Returns only recipes the player has unlocked
+  - `get_unlocked_recipes_by_type(recipe_type)` — Unlocked recipes filtered by type (Crafting, Smithing, etc.)
+  - `get_craftable_recipes(inventory)` — Unlocked recipes the player can currently craft
+  - `unlock_recipe(recipe)` — Unlocks a recipe for the player
+  - `is_recipe_unlocked(recipe)` — Checks if a recipe is unlocked
+- Integrates with `PPPlayerManager` for persistence via `PPPlayerData.unlocked_recipes`
+
+#### 🐛 Bug Fixes
+
+- 🔧 Fixed `PPRuntimeNPC.get_available_quests()` not filtering completed quests — was comparing `quest_entity.get_entity_id()` (Pandora internal ID) against `completed_quest_ids` which stores `quest_data.get_quest_id()` (user-defined Quest ID). Quests were always re-offered after completion
+
+---
+## [1.2.4-core] - 2026-03-13
 
 #### 🐛 Bug Fixes
 

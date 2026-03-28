@@ -993,4 +993,4 @@ func show_quest_statistics():
 
 ---
 
-*API Reference for Pandora+ v1.2.4-core*
+*API Reference for Pandora+ v1.2.5-core*

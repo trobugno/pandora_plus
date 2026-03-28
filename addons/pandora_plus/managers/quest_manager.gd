@@ -126,8 +126,7 @@ func complete_quest(quest_id: String) -> bool:
 				PPQuestUtils.grant_non_item_rewards(runtime_quest, inventory)
 				var pending_items = PPQuestUtils.get_item_reward_objects(runtime_quest)
 				runtime_quest.complete()
-				_move_to_completed(quest_id)
-				quest_completed.emit(quest_id)
+				# _on_quest_completed handles: _move_to_completed + quest_completed.emit
 				quest_rewards_pending.emit(quest_id, runtime_quest, pending_items)
 				return true
 		else:
@@ -136,8 +135,7 @@ func complete_quest(quest_id: String) -> bool:
 				PPQuestUtils.grant_reward(reward, inventory, quest_id)
 
 	runtime_quest.complete()
-	_move_to_completed(quest_id)
-	quest_completed.emit(quest_id)
+	# _on_quest_completed handles: _move_to_completed + quest_completed.emit
 	return true
 
 ## Fails a quest by ID
@@ -154,9 +152,7 @@ func fail_quest(quest_id: String) -> bool:
 		return false
 
 	runtime_quest.fail()
-	_move_to_failed(quest_id)
-	quest_failed.emit(quest_id)
-
+	# _on_quest_failed handles: _move_to_failed + quest_failed.emit
 	return true
 
 ## Abandons a quest by ID

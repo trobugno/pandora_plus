@@ -445,4 +445,4 @@ func _on_buff_removed(modifier: PPStatModifier):
 
 ---
 
-*API Reference generated from source code v1.2.4-core | v1.0.1-premium*
+*API Reference generated from source code v1.2.5-core | v1.0.2-premium*

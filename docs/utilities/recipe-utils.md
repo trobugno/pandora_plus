@@ -222,6 +222,104 @@ func populate_recipe_ui(recipes: Array[PPRecipeEntity]):
 
 ---
 
+## Recipe Discovery
+
+These methods manage recipe unlocking through `PPPlayerManager` and `PPPlayerData.unlocked_recipes`. Recipes are stored by their Pandora entity ID and persisted via the save system.
+
+###### `get_unlocked_recipes() -> Array[PPRecipeEntity]`
+
+Gets only the recipes the player has unlocked.
+
+**Returns:** Array of unlocked `PPRecipeEntity` instances
+
+**Behavior:**
+- Reads `PPPlayerManager.get_unlocked_recipes()` (list of entity IDs)
+- Filters `get_all_recipes()` to return only matching entities
+
+**Example:**
+```gdscript
+# Populate a crafting GUI with unlocked recipes
+var known_recipes = PPRecipeUtils.get_unlocked_recipes()
+for recipe_entity in known_recipes:
+    var recipe = recipe_entity.get_recipe_property()
+    add_recipe_to_list(recipe_entity.get_description(), recipe)
+```
+
+---
+
+###### `get_unlocked_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]`
+
+Gets unlocked recipes filtered by recipe type.
+
+**Parameters:**
+- `recipe_type`: Recipe type to filter (e.g., "Crafting", "Smithing", "Alchemy")
+
+**Returns:** Array of unlocked `PPRecipeEntity` matching the specified type
+
+**Example:**
+```gdscript
+# Crafting station that only shows unlocked recipes of its type
+var station_recipes = PPRecipeUtils.get_unlocked_recipes_by_type("Smithing")
+```
+
+---
+
+###### `get_craftable_recipes(inventory: PPInventory) -> Array[PPRecipeEntity]`
+
+Gets unlocked recipes the player can currently craft with their inventory.
+
+**Parameters:**
+- `inventory`: Player's inventory to check ingredients against
+
+**Returns:** Array of `PPRecipeEntity` that are both unlocked and craftable
+
+**Example:**
+```gdscript
+# Highlight recipes the player can craft right now
+var craftable = PPRecipeUtils.get_craftable_recipes(player_inventory)
+for recipe_entity in craftable:
+    highlight_recipe(recipe_entity)
+```
+
+---
+
+###### `unlock_recipe(recipe: PPRecipeEntity) -> void`
+
+Unlocks a recipe for the player. Convenience wrapper around `PPPlayerManager.unlock_recipe()`.
+
+**Parameters:**
+- `recipe`: The `PPRecipeEntity` to unlock
+
+**Example:**
+```gdscript
+# Unlock a recipe when player finds a scroll
+var recipe_entity = Pandora.get_entity("IRON_SWORD_RECIPE") as PPRecipeEntity
+PPRecipeUtils.unlock_recipe(recipe_entity)
+```
+
+---
+
+###### `is_recipe_unlocked(recipe: PPRecipeEntity) -> bool`
+
+Checks if a recipe is unlocked.
+
+**Parameters:**
+- `recipe`: The `PPRecipeEntity` to check
+
+**Returns:** `true` if the recipe is unlocked
+
+**Example:**
+```gdscript
+# Show lock icon on undiscovered recipes
+for recipe_entity in PPRecipeUtils.get_all_recipes():
+    if PPRecipeUtils.is_recipe_unlocked(recipe_entity):
+        show_recipe(recipe_entity)
+    else:
+        show_locked_recipe()
+```
+
+---
+
 ## Usage Examples
 
 ### Example 1: Basic Crafting Station
@@ -497,36 +595,38 @@ func start_crafting(recipe: PPRecipe):
 
 ## Common Patterns
 
-### Pattern 1: Recipe Unlocking System
+### Pattern 1: Recipe Unlocking System (Built-in)
 
 ```gdscript
-var unlocked_recipes: Array[PPRecipe] = []
-var all_recipes: Array[PPRecipe] = []
+# Unlock a recipe (e.g., from a quest reward, scroll, NPC dialogue)
+var recipe_entity = Pandora.get_entity("IRON_SWORD_RECIPE") as PPRecipeEntity
+PPRecipeUtils.unlock_recipe(recipe_entity)
 
-func check_recipe_unlock(recipe: PPRecipe) -> bool:
-    if recipe in unlocked_recipes:
-        return false
-    
-    # Unlock if player has discovered all ingredients
-    var has_all_ingredients = true
-    for ingredient in recipe.get_ingredients():
-        var found = false
-        for slot in player_inventory.all_items:
-            if slot and slot.item:
-                if slot.item.get_entity_id() == ingredient.get_item_entity().get_entity_id():
-                    found = true
-                    break
-        
-        if not found:
-            has_all_ingredients = false
-            break
-    
-    if has_all_ingredients:
-        unlocked_recipes.append(recipe)
-        show_notification("New recipe unlocked: %s" % recipe.get_result().get_item_name())
-        return true
-    
-    return false
+# Listen for unlock events
+PPPlayerManager.recipe_unlocked.connect(func(recipe_id: String):
+    var entity = Pandora.get_entity(recipe_id)
+    show_notification("New recipe unlocked: %s" % entity.get_entity_name())
+)
+
+# Populate crafting GUI with only unlocked recipes
+func populate_crafting_list():
+    var recipes = PPRecipeUtils.get_unlocked_recipes()
+    for recipe_entity in recipes:
+        var recipe = recipe_entity.get_recipe_property()
+        var can_craft = PPRecipeUtils.can_craft(player_inventory, recipe)
+        add_recipe_button(recipe_entity.get_description(), recipe, can_craft)
+
+# Filter by crafting station type
+func populate_station_recipes(station_type: String):
+    var recipes = PPRecipeUtils.get_unlocked_recipes_by_type(station_type)
+    for recipe_entity in recipes:
+        add_recipe_button(recipe_entity.get_description(), recipe_entity.get_recipe_property())
+
+# Show only currently craftable recipes
+func show_craftable_only():
+    var craftable = PPRecipeUtils.get_craftable_recipes(player_inventory)
+    for recipe_entity in craftable:
+        highlight_recipe(recipe_entity)
 ```
 
 ---
@@ -815,4 +915,4 @@ func craft_with_time(inventory: PPInventory, recipe: PPRecipe):
 
 ---
 
-*API Reference generated from source code*
+*API Reference generated from source code v1.2.5-core | v1.0.2-premium*

@@ -1,11 +1,11 @@
 {
   "core": {
-    "version": "1.2.4-core",
-    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.4-core/pandora_plus.zip",
+    "version": "1.2.5-core",
+    "download_url": "https://github.com/trobugno/pandora_plus/releases/download/v1.2.5-core/pandora_plus.zip",
     "changelog": "- 🔧 Fixed extension properties (recipe_property, etc.) not appearing on new project installations due to plugin initialization timing"
   },
   "premium": {
-    "version": "1.0.1-premium",
+    "version": "1.0.2-premium",
     "download_url": "https://trobugno.itch.io/pandora-plus-premium",
     "changelog": "- 🔧 Fixed extension properties (recipe_property, etc.) not appearing on new project installations due to plugin initialization timing"
   }

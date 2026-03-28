@@ -249,8 +249,12 @@ func get_available_quests(completed_quest_ids: Array) -> Array:
 		if quest_ref is PandoraReference:
 			var quest_entity = quest_ref.get_entity() as PPQuestEntity
 			if quest_entity:
-				# Check if already completed
-				if quest_entity.get_entity_id() in completed_quest_ids:
+				var quest_data = quest_entity.get_quest_data()
+				if not quest_data:
+					continue
+
+				# Check if already completed (using quest_data quest_id, same as QuestManager)
+				if quest_data.get_quest_id() in completed_quest_ids:
 					continue
 
 				available_quests.append(quest_entity)

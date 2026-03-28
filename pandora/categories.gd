@@ -10,7 +10,3 @@ const QUESTS = "1250.0"
 const ITEMRECIPES = "1268.0"
 
 
-class ItemsCategories:
-	const EQUIPMENT = "1214.0"
-
-
