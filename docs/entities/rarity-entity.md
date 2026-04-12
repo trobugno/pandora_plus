@@ -403,4 +403,4 @@ The `@tool` annotation allows the script to run in the editor for:
 
 ---
 
-*API Reference generated from source code v1.2.5-core | v1.0.2-premium*
+*API Reference generated from source code v1.2.6-core | v1.0.2-premium*

@@ -566,6 +566,10 @@
 				"_default_value": null,
 				"_id": "1270.0",
 				"_name": "recipe_property",
+				"_setting_overrides": {
+					"Ingredients Filter": "1206.0",
+					"Result Filter": "1206.0"
+				},
 				"_type": "recipe_property"
 			},
 			{

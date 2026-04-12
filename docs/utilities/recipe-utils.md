@@ -915,4 +915,4 @@ func craft_with_time(inventory: PPInventory, recipe: PPRecipe):
 
 ---
 
-*API Reference generated from source code v1.2.5-core | v1.0.2-premium*
+*API Reference generated from source code v1.2.6-core | v1.0.2-premium*

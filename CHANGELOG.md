@@ -5,7 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.5-core] (Current) - 2026-03-28
+## [1.2.6-core] (Current) - 2026-04-12
+
+#### ✨ New Features
+
+- 🎁 **Option Property** — New generic dropdown extension property with per-instance configurable options managed via Pandora's lateral property settings panel. Options are set as a comma-separated string in the "Options" setting
+
+#### 🐛 Bug Fixes
+
+- 🔧 Fixed `owner.get_parent()` null crash on editor startup in all window-based UI components (`rewards_window.gd`, `objectives_window.gd`, `ingredients_window.gd`) — added null guard for `owner`
+- 🔧 Fixed `option_property` dropdown not updating when editing options in the settings panel — `refresh()` now uses `call_deferred()` to avoid `add_child()` conflict during parent node setup
+- 🔧 Fixed focus loss when editing string-type settings in the property settings panel — replaced `text_changed` with `text_submitted` + `focus_exited` to prevent UI rebuild on every keystroke
+
+---
+## [1.2.5-core] - 2026-03-28
 
 #### ✨ New Features
 

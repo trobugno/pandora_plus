@@ -621,4 +621,4 @@ The system is fully backward compatible:
 
 ---
 
-*API Reference v1.2.5-core | v1.0.2-premium*
+*API Reference v1.2.6-core | v1.0.2-premium*

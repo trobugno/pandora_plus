@@ -17,7 +17,7 @@ var property_bar: Node
 var _items: Array
 
 func _ready():
-	if owner.get_parent() is SubViewport:
+	if owner != null and owner.get_parent() is SubViewport:
 		return
 
 	close_button.pressed.connect(_on_close_requested)
