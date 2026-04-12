@@ -152,6 +152,27 @@ else:
 
 ---
 
+### get_equipment_sets()
+
+Returns all equipment sets that contain this piece.
+
+```gdscript
+func get_equipment_sets() -> Array[PPEquipmentSetEntity]
+```
+
+**Returns:** Array of PPEquipmentSetEntity that include this equipment piece
+
+**Example:**
+```gdscript
+var helmet = Pandora.get_entity("KNIGHT_HELMET") as PPEquipmentEntity
+var sets = helmet.get_equipment_sets()
+
+for set_entity in sets:
+    print("Part of set: %s (%d pieces)" % [set_entity.get_set_name(), set_entity.get_total_pieces()])
+```
+
+---
+
 ## Usage Examples
 
 ### Example 1: Equipment Inspector
@@ -434,6 +455,7 @@ print("Attack: +%d" % stats._attack)  # Crashes if stats is null
 ## See Also
 
 - [Equipment System](../core-systems/equipment-system.md) - Complete equipment guide
+- [PPEquipmentSetEntity](equipment-set-entity.md) - Equipment set definitions
 - [PPItemEntity](item-entity.md) - Base item class
 - [PPEquipmentUtils](../utilities/equipment-utils.md) - Equipment utility functions
 - [PPInventory](../api/inventory.md) - Inventory management
@@ -441,4 +463,4 @@ print("Attack: +%d" % stats._attack)  # Crashes if stats is null
 
 ---
 
-*API Reference for Pandora+ v1.0.0*
+*API Reference for Pandora+ v1.0.1-premium*

@@ -81,6 +81,9 @@ func _ready() -> void:
 	var location_category := _setup_location_categories()
 	_setup_npc_categories(location_category)
 
+	# Set default category filters for extension properties
+	_setup_category_filters()
+
 	# Save all data once after all categories have been created/verified.
 	# This avoids intermediate saves that can cause side effects (file regeneration,
 	# editor reimports) before sub-categories are created,
@@ -301,6 +304,50 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			Pandora.create_property(npc_category, "quest_giver_for", "array")
 		if not npc_category.is_generate_ids():
 			npc_category.set_generate_ids(true)
+
+func _setup_category_filters() -> void:
+	var all_categories := Pandora.get_all_categories()
+
+	# Find categories by name
+	var items_cats := all_categories.filter(func(c: PandoraCategory): return c.get_entity_name() == ITEMS_NAME)
+	var npcs_cats := all_categories.filter(func(c: PandoraCategory): return c.get_entity_name() == "NPCs")
+	var locations_cats := all_categories.filter(func(c: PandoraCategory): return c.get_entity_name() == "Locations")
+	var recipes_cats := all_categories.filter(func(c: PandoraCategory): return c.get_entity_name() == ITEM_RECIPES_NAME)
+	var quests_cats := all_categories.filter(func(c: PandoraCategory): return c.get_entity_name() == "Quests")
+
+	if items_cats.is_empty() or npcs_cats.is_empty() or locations_cats.is_empty():
+		return
+
+	var items_id := str((items_cats[0] as PandoraCategory)._id)
+	var npcs_id := str((npcs_cats[0] as PandoraCategory)._id)
+	var locations_id := str((locations_cats[0] as PandoraCategory)._id)
+
+	# Recipe property → Items filter for result and waste/ingredients
+	if recipes_cats:
+		var recipe_cat := recipes_cats[0] as PandoraCategory
+		if recipe_cat.has_entity_property("recipe_property"):
+			var prop := recipe_cat.get_entity_property("recipe_property")
+			if not prop.get_setting("Result Filter"):
+				prop.set_setting_override("Result Filter", items_id)
+			if not prop.get_setting("Ingredients Filter"):
+				prop.set_setting_override("Ingredients Filter", items_id)
+
+	# Quest property → NPCs filter for quest giver
+	if quests_cats:
+		var quest_cat := quests_cats[0] as PandoraCategory
+		if quest_cat.has_entity_property("quest_data"):
+			var prop := quest_cat.get_entity_property("quest_data")
+			if not prop.get_setting("Quest Giver Category Filter"):
+				prop.set_setting_override("Quest Giver Category Filter", npcs_id)
+
+	# NPC properties → Locations filter for schedule
+	if npcs_cats:
+		var npc_cat := npcs_cats[0] as PandoraCategory
+		if npc_cat.has_entity_property("schedule"):
+			var prop := npc_cat.get_entity_property("schedule")
+			if not prop.get_setting("Default Location Filter"):
+				prop.set_setting_override("Default Location Filter", locations_id)
+
 
 func _setup_item_recipes_categories() -> void:
 	var all_categories := Pandora.get_all_categories()

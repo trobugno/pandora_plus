@@ -97,6 +97,60 @@ func _on_equipment_unequipped(stats: PPRuntimeStats, slot: String, item: PPEquip
 
 ---
 
+### set_bonus_activated
+
+```gdscript
+signal set_bonus_activated(set_entity: PPEquipmentSetEntity, tier: int, bonuses: Dictionary)
+```
+
+Emitted when a set bonus tier activates.
+
+**Parameters:**
+- `set_entity`: The equipment set entity
+- `tier`: Number of pieces required for this tier
+- `bonuses`: Dictionary of stat_name -> bonus_value
+
+**Example:**
+```gdscript
+PPEquipmentUtils.set_bonus_activated.connect(func(set_entity, tier, bonuses):
+    print("Set '%s' tier %d activated!" % [set_entity.get_set_name(), tier])
+    for stat in bonuses:
+        print("  +%d %s" % [bonuses[stat], stat])
+)
+```
+
+---
+
+### set_bonus_deactivated
+
+```gdscript
+signal set_bonus_deactivated(set_entity: PPEquipmentSetEntity)
+```
+
+Emitted when all set bonus tiers for a set are deactivated (not enough pieces equipped).
+
+---
+
+### set_bonus_changed
+
+```gdscript
+signal set_bonus_changed(set_entity: PPEquipmentSetEntity, old_tier: int, new_tier: int)
+```
+
+Emitted whenever a set bonus tier changes (up or down), including activation (old_tier=0) and deactivation (new_tier=0).
+
+**Example:**
+```gdscript
+PPEquipmentUtils.set_bonus_changed.connect(func(set_entity, old_tier, new_tier):
+    if new_tier > old_tier:
+        show_notification("Set bonus upgraded! %s: %d pieces" % [set_entity.get_set_name(), new_tier])
+    else:
+        show_notification("Set bonus downgraded: %s" % set_entity.get_set_name())
+)
+```
+
+---
+
 ## Methods
 
 ### can_equip()
@@ -519,45 +573,143 @@ func get_all_weapons_in_inventory() -> Array[PPEquipmentEntity]:
 
 ---
 
-### Example 5: Equipment Set Bonus Integration
+### Example 5: Equipment Set Bonus UI
 
 ```gdscript
-func check_and_apply_set_bonuses():
-    # Get all equipped items
-    var equipped_items: Array[PPEquipmentEntity] = []
+# Set bonuses are managed automatically — just connect to signals for UI
+func _ready():
+    PPEquipmentUtils.set_bonus_activated.connect(_on_set_bonus_activated)
+    PPEquipmentUtils.set_bonus_deactivated.connect(_on_set_bonus_deactivated)
+    PPEquipmentUtils.set_bonus_changed.connect(_on_set_bonus_changed)
 
-    for slot_name in player.inventory.equipped_items.keys():
-        if player.inventory.has_equipment_in_slot(slot_name):
-            var equipped = player.inventory.get_equipped_item(slot_name)
-            equipped_items.append(equipped.item as PPEquipmentEntity)
+func _on_set_bonus_activated(set_entity: PPEquipmentSetEntity, tier: int, bonuses: Dictionary):
+    show_set_bonus_popup(set_entity.get_set_name(), tier, bonuses)
 
-    # Check for equipment sets
-    for equipment_set in all_equipment_sets:
-        var pieces_worn = 0
+func _on_set_bonus_deactivated(set_entity: PPEquipmentSetEntity):
+    hide_set_bonus_indicator(set_entity.get_entity_id())
 
-        for piece_id in equipment_set.required_pieces:
-            for equipped in equipped_items:
-                if equipped.get_entity_id() == piece_id:
-                    pieces_worn += 1
-                    break
+func _on_set_bonus_changed(set_entity: PPEquipmentSetEntity, old_tier: int, new_tier: int):
+    update_set_bonus_indicator(set_entity.get_entity_id(), new_tier)
 
-        # Apply set bonus
-        if pieces_worn >= equipment_set.min_pieces:
-            apply_set_bonus(equipment_set, pieces_worn)
+func display_all_set_statuses():
+    var all_sets = PPEquipmentUtils.get_all_equipment_sets()
+    for set_entity in all_sets:
+        var status = PPEquipmentUtils.get_set_status(set_entity, player.inventory)
+        print("%s: %d/%d pieces (tier %d)" % [
+            set_entity.get_set_name(),
+            status.equipped_count,
+            status.total_pieces,
+            status.active_tier
+        ])
+        if status.next_tier > 0:
+            print("  Next tier at %d pieces" % status.next_tier)
+```
 
-func apply_set_bonus(set: EquipmentSet, pieces: int):
-    var bonus = set.get_bonus_for_pieces(pieces)
+---
 
-    print("Set Bonus Active: %s (%d pieces)" % [set.set_name, pieces])
+## Set Bonus Methods
 
-    # Apply bonus as temporary modifier
-    for stat_name in bonus:
-        var modifier = PPStatModifier.create_flat(
-            stat_name,
-            bonus[stat_name],
-            "set_bonus_%s" % set.set_name
-        )
-        player.runtime_stats.add_modifier(modifier)
+Set bonuses are automatically managed when equipment is equipped/unequipped. These methods allow you to query set bonus state.
+
+### update_set_bonuses()
+
+Updates all set bonuses based on currently equipped items. Called automatically after equip/unequip operations.
+
+```gdscript
+func update_set_bonuses(inventory: PPInventory, character_stats: PPRuntimeStats) -> void
+```
+
+**Note:** You typically don't need to call this manually — it's called automatically by `equip_item()` and `unequip_item()`.
+
+---
+
+### get_active_set_bonuses()
+
+Returns active set bonuses with their current tier.
+
+```gdscript
+func get_active_set_bonuses(inventory: PPInventory) -> Dictionary
+```
+
+**Returns:** Dictionary with `set_id -> tier` (pieces_required of active tier)
+
+**Example:**
+```gdscript
+var active = PPEquipmentUtils.get_active_set_bonuses(player.inventory)
+
+for set_id in active:
+    print("Set %s: tier %d" % [set_id, active[set_id]])
+```
+
+---
+
+### get_set_status()
+
+Returns detailed status of a specific equipment set.
+
+```gdscript
+func get_set_status(set_entity: PPEquipmentSetEntity, inventory: PPInventory) -> Dictionary
+```
+
+**Returns:** Dictionary with keys:
+- `equipped_count` (int): Number of set pieces currently equipped
+- `total_pieces` (int): Total pieces in the set
+- `active_tier` (int): Currently active tier (0 if none)
+- `active_bonuses` (Dictionary): Stat bonuses of active tier
+- `next_tier` (int): Pieces needed for next tier (0 if at max or none)
+- `equipped_piece_ids` (Array[String]): Entity IDs of equipped set pieces
+
+**Example:**
+```gdscript
+var knight_set = Pandora.get_entity("KNIGHT_SET") as PPEquipmentSetEntity
+var status = PPEquipmentUtils.get_set_status(knight_set, player.inventory)
+
+print("Equipped: %d/%d" % [status.equipped_count, status.total_pieces])
+print("Active tier: %d" % status.active_tier)
+
+if status.active_bonuses:
+    for stat in status.active_bonuses:
+        print("  +%d %s" % [status.active_bonuses[stat], stat])
+
+if status.next_tier > 0:
+    print("Next tier at %d pieces" % status.next_tier)
+```
+
+---
+
+### get_all_equipment_sets()
+
+Returns all equipment set entities defined in Pandora.
+
+```gdscript
+func get_all_equipment_sets() -> Array[PPEquipmentSetEntity]
+```
+
+**Example:**
+```gdscript
+var all_sets = PPEquipmentUtils.get_all_equipment_sets()
+
+for set_entity in all_sets:
+    print("%s (%d pieces)" % [set_entity.get_set_name(), set_entity.get_total_pieces()])
+```
+
+---
+
+### get_sets_for_equipment()
+
+Finds all equipment sets that contain a specific equipment piece.
+
+```gdscript
+func get_sets_for_equipment(equipment: PPEquipmentEntity) -> Array[PPEquipmentSetEntity]
+```
+
+**Example:**
+```gdscript
+var helmet = Pandora.get_entity("KNIGHT_HELMET") as PPEquipmentEntity
+var sets = PPEquipmentUtils.get_sets_for_equipment(helmet)
+
+for s in sets:
+    print("Part of set: %s" % s.get_set_name())
 ```
 
 ---
@@ -698,4 +850,4 @@ PPEquipmentUtils.equip_item(inventory, equipment, stats)  # May crash
 
 ---
 
-*API Reference for Pandora+ v1.0.0*
+*API Reference for Pandora+ v1.0.1-premium*

@@ -502,6 +502,15 @@
 			],
 			"name": "PPQuest",
 			"show_on_top": true
+		},
+		{
+			"dependencies": [],
+			"description": "A dropdown selection property with configurable options per instance. Options are managed via the property settings panel.",
+			"dir_name": "option_property",
+			"enabled": true,
+			"fields": [],
+			"name": "PPOption",
+			"show_on_top": true
 		}
 	]
 }

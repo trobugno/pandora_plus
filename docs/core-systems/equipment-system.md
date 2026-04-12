@@ -17,7 +17,8 @@ The Pandora+ Equipment System provides a comprehensive solution for managing cha
 
 **Core Components:**
 - **PPEquipmentEntity** - Equipment items with slot and stat properties
-- **PPEquipmentUtils** - Utility singleton for equip/unequip operations
+- **PPEquipmentSetEntity** - Equipment set definitions with tiered bonuses
+- **PPEquipmentUtils** - Utility singleton for equip/unequip operations and set bonus management
 - **PPInventory** - Manages both regular items and equipment slots
 - **PPRuntimeStats** - Applies and removes equipment stat modifiers
 
@@ -192,6 +193,9 @@ Add to autoload in Project Settings:
 ```gdscript
 signal equipment_equipped(character_stats: PPRuntimeStats, slot_name: String, item: PPEquipmentEntity)
 signal equipment_unequipped(character_stats: PPRuntimeStats, slot_name: String, item: PPEquipmentEntity)
+signal set_bonus_activated(set_entity: PPEquipmentSetEntity, tier: int, bonuses: Dictionary)
+signal set_bonus_deactivated(set_entity: PPEquipmentSetEntity)
+signal set_bonus_changed(set_entity: PPEquipmentSetEntity, old_tier: int, new_tier: int)
 ```
 
 **Example:**
@@ -611,48 +615,79 @@ print("Attack difference: %+d" % comparison["difference"].get("attack", 0))
 
 ---
 
-### Pattern 2: Equipment Sets
+### Pattern 2: Equipment Set Bonuses
+
+Equipment sets are defined in Pandora's entity editor under the "EquipmentSets" category. Set bonuses are automatically managed by PPEquipmentUtils — they activate/deactivate when equipment is equipped or unequipped.
+
+#### Creating Equipment Sets in Pandora Editor
+
+1. Open Pandora Editor
+2. Navigate to the "EquipmentSets" category
+3. Create a new entity with:
+   - `set_name` (String): Display name (e.g., "Knight's Honor")
+   - `set_description` (String): Set description
+   - `set_pieces` (Array[Reference]): References to PPEquipmentEntity pieces
+   - `set_bonuses` (PPSetBonus): Tiered bonuses with pieces required + stat bonuses
+
+#### Set Bonus Tiers
+
+Each set can have multiple bonus tiers. The best applicable tier activates based on equipped piece count:
 
 ```gdscript
-class_name EquipmentSet
+# Example: Knight's Honor set (3 pieces)
+# Tier 1: 2 pieces → +10 defense
+# Tier 2: 3 pieces → +25 defense, +50 health
 
-var set_name: String
-var required_pieces: Array[String]  # Equipment entity IDs
-var set_bonuses: Dictionary  # Number equipped -> bonus stats
-
-func check_set_bonus(inventory: PPInventory) -> Dictionary:
-    var equipped_count = 0
-
-    for piece_id in required_pieces:
-        var piece = Pandora.get_entity(piece_id) as PPEquipmentEntity
-        if not piece:
-            continue
-
-        var slot = piece.get_equipment_slot()
-        if inventory.has_equipment_in_slot(slot):
-            var equipped = inventory.get_equipped_item(slot).item
-            if equipped.get_entity_id() == piece_id:
-                equipped_count += 1
-
-    # Return highest applicable bonus
-    for count in set_bonuses.keys():
-        if equipped_count >= count:
-            return set_bonuses[count]
-
-    return {}
-
-# Example set:
-var knight_set = EquipmentSet.new()
-knight_set.set_name = "Knight's Honor"
-knight_set.required_pieces = ["KNIGHT_HELMET", "KNIGHT_ARMOR", "KNIGHT_BOOTS"]
-knight_set.set_bonuses = {
-    2: {"defense": 10},  # 2 pieces: +10 defense
-    3: {"defense": 25, "health": 50}  # 3 pieces: +25 defense, +50 health
-}
-
-var active_bonus = knight_set.check_set_bonus(player.inventory)
-print("Set bonus: ", active_bonus)
+# Equip 2 knight pieces → Tier 1 activates (+10 defense)
+# Equip 3 knight pieces → Tier 2 activates (+25 defense, +50 health)
+# Unequip 1 piece → Falls back to Tier 1
+# Unequip another → No tier active
 ```
+
+#### Using Set Bonuses in Code
+
+```gdscript
+# Set bonuses are automatic! Just equip/unequip normally:
+PPEquipmentUtils.equip_item(player.inventory, knight_helmet, player.runtime_stats)
+# → Set bonus automatically recalculated
+
+# Listen for set bonus changes
+PPEquipmentUtils.set_bonus_activated.connect(func(set_entity, tier, bonuses):
+    print("Set '%s' tier %d activated!" % [set_entity.get_set_name(), tier])
+    for stat in bonuses:
+        print("  +%d %s" % [bonuses[stat], stat])
+)
+
+PPEquipmentUtils.set_bonus_changed.connect(func(set_entity, old_tier, new_tier):
+    print("Set '%s' changed: tier %d → %d" % [set_entity.get_set_name(), old_tier, new_tier])
+)
+
+# Query active set bonuses
+var active = PPEquipmentUtils.get_active_set_bonuses(player.inventory)
+for set_id in active:
+    print("Set %s: tier %d active" % [set_id, active[set_id]])
+
+# Get detailed set status
+var knight_set = Pandora.get_entity("KNIGHT_SET") as PPEquipmentSetEntity
+var status = PPEquipmentUtils.get_set_status(knight_set, player.inventory)
+print("Equipped: %d/%d" % [status.equipped_count, status.total_pieces])
+print("Active tier: %d" % status.active_tier)
+print("Next tier at: %d pieces" % status.next_tier)
+
+# Find which sets an equipment piece belongs to
+var helmet = Pandora.get_entity("KNIGHT_HELMET") as PPEquipmentEntity
+var sets = helmet.get_equipment_sets()
+for s in sets:
+    print("Part of set: %s" % s.get_set_name())
+```
+
+#### How Set Bonuses Work Internally
+
+1. **On equip/unequip**: `update_set_bonuses()` is called automatically
+2. **For each defined set**: Counts how many pieces are currently equipped
+3. **Determines best tier**: Highest tier where `equipped_count >= pieces_required`
+4. **Applies stat modifiers**: Creates FLAT modifiers with source `"set_bonus_{set_id}"`
+5. **Emits signals**: `set_bonus_activated`, `set_bonus_deactivated`, or `set_bonus_changed`
 
 ---
 
@@ -756,4 +791,4 @@ func reapply_equipment_stats():
 
 ---
 
-*Complete Guide for Pandora+ v1.0.0*
+*Complete Guide for Pandora+ v1.0.1-premium*

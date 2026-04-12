@@ -3,6 +3,7 @@ extends Window
 
 const ArrayItem = preload("res://addons/pandora/ui/components/array_editor/array_item.tscn")
 const PropertyBarScene = "res://addons/pandora/ui/components/property_bar/property_bar.tscn"
+const QuestRewardType = preload("uid://ig8sh17ax6op")
 
 signal item_added(item: Variant)
 signal item_removed(idx: int)
@@ -44,6 +45,11 @@ func _clear():
 	items_container.get_children().clear()
 
 func _add_property_control(control: PandoraPropertyControl, item_property: PandoraProperty, idx: int):
+	var all_categories = Pandora.get_all_categories()
+	var item_categories := all_categories.filter(func(cat: PandoraCategory): return cat.get_entity_name() == "Items")
+	if item_categories:
+		item_property.set_setting_override(QuestRewardType.SETTING_REWARD_ENTITY_FILTER, (item_categories[0] as PandoraCategory).get_entity_id())
+
 	var item = ArrayItem.instantiate()
 	control.init(item_property)
 	control.property_value_changed.connect(func(value: Variant): item_updated.emit(idx, value))
