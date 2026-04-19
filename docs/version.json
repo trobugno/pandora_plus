@@ -5,8 +5,8 @@
     "changelog": "- 🎁 Option Property — generic dropdown with per-instance configurable options\n- 🔧 Fixed owner null crash in window UI components\n- 🔧 Fixed option_property refresh conflict with call_deferred()\n- 🔧 Fixed focus loss in string-type property settings"
   },
   "premium": {
-    "version": "1.1.0-premium",
+    "version": "1.1.1-premium",
     "download_url": "https://trobugno.itch.io/pandora-plus-premium",
-    "changelog": "- 🎁 Expanded Stats System (8 → 21 stats)\n- 🎁 Magic Damage, Armor/Magic Penetration, Luck Drop Rate\n- 🎁 Equipment Set Bonus System\n- 🎁 Option Property, Category Filters\n- 🔧 Multiple bug fixes"
+    "changelog": "- 🔧 Fixed PPEquipmentSetEntity.get_set_pieces() crash — now uses ref._entity_id directly"
   }
 }
