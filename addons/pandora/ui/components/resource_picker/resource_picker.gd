@@ -22,7 +22,7 @@ func set_resource_path(path: String) -> void:
 		line_edit.text = ""
 		self.resource_path = ""
 		return
-
+	
 	var resource = load(path) as Resource
 	if resource != null:
 		line_edit.text = path

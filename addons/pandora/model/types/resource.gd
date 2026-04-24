@@ -27,9 +27,6 @@ func write_value(variant: Variant) -> Variant:
 		return null
 	if variant is Resource:
 		return variant.resource_path
-	# If it's already a string (path), return it as-is
-	if variant is String:
-		return variant
 	return variant
 
 
