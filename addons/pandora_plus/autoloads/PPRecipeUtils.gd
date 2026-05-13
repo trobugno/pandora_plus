@@ -72,6 +72,32 @@ func get_recipes_by_type(recipe_type: String) -> Array[PPRecipeEntity]:
 
 	return filtered
 
+
+## Finds the first recipe that can be crafted from the given inventory.
+##
+## @param inventory: PPInventory to check ingredients against
+## @param recipe_type: Optional. If non-empty, only recipes matching this type
+##   (e.g. "Crafting", "Smithing", "Alchemy") are considered. Empty string
+##   searches all recipe types.
+## @return PPRecipeEntity: First matching recipe, or null if none found.
+##
+## Convenience wrapper around get_all_recipes() / get_recipes_by_type() + can_craft().
+## Useful for crafting UI panels that need to detect "this ingredient combination
+## matches recipe X" in real time.
+func find_matching_recipe(inventory: PPInventory, recipe_type: String = "") -> PPRecipeEntity:
+	if not inventory:
+		return null
+	var candidates : Array[PPRecipeEntity]
+	if recipe_type.is_empty():
+		candidates = get_all_recipes()
+	else:
+		candidates = get_recipes_by_type(recipe_type)
+	for entity in candidates:
+		var recipe_property := entity.get_recipe_property()
+		if recipe_property and can_craft(inventory, recipe_property):
+			return entity
+	return null
+
 # ============================================================================
 # RECIPE DISCOVERY
 # ============================================================================

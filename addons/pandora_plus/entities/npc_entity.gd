@@ -43,3 +43,22 @@ func get_spawn_location() -> PandoraReference:
 func get_quest_giver_for() -> Array:
 	var refs = get_array("quest_giver_for")
 	return refs if refs else []
+
+## Gets the NPC's loot table — items dropped on death (typically for hostile NPCs).
+## Returns an Array of PPItemDrop. Empty array if no loot_table configured.
+##
+## To populate, configure the `loot_table` array property on the NPCs Pandora
+## category with `item_drop_property` entries.
+func get_loot_table() -> Array[PPItemDrop]:
+	var result : Array[PPItemDrop] = []
+	if not has_entity_property("loot_table"):
+		return result
+	var raw_drops = get_array("loot_table")
+	for raw in raw_drops:
+		if raw is PPItemDrop:
+			result.append(raw)
+	return result
+
+## Returns true if NPC has a configured loot table with at least one entry.
+func has_loot_table() -> bool:
+	return get_loot_table().size() > 0

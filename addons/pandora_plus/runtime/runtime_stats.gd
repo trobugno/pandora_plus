@@ -21,13 +21,25 @@ func _init(p_base_stats: Variant = null) -> void:
 	elif p_base_stats is Dictionary:
 		base_stats_data = p_base_stats
 	else:
-		_create_default_stats_data()
+		base_stats_data = _create_default_stats_data()
 
-func get_effective_stat(stat_name: String) -> float:
-	if _cache_dirty:
-		_recalculate_all_stats()
-	
-	return _cached_stats.get(stat_name, _get_base_stat_value(stat_name))
+## Returns the effective value of a stat (base + all active modifiers).
+##
+## @param stat_name: The stat to query (e.g. "health", "attack")
+## @param exclude_source_prefix: Optional. If non-empty, modifiers whose source
+##   starts with this prefix are excluded from the calculation. Useful for
+##   computing "max without status effects" (pass "status_") for HUD limitator
+##   overlays, or "max without equipment" (pass "equipment_") for naked stat
+##   display in character sheets.
+##
+## Note: when exclude_source_prefix is empty, the cached path is used (fast).
+## When non-empty, the value is computed on demand without cache.
+func get_effective_stat(stat_name: String, exclude_source_prefix: String = "") -> float:
+	if exclude_source_prefix.is_empty():
+		if _cache_dirty:
+			_recalculate_all_stats()
+		return _cached_stats.get(stat_name, _get_base_stat_value(stat_name))
+	return _calculate_stat_filtered(stat_name, exclude_source_prefix)
 
 func add_modifier(modifier: PPStatModifier) -> void:
 	if not modifier:
@@ -111,6 +123,42 @@ func _calculate_stat(stat_name: String) -> float:
 	for mod in multiplicative_mods:
 		result *= mod.value
 	
+	return max(0, result)
+
+
+## Computes a stat on demand, excluding modifiers whose source starts with the given prefix.
+## Mirrors _calculate_stat but with a source filter on the modifier list.
+func _calculate_stat_filtered(stat_name: String, exclude_source_prefix: String) -> float:
+	var base_value = _get_base_stat_value(stat_name)
+
+	var flat_mods: Array[PPStatModifier] = []
+	var additive_mods: Array[PPStatModifier] = []
+	var multiplicative_mods: Array[PPStatModifier] = []
+
+	for mod in get_modifiers_for_stat(stat_name):
+		if mod.source.begins_with(exclude_source_prefix):
+			continue
+		match mod.type:
+			PPStatModifier.ModifierType.FLAT:
+				flat_mods.append(mod)
+			PPStatModifier.ModifierType.ADDITIVE:
+				additive_mods.append(mod)
+			PPStatModifier.ModifierType.MULTIPLICATIVE:
+				multiplicative_mods.append(mod)
+
+	var result = base_value
+
+	for mod in flat_mods:
+		result += mod.value
+
+	var additive_sum = 0.0
+	for mod in additive_mods:
+		additive_sum += mod.value
+	result += base_value * (additive_sum / 100.0)
+
+	for mod in multiplicative_mods:
+		result *= mod.value
+
 	return max(0, result)
 
 

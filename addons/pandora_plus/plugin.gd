@@ -71,6 +71,27 @@ func _ensure_extensions_dir() -> void:
 		PandoraSettings.set_extensions_dir(extensions_dir)
 
 
+## Ensures a property exists on the given category with the correct type.
+## Recovery scenarios handled:
+##   1. Property doesn't exist → creates it
+##   2. Property exists but has type "undefined" (corrupted from prior installations
+##      where extension types weren't yet registered) → deletes and recreates
+##   3. Property exists with correct type → returns it unchanged
+## Use this helper for ALL extension-typed properties (quest_property, stats_property,
+## recipe_property, etc.) to ensure clean migration from corrupted data.pandora files.
+func _ensure_property(category: PandoraCategory, property_name: String, property_type: String) -> PandoraProperty:
+	if category.has_entity_property(property_name):
+		var existing: PandoraProperty = category.get_entity_property(property_name)
+		var existing_type = existing.get_property_type()
+		var is_undefined: bool = existing_type == null or existing_type.get_type_name() == "undefined"
+		if is_undefined:
+			push_warning("Pandora+: Detected corrupted property '%s' on category '%s' (type=undefined). Recreating with type '%s'." % [property_name, category.get_entity_name(), property_type])
+			Pandora._entity_backend.delete_property(existing)
+			return Pandora.create_property(category, property_name, property_type)
+		return existing
+	return Pandora.create_property(category, property_name, property_type)
+
+
 func _ready() -> void:
 	PandoraPlusSettings.initialize()
 
@@ -182,14 +203,13 @@ func _setup_quest_categories() -> void:
 		quest_category.set_script_path("res://addons/pandora_plus/entities/quest_entity.gd")
 
 		# Use the custom quest_property type which handles objectives and rewards internally
-		Pandora.create_property(quest_category, "quest_data", "quest_property")
+		_ensure_property(quest_category, "quest_data", "quest_property")
 		quest_category.set_generate_ids(true)
 	else:
 		var quest_category : PandoraCategory = quest_categories[0]
 
-		# Ensure all properties exist (for updates)
-		if not quest_category.has_entity_property("quest_data"):
-			Pandora.create_property(quest_category, "quest_data", "quest_property")
+		# Ensure all properties exist (also recovers from corrupted "undefined" types)
+		_ensure_property(quest_category, "quest_data", "quest_property")
 		if not quest_category.is_generate_ids():
 			quest_category.set_generate_ids(true)
 
@@ -263,7 +283,7 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 		Pandora.create_property(npc_category, "texture", "resource")
 
 		# Combat properties
-		Pandora.create_property(npc_category, "base_stats", "stats_property")
+		_ensure_property(npc_category, "base_stats", "stats_property")
 		Pandora.create_property(npc_category, "faction", "String")
 		Pandora.create_property(npc_category, "is_hostile", "bool")
 
@@ -275,10 +295,14 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 		# Quest properties
 		Pandora.create_property(npc_category, "quest_giver_for", "array")
 
+		# Loot table (drops on death — typically for hostile NPCs)
+		var loot_table_property = Pandora.create_property(npc_category, "loot_table", "array")
+		loot_table_property.set_setting_override("Array Type", "item_drop_property")
+
 		# Set default values
 		npc_category.get_entity_property("faction").set_default_value("Neutral")
 		npc_category.get_entity_property("is_hostile").set_default_value(false)
-		
+
 		npc_category.set_generate_ids(true)
 	else:
 		var npc_category : PandoraCategory = npc_categories[0]
@@ -290,8 +314,7 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			Pandora.create_property(npc_category, "description", "String")
 		if not npc_category.has_entity_property("texture"):
 			Pandora.create_property(npc_category, "texture", "resource")
-		if not npc_category.has_entity_property("base_stats"):
-			Pandora.create_property(npc_category, "base_stats", "stats_property")
+		_ensure_property(npc_category, "base_stats", "stats_property")
 		if not npc_category.has_entity_property("faction"):
 			Pandora.create_property(npc_category, "faction", "String")
 		if not npc_category.has_entity_property("is_hostile"):
@@ -302,6 +325,14 @@ func _setup_npc_categories(location_category: PandoraCategory) -> void:
 			spawn_location_property.set_setting_override(REFERENCE_TYPE.SETTING_CATEGORY_FILTER, str(location_category._id))
 		if not npc_category.has_entity_property("quest_giver_for"):
 			Pandora.create_property(npc_category, "quest_giver_for", "array")
+		if not npc_category.has_entity_property("loot_table"):
+			var loot_table_property = Pandora.create_property(npc_category, "loot_table", "array")
+			loot_table_property.set_setting_override("Array Type", "item_drop_property")
+		else:
+			# Ensure Array Type setting is set for existing loot_table properties
+			var existing_loot = npc_category.get_entity_property("loot_table")
+			if existing_loot and not existing_loot.get_setting("Array Type"):
+				existing_loot.set_setting_override("Array Type", "item_drop_property")
 		if not npc_category.is_generate_ids():
 			npc_category.set_generate_ids(true)
 
@@ -340,9 +371,15 @@ func _setup_category_filters() -> void:
 			if not prop.get_setting("Quest Giver Category Filter"):
 				prop.set_setting_override("Quest Giver Category Filter", npcs_id)
 
-	# NPC properties → Locations filter for schedule
+	# NPC properties → Items filter for loot_table, Locations filter for schedule
 	if npcs_cats:
 		var npc_cat := npcs_cats[0] as PandoraCategory
+		# Loot table → Items (item_drop_property references)
+		if npc_cat.has_entity_property("loot_table"):
+			var prop := npc_cat.get_entity_property("loot_table")
+			if not prop.get_setting("Category Filter"):
+				prop.set_setting_override("Category Filter", items_id)
+		# Schedule default location → Locations (Premium-only schedule_property)
 		if npc_cat.has_entity_property("schedule"):
 			var prop := npc_cat.get_entity_property("schedule")
 			if not prop.get_setting("Default Location Filter"):
@@ -359,16 +396,15 @@ func _setup_item_recipes_categories() -> void:
 
 		# Properties
 		Pandora.create_property(item_recipes_category, "description", "String")
-		Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
+		_ensure_property(item_recipes_category, "recipe_property", "recipe_property")
 
 		item_recipes_category.set_generate_ids(true)
 	else:
 		var item_recipes_category : PandoraCategory = item_recipes_categories[0]
 
-		# Ensure all properties exist (for updates)
+		# Ensure all properties exist (also recovers from corrupted "undefined" types)
 		if not item_recipes_category.has_entity_property("description"):
 			Pandora.create_property(item_recipes_category, "description", "String")
-		if not item_recipes_category.has_entity_property("recipe_property"):
-			Pandora.create_property(item_recipes_category, "recipe_property", "recipe_property")
+		_ensure_property(item_recipes_category, "recipe_property", "recipe_property")
 		if not item_recipes_category.is_generate_ids():
 			item_recipes_category.set_generate_ids(true)

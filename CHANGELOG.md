@@ -5,7 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.6-core] (Current) - 2026-04-12
+## [1.2.7-core] (Current) - 2026-05-13
+
+#### ✨ Enhancements
+
+- ✨ **`PPRuntimeStats.get_effective_stat()` accepts an optional `exclude_source_prefix`** — pass e.g. `"status_"` to compute the effective max excluding status-induced modifiers (useful for HUD limitator bar overlays). Empty prefix (default) uses the cached fast path; non-empty bypasses cache and computes on demand. Modifier source convention: use prefixes like `"status_"`, `"equipment_"`, `"buff_"` etc. for clean filtering.
+- ✨ **`PPNPCEntity.get_loot_table()` + `has_loot_table()`** — new built-in API for NPC drop tables. The `loot_table` array property (of `item_drop_property`) is now configured by `plugin.gd` on the NPCs Pandora category, with default `Category Filter` set to Items. Replaces the pattern of stashing mob drops in `custom_data` arrays — discoverable, type-safe, editable in Pandora UI.
+- ✨ **`PPRecipeUtils.find_matching_recipe(inventory, recipe_type)`** — new convenience method returning the first recipe craftable from a given inventory, optionally filtered by recipe type ("Crafting", "Smithing", "Alchemy", or custom). Replaces ~10 lines of manual filtering on crafting UI panels.
+
+#### 🐛 Bug Fixes
+
+- 🔧 **`PPRuntimeStats._init()` else branch no longer drops default stats** — the no-argument constructor called `_create_default_stats_data()` but discarded its return value, leaving `base_stats_data = {}` instead of the 8-stat baseline. Projects using `PPRuntimeStats.new()` without parameters previously had to set `base_stats_data` manually as a workaround. Now `PPRuntimeStats.new()` correctly initializes with health=100, mana=100, defense=5, attack=5, att_speed=1.0, crit_rate=0, crit_damage=0, mov_speed=10.
+- 🔧 **Fixed corrupted "undefined" extension properties surviving across plugin reinstalls** — when migrating an existing project to Pandora+, extension-typed properties (`stats_property`, `quest_property`, `recipe_property`) that had been previously saved with type `"undefined"` (from a corrupted prior install) were not being repaired. The migration code's `if not has_entity_property()` check returned `true` for these corrupted properties, so they were silently kept and never replaced.
+- 🔧 New helper `_ensure_property()` in `plugin.gd` now detects and repairs `undefined`-typed extension properties on every plugin load — deletes the broken entry and recreates it with the correct type. Applies automatically; users only need to update Pandora+ and restart Godot.
+- 🔧 Affected migration paths: NPC `base_stats`, Quests `quest_data`, Recipes `recipe_property`.
+
+---
+## [1.2.6-core] - 2026-04-12
 
 #### ✨ New Features
 
