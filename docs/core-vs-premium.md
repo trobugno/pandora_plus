@@ -15,14 +15,15 @@ Pandora+ comes in two editions to fit different needs and budgets. This page exp
 | **Player Data** | ✅ Basic | ✅ Leveling & Progression |
 | **Save/Load** | ✅ Quests, NPCs & Player | ✅ Everything |
 | **Inventory System** | ✅ | ✅ |
-| **Stats System** | ✅ | ✅ More Coming Soon |
+| **Stats System** | ✅ | ✅ |
 | **Recipe/Crafting** | ✅ | ✅ |
 | **Item System** | ✅ | ✅ |
 | **Status Effects** | ✅ | ✅ More Coming Soon |
-| **Combat Calculator** | ✅ | ✅ More Coming Soon |
+| **Combat Calculator** | ✅ | ✅ |
 | **Merchant/Trading** | ❌ | ✅ |
 | **Equipment System** | ❌ | ✅ |
-| **Visual Quests Editor** | ❌ | ✅ Coming Soon |
+| **Visual Quest Editor** | ❌ | ✅ |
+| **Translation Editor** | ❌ | ✅ |
 | **Skill Tree Editor** | ❌ | ✅ Coming Soon |
 | **Priority Support** | ❌ | ✅ Email & Discord |
 | **Commercial Use** | ✅ Allowed | ✅ Allowed |
@@ -41,108 +42,67 @@ The Core edition provides everything you need to build quest-based RPG games. It
 
 ### What's Included (Core)
 
-#### 📜 Quest System
-Complete quest management with:
-- Quest objectives (Kill, Collect, Talk, Go To, Custom)
-- Quest rewards (Items, Currency, Experience)
-- Quest prerequisites and chains
-- Quest giver NPCs
-- State tracking (Active, Completed, Failed, Abandoned)
-- Auto-complete when all objectives met
-- Save/Load support
-
-[Learn more →](core-systems/quest-system.md)
-
-#### 👥 NPC System
-Dynamic NPC management with:
-- Runtime NPC instances
-- Quest giver functionality
-- Available quest filtering
-- NPC health tracking
-- Hostile/Friendly NPCs
-- Location tracking
-- Save/Load support
-
-[Learn more →](core-systems/npc-system.md)
-
-#### 💾 Player Data
-Basic player state management:
-- Player name
-- Game completion tracking
-- Integration with quest system
-- Save/Load support
-
-[Learn more →](core-systems/player-data.md)
-
-#### 📊 Runtime Stats System
-Dynamic stat calculation with:
-- Temporary and permanent modifiers
-- Percentage and flat modifiers
-- Stat dependencies
-- Buff/Debuff system
-- Equipment bonuses
-- Level-up systems
-
-[Learn more →](core-systems/runtime-stats.md)
-
-#### 🎒 Inventory System
-Full-featured inventory with:
-- Stackable items
-- Weight limits
-- Equipment slots
-- Currency tracking
-- Auto-stacking
-- Sorting and compacting
-- Transfer between inventories
-- Save/Load support
-
-[Learn more →](core-systems/inventory-system.md)
-
-#### 📓 Recipe/Crafting System
-Complete crafting solution:
-- Recipe definitions
-- Ingredient requirements
-- Crafting categories
-- Auto-consume ingredients
-- Result items
-- Crafting validation
-
-[Learn more →](properties/recipe.md)
-
-#### ⚔️ Item System
-Rich item framework:
-- Item entities
-- Rarity system (Common → Legendary)
-- Item drops with probability
-- Stackable/Non-stackable
-- Weight and value
-- Item types and categories
-
-[Learn more →](entities/item-entity.md)
-
-#### ✨ Status Effects
-Advanced effect system:
-- Temporary buffs/debuffs
-- Duration-based effects
-- Stat modifiers
-- Visual indicators
-- Stack management
-
-[Learn more →](properties/status-effect.md)
-
-#### 🗡️ Combat Calculator
-Damage calculation utilities:
-- Damage formulas
-- Armor reduction
-- Critical hits
-
-[Learn more →](utilities/combat-calculator.md)
-
-#### 🛠️ Utilities
-- **PPQuestUtils**: Quest lifecycle, validation, tracking
-- **PPNPCUtils**: NPC spawn, combat, quest integration
-- **PPInventoryUtils**: Items, rarity, sorting
-- **PPRecipeUtils**: Crafting, recipe
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="card-icon">📜</div>
+    <div class="card-title">Quest System</div>
+    <div class="card-desc">Objectives (Kill, Collect, Talk, Go To, Custom), rewards, prerequisites & chains, quest giver NPCs, state tracking, auto-complete, save/load</div>
+    <a class="card-link" href="#/core-systems/quest-system">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">👥</div>
+    <div class="card-title">NPC System</div>
+    <div class="card-desc">Runtime instances, quest giver functionality, hostile/friendly NPCs, health & location tracking, save/load</div>
+    <a class="card-link" href="#/core-systems/npc-system">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">💾</div>
+    <div class="card-title">Player Data</div>
+    <div class="card-desc">Player name, game completion tracking, quest system integration, save/load support</div>
+    <a class="card-link" href="#/core-systems/player-data">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">📊</div>
+    <div class="card-title">Runtime Stats</div>
+    <div class="card-desc">Temporary & permanent modifiers, percentage & flat bonuses, stat dependencies, buff/debuff system, equipment bonuses, level-up</div>
+    <a class="card-link" href="#/core-systems/runtime-stats">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🎒</div>
+    <div class="card-title">Inventory System</div>
+    <div class="card-desc">Stackable items, weight limits, equipment slots, currency, auto-stacking, sorting, transfer between inventories, save/load</div>
+    <a class="card-link" href="#/core-systems/inventory-system">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">📓</div>
+    <div class="card-title">Recipe / Crafting</div>
+    <div class="card-desc">Recipe definitions, ingredient requirements, crafting categories, auto-consume ingredients, crafting validation</div>
+    <a class="card-link" href="#/properties/recipe">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">⚔️</div>
+    <div class="card-title">Item System</div>
+    <div class="card-desc">Item entities, rarity system (Common to Legendary), item drops with probability, stackable/non-stackable, weight & value</div>
+    <a class="card-link" href="#/entities/item-entity">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">✨</div>
+    <div class="card-title">Status Effects</div>
+    <div class="card-desc">Temporary buffs/debuffs, duration-based effects, stat modifiers, visual indicators, stack management</div>
+    <a class="card-link" href="#/properties/status-effect">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🗡️</div>
+    <div class="card-title">Combat Calculator</div>
+    <div class="card-desc">Damage formulas, armor reduction, critical hits</div>
+    <a class="card-link" href="#/utilities/combat-calculator">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🛠️</div>
+    <div class="card-title">Utilities</div>
+    <div class="card-desc">PPQuestUtils, PPNPCUtils, PPInventoryUtils, PPRecipeUtils — lifecycle helpers, validation, sorting, crafting</div>
+  </div>
+</div>
 
 ---
 
@@ -155,36 +115,47 @@ The Premium edition includes **all Core features** plus advanced systems for com
 - Character progression (stats, levels)
 - Merchant/Trading game
 - NPC with more complexity (AI, Routine, etc.)
+- Localized/multilingual games
 - Commercial projects needing professional features
 
 ### What's Included (Premium)
 
-#### All Core Features
-All features developed for Core version are inherited by Premium version
-
-#### ![new](assets/new.png) New in v1.0.1-premium
-
-#### 🏪 Merchant/Trading System
-Complete trading and shop system:
-- NPC merchants with inventories
-- Dynamic pricing (supply/demand)
-- Barter system
-- Shop UI components
-- Trade validation
-- Reputation-based pricing
-
-#### ⚔️ Equipment System
-Full equipment management:
-- Equipment slots (head, chest, weapon, etc.)
-- Stat bonuses from equipment
-- Set bonuses
-- Equipment durability (Coming Soon)
-- Upgrade/enhancement system (Coming Soon)
-- Visual equipment on character (Coming Soon)
-
-#### 🎨 Editors (Coming Soon)
-- Visual Quest Editor
-- Skill Tree Editor
+<div class="feature-grid">
+  <div class="feature-card" style="grid-column: 1 / -1; background: linear-gradient(135deg, #e7f3ff 0%, #f0f4ff 100%); border-color: #5865F2;">
+    <div class="card-icon">⭐</div>
+    <div class="card-title">All Core Features</div>
+    <div class="card-desc">Every feature from the Core edition is included in Premium. Quest System, NPC System, Inventory, Crafting, Stats, Combat Calculator, and more.</div>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🏪</div>
+    <div class="card-title">Merchant/Trading System</div>
+    <div class="card-desc">NPC merchants with inventories, dynamic pricing (supply/demand), barter system, shop UI components, trade validation, reputation-based pricing</div>
+    <a class="card-link" href="#/core-systems/merchant-system">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">⚔️</div>
+    <div class="card-title">Equipment System</div>
+    <div class="card-desc">Equipment slots (head, chest, weapon, etc.), stat bonuses, set bonuses. Durability, Upgrade and enhancement system</div>
+    <a class="card-link" href="#/core-systems/equipment-system">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🗺️</div>
+    <div class="card-title">Visual Quest Editor <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-desc">Quest list with search & filters, 5-tab form editor, popup editors with entity pickers, graph view with cycle detection, 8 built-in templates, real-time validation, balance analytics, progression simulator</div>
+    <a class="card-link" href="#/core-systems/visual-quest-editor">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">🌐</div>
+    <div class="card-title">Translation Editor <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-desc">Auto-discovery of translatable strings, spreadsheet grid with inline editing, stale detection, one-click Apply to native Godot .translation files, CSV and PO/POT export & import</div>
+    <a class="card-link" href="#/core-systems/translation-editor">Learn more →</a>
+  </div>
+  <div class="feature-card" style="border-style: dashed; opacity: 0.8;">
+    <div class="card-icon">🎨</div>
+    <div class="card-title">Skill Tree Editor</div>
+    <div class="card-desc">Visual skill tree editor for character progression. Coming Soon!</div>
+  </div>
+</div>
 
 ---
 
@@ -235,6 +206,8 @@ You can start with Core and upgrade to Premium at any time. Your existing quest 
 
 ### Choose **💎 Premium** if you:
 - Need advanced RPG features
+- Want a visual quest editor (no code required)
+- Need to localize your game (translation editor)
 - Need trading system
 - Need npc with a routine
 - Want progression systems
@@ -276,4 +249,4 @@ If you're using Core and find it valuable, consider:
 
 ---
 
-*Last updated: v1.0.0*
+*Last updated: v1.3.0-premium*

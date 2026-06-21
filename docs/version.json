@@ -5,8 +5,8 @@
     "changelog": "- ✨ PPRuntimeStats.get_effective_stat() accepts exclude_source_prefix for filtered max computation\n- ✨ PPNPCEntity built-in loot_table property + get_loot_table()/has_loot_table() API\n- ✨ PPRecipeUtils.find_matching_recipe(inventory, type) convenience method\n- 🔧 Fixed PPRuntimeStats._init() else branch dropping default stats\n- 🔧 Fixed migration of corrupted 'undefined' extension properties on existing projects"
   },
   "premium": {
-    "version": "1.1.2-premium",
+    "version": "1.3.0-premium",
     "download_url": "https://trobugno.itch.io/pandora-plus-premium",
-    "changelog": "- ✨ PPInventory now reads custom equipment slot names from Pandora option_property settings\n- ✨ PPRuntimeStats.get_effective_stat() accepts exclude_source_prefix for filtered max computation\n- ✨ PPNPCEntity built-in loot_table property + get_loot_table()/has_loot_table() API\n- ✨ PPRecipeUtils.find_matching_recipe(inventory, type) convenience method\n- 🔧 Fixed PPRuntimeStats._init() else branch dropping default stats\n- 🔧 Fixed migration of corrupted 'undefined' extension properties on existing projects"
+    "changelog": "- 🎁 Visual Quest Editor: in-editor quest authoring with graph view, templates, validation, balance analytics, progression simulator\n- 🎁 Translation Editor: auto-discovery, spreadsheet grid, stale detection, native .translation files, CSV/PO export & import\n- 🔧 Fixed text input cursor position in Quest Editor fields\n- 🔧 Fixed objective/reward dialogs not showing saved values on re-edit\n- 🔧 Fixed validation not triggering on add/delete/reorder"
   }
 }

@@ -5,6 +5,8 @@
   - [🔸Getting Started](/getting-started/setup.md)
 - 📜 Core Systems
   - [🔸Quest System](/core-systems/quest-system.md)
+  - [💎Visual Quest Editor](/core-systems/visual-quest-editor.md)
+  - [💎Translation Editor](/core-systems/translation-editor.md)
   - [🔸NPC System](/core-systems/npc-system.md)
   - [🔸Player Data](/core-systems/player-data.md)
   - [🔸Runtime Stats](/core-systems/runtime-stats.md)

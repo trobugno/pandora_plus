@@ -108,6 +108,57 @@
       text-decoration: none;
       color: inherit;
     }
+
+    /* Feature card grid */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 1.5rem 0;
+    }
+
+    .feature-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      background: #fff;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .feature-card .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #2c3e50;
+    }
+
+    .feature-card .card-desc {
+      font-size: 0.88rem;
+      color: #555;
+      line-height: 1.5;
+      margin: 0 0 12px 0;
+    }
+
+    .feature-card .card-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--theme-color);
+      text-decoration: none;
+    }
+
+    .feature-card .card-link:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 
