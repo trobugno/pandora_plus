@@ -217,4 +217,4 @@ No additional code needed — PPEquipmentUtils handles set bonus activation/deac
 
 ---
 
-*API Reference for Pandora+ v1.0.1-premium*
+*API Reference for Pandora+ v1.4.0-premium*

@@ -2,6 +2,8 @@
 
 Complete guide to the Pandora+ NPC System - dynamic NPC management with quest giving, combat, dialogue, and runtime state tracking.
 
+> 💎 **Premium:** NPCs can also have **talents and abilities** (a static loadout + optional leveling). See the [Skill Tree Editor → NPC Skills](/core-systems/skill-tree-editor?id=npc-skills).
+
 ---
 
 ## Overview
@@ -926,13 +928,59 @@ PPNPCUtils.debug_print_all_npcs(all_npcs)
 
 ---
 
+## 💎 Skills & Level (Premium)
+
+NPCs — enemies **and** companions — can have **talents and abilities**, authored from the **Skill Tree Editor → NPCs** tab. The NPC entity gains three properties:
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| `level` | int | Character level (default 1). Optional — used for scaling / conditions / display / dynamic leveling. Not required by the loadout. |
+| `can_level` | bool | Off by default (fixed loadout). Enable it for NPCs that gain skill XP and level up at runtime. |
+| `skill_loadout` | String (JSON) | The **static loadout** — which talents (with per-perk ranks) and abilities the NPC has. Edit it visually from the Skill Tree Editor; no JSON by hand. |
+
+### Entity accessors (`PPNPCEntity`)
+
+```gdscript
+npc_entity.get_level()          # -> int
+npc_entity.can_level()          # -> bool
+npc_entity.get_skill_loadout()  # -> PPSkillLoadout (parsed talents/abilities)
+npc_entity.has_skill_loadout()  # -> bool
+```
+
+### Runtime (`PPRuntimeNPC`)
+
+Each runtime NPC builds its own skill state from the loadout on spawn. Pandora+ **resolves** the values; your game **applies** them.
+
+```gdscript
+# Resolved effects across the NPC's loadout talents (for the game to apply):
+for e in runtime_npc.get_skill_effects():
+    apply_effect(e)                       # e.effect_type, e.effect_nature, e.values
+
+# A single effect value at the loadout rank:
+var dmg = runtime_npc.get_skill_effect_value(talent_id, "p_strike", "DAMAGE", "amount")
+
+# Abilities from the loadout:
+if runtime_npc.has_skill_ability(ability_id):
+    use_ability(ability_id)
+
+# Dynamic leveling (only if the NPC has can_level = true):
+runtime_npc.grant_skill_xp(talent_id, 50)
+```
+
+The loadout + any runtime progression are serialized with the NPC's `to_dict()` / `from_dict()`.
+
+See the [Skill Tree Editor](skill-tree-editor.md) for authoring talents, abilities and effects.
+
+---
+
 ## See Also
 
 - [PPNPCUtils](../utilities/npc-utils.md) - NPC utility functions
 - [PPRuntimeNPC](../api/runtime-npc.md) - Runtime NPC API
+- [Skill Tree Editor](skill-tree-editor.md) - 💎 Talents, abilities & NPC skills
 - [Quest System](quest-system.md) - Quest integration
 - [Player Data](player-data.md) - Save/load integration
 
 ---
 
-*Complete System Guide for Pandora+ v1.0.0*
+*Complete System Guide for Pandora+ v1.0.0 | 💎 Skills & Level v1.4.0-premium*

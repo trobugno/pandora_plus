@@ -295,4 +295,4 @@ Speed up quest creation with pre-built templates.
 
 ---
 
-*Complete Guide for Pandora+ v1.3.0-premium*
+*Complete Guide for Pandora+ v1.4.0-premium*

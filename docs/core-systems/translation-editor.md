@@ -264,4 +264,4 @@ Three settings are available in Project Settings > Pandora+ > Config > i18n:
 
 ---
 
-*Complete Guide for Pandora+ v1.3.0-premium*
+*Complete Guide for Pandora+ v1.4.0-premium*

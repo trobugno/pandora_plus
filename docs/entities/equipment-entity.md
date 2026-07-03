@@ -463,4 +463,4 @@ print("Attack: +%d" % stats._attack)  # Crashes if stats is null
 
 ---
 
-*API Reference for Pandora+ v1.0.1-premium*
+*API Reference for Pandora+ v1.4.0-premium*

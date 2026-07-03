@@ -644,9 +644,37 @@ NPCs can reference quests through the `quest_giver_for` array. Use `PPRuntimeNPC
 
 ---
 
+## 💎 Skills & Level (Premium Only)
+
+NPCs can have talents/abilities via a static loadout, authored from the Skill Tree Editor's **NPCs** tab. See [Skill Tree Editor → NPC Skills](../core-systems/skill-tree-editor.md).
+
+###### 💎 `get_level() -> int`
+Authored character level (default 1). Optional — used for scaling, conditions, display, or as the base for dynamic leveling. Not required by the loadout.
+
+###### 💎 `can_level() -> bool`
+Whether this NPC opts into dynamic (XP-based) leveling. `false` by default (fixed level).
+
+###### 💎 `get_skill_loadout() -> PPSkillLoadout`
+The parsed static skill loadout: `talents` (each with per-perk ranks) and `abilities` (each with a rank). Empty if unset.
+
+###### 💎 `has_skill_loadout() -> bool`
+`true` if the NPC has any talents/abilities configured.
+
+```gdscript
+if npc_entity.has_skill_loadout():
+    var loadout = npc_entity.get_skill_loadout()
+    print(loadout.talents)    # [ { id, perks: { perk_id: rank } } ]
+    print(loadout.abilities)  # [ { id, rank } ]
+```
+
+Backing properties on the NPCs category: `level` (int), `can_level` (bool), `skill_loadout` (String, JSON).
+
+---
+
 ## See Also
 
 - [PPRuntimeNPC](../api/runtime-npc.md) - Runtime NPC instance
+- [Skill Tree Editor](../core-systems/skill-tree-editor.md) - 💎 Talents, abilities & NPC skills
 - [PPQuestEntity](../entities/quest-entity.md) - Quest entities
 - [NPC System](../core-systems/npc-system.md) - Complete system overview
 - [PPNPCUtils](../utilities/npc-utils.md) - NPC utility functions

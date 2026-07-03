@@ -791,4 +791,4 @@ func reapply_equipment_stats():
 
 ---
 
-*Complete Guide for Pandora+ v1.0.1-premium*
+*Complete Guide for Pandora+ v1.4.0-premium*

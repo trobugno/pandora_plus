@@ -7,21 +7,27 @@ Welcome to the **Pandora+** documentation! This comprehensive guide will help yo
 Pandora+ extends [Pandora by BitBrain](https://github.com/bitbrain/pandora) with specialized RPG-oriented data properties and runtime systems. It provides everything you need to create complex RPG mechanics without reinventing the wheel.
 
 **Pandora+ comes in two editions:**
-- **Core (Free & Open Source)** - *v1.2.6-core* : 
-  - Basic **Quest System** (Talk, Collect, Kill) + Rewards (Item, Experience, Currency) ![new](assets/new.png)
-  - Basic **NPC System** (Strongly related to Quests) ![new](assets/new.png)
-  - **Player Data & Manager** ![new](assets/new.png)
-  - **Save/Load Framework** ![new](assets/new.png)
-  - **Inventory System** 
+- **Core (Free & Open Source)** - *v1.2.7-core* :
+  - **Quest System** (Talk, Collect, Kill, Go To, Custom) + Rewards (Item, Experience, Currency)
+  - **NPC System** (quest givers, factions, combat, loot)
+  - **Player Data & Manager**
+  - **Save/Load Framework**
+  - **Inventory System**
   - **Stats & Modifiers System**
-  - **Crafting/Recipe System**
+  - **Crafting / Recipe System**
   - **Item Drop System**
-- **💎 Premium** - *v1.1.0-premium* : 
+  - **Combat Calculator** & **Time Manager**
+- **💎 Premium** - *v1.4.0-premium* :
   - <u>All Core features</u>
-  - NPC extended with **Merchant/Trading System** ![new](assets/new.png)
-  - NPC extended with **Scheduled/Routine System** ![new](assets/new.png)
-  - **Equipment System** with bonuses, etc ![new](assets/new.png)
-  - Player extended with **Leveling & Progression** ![new](assets/new.png)
+  - **Visual Quest Editor** (in-editor quest authoring)
+  - **Translation / Localization Editor**
+  - **Skill Tree Editor** — Talents & Abilities ![new](assets/new.png)
+  - **NPC Skills** — talents/abilities for NPCs ![new](assets/new.png)
+  - **In-Editor Documentation** ![new](assets/new.png)
+  - **Merchant / Trading System**
+  - NPC **Scheduled / Routine System**
+  - **Equipment System** (slots, set bonuses, durability)
+  - **Leveling & Progression**
 
 [See full comparison →](core-vs-premium.md)
 
@@ -133,8 +139,10 @@ Pandora+ is perfect for:
 | Version | Core (Free) | Premium | Status |
 |---------|-------------|---------|--------|
 |**v0.3.0-beta**|✅ Runtime Stats System<br>✅ Inventory System<br>✅ Recipe/Crafting<br>✅ Combat Calculator<br>✅ Status Effects<br>✅ Item System with Rarity|N/A|Released (14 Dec 2025)|
-|**v1.0.0**|✅ All previous features<br>✅ Quest System<br>✅ NPC System<br>✅ Player Data<br>✅ Quest Objectives & Rewards<br>✅ Save/Load Framework|💎 All Core features<br>💎 Merchant/Trading System<br>💎 NPC Scheduled/Routine<br>💎 Save/Load Framework<br>💎 Equipment System<br>💎 Leveling & Progression|Released (Feb 2026)|
-|**Future**|N/A|💎 Advanced Status Effect<br>💎 Visual Quest Editor<br>💎 Skill Tree System<br>💎 Advanced Combat System<br>💎 Procedural Quest Generation|Planned|
+|**v1.0.0**|✅ All previous features<br>✅ Quest System<br>✅ NPC System<br>✅ Player Data<br>✅ Quest Objectives & Rewards<br>✅ Save/Load Framework|💎 All Core features<br>💎 Merchant/Trading System<br>💎 NPC Scheduled/Routine<br>💎 Equipment System<br>💎 Leveling & Progression|Released (Feb 2026)|
+|**v1.3.0**|🔧 Fixes & API additions|💎 Visual Quest Editor<br>💎 Translation / Localization Editor|Released (May 2026)|
+|**v1.4.0**|🔧 Fixes & API additions|💎 Skill Tree Editor (Talents & Abilities)<br>💎 NPC Skills (talents/abilities for NPCs)<br>💎 In-Editor Documentation|Released (Jun 2026)|
+|**Future**|N/A|💎 Advanced Status Effects<br>💎 Advanced Combat System<br>💎 Procedural Quest Generation|Planned|
 
 ## 🤝 Contributing
 
@@ -152,7 +160,8 @@ Pandora+ (Core) is open source and welcomes contributions!
 
 ## 📄 License
 
-Pandora+ (Core) is licensed under the [MIT License](https://github.com/trobugno/pandora_plus/blob/main/LICENSE).
+- **Pandora+ (Core)** is licensed under the [MIT License](https://github.com/trobugno/pandora_plus/blob/main/LICENSE) — free for personal and commercial use.
+- **Pandora+ (Premium)** is distributed under a proprietary **Commercial License** (single developer, non-transferable, no source redistribution). The full license text is included with your [purchase on itch.io](https://trobugno.itch.io/pandora-plus-premium).
 
 ## 🙏 Credits
 

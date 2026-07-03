@@ -7,7 +7,7 @@ Complete installation guide for **Pandora+** in your Godot project.
 | Requirement | Version | Status |
 |-------------|---------|--------|
 | **Godot Engine** | 4.5+ | Required |
-| **Pandora** | 1.0-alpha9+ (by [Pull Request](https://github.com/bitbrain/pandora/pull/230)) | Required |
+| **Pandora** | 1.0-alpha9+ | Required |
 | **GDScript** | 2.0 | Required |
 | **Operating System** | Windows / Linux / macOS | All supported |
 
@@ -149,8 +149,7 @@ Pandora+ extends Pandora's data management system. Without Pandora, Pandora+ can
 
 1. **Download Pandora**
    - Go to [Pandora Releases](https://github.com/bitbrain/pandora/releases)
-   - Download version **1.0-alpha9 or higher**<br>
-     ⚠️​ **Note**: If this [Pull Request](https://github.com/bitbrain/pandora/pull/230) is not merged yet, please download Pandora using it.
+   - Download version **1.0-alpha9 or higher**
 
 2. **Install in Project**
    ```

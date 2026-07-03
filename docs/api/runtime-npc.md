@@ -1014,12 +1014,54 @@ Use `to_dict()` and `from_dict()` to save/load NPC state. This preserves:
 - All stat modifiers
 - Alive/dead state
 - Current location
+- 💎 Skill-tree loadout & progression
+
+---
+
+## 💎 Skills (Premium Only)
+
+Each runtime NPC builds its own skill state (`PPSkillTreeState`) from the entity's static loadout on spawn. Pandora+ **resolves** effect values; **your game applies** them.
+
+###### 💎 `get_skill_state() -> PPSkillTreeState`
+The NPC's per-actor skill-tree state (talents/abilities). `null` if the NPC has no entity.
+
+###### 💎 `get_skill_effect_value(talent_id, perk_id, effect_type_id, field_id = "value") -> Variant`
+Resolves a single effect field value from one of the NPC's talents, at its loadout rank. `null` if not present.
+
+###### 💎 `get_skill_effects() -> Array`
+Every currently-active effect across the NPC's loadout talents, for the game to apply. Each entry: `{ perk_id, rank, effect_type, effect_nature, application_mode, values }`.
+
+###### 💎 `has_skill_ability(ability_id: String) -> bool`
+`true` if the loadout grants the given ability (level > 0).
+
+###### 💎 `get_skill_ability_level(ability_id: String) -> int`
+The ability's level from the loadout (0 if not granted).
+
+###### 💎 `grant_skill_xp(talent_id: String, amount: int) -> void`
+Grants skill XP to a talent **only if** the NPC opts into dynamic leveling (`can_level = true`); otherwise a no-op with a warning.
+
+```gdscript
+# Apply an NPC's resolved skill effects
+for e in runtime_npc.get_skill_effects():
+    apply_effect(e)                        # e.effect_type, e.effect_nature, e.values
+
+var dmg = runtime_npc.get_skill_effect_value(talent_id, "p_strike", "DAMAGE", "amount")
+
+if runtime_npc.has_skill_ability(ability_id):
+    use_ability(ability_id)
+
+# Dynamic leveling (only if can_level = true)
+runtime_npc.grant_skill_xp(talent_id, 50)
+```
+
+See the [Skill Tree Editor](../core-systems/skill-tree-editor.md) for authoring NPC loadouts.
 
 ---
 
 ## See Also
 
 - [PPNPCEntity](../entities/npc-entity.md) - NPC entity definition
+- [Skill Tree Editor](../core-systems/skill-tree-editor.md) - 💎 Talents, abilities & NPC skills
 - [PPRuntimeStats](../api/runtime-stats.md) - Stat system
 - [PPStatModifier](../api/stat-modifier.md) - Stat modifiers
 - [NPC System](../core-systems/npc-system.md) - Complete system overview

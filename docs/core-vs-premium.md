@@ -24,7 +24,9 @@ Pandora+ comes in two editions to fit different needs and budgets. This page exp
 | **Equipment System** | ❌ | ✅ |
 | **Visual Quest Editor** | ❌ | ✅ |
 | **Translation Editor** | ❌ | ✅ |
-| **Skill Tree Editor** | ❌ | ✅ Coming Soon |
+| **Skill Tree Editor** | ❌ | ✅ |
+| **NPC Skills** (talents/abilities) | ❌ | ✅ |
+| **In-Editor Documentation** | ❌ | ✅ |
 | **Priority Support** | ❌ | ✅ Email & Discord |
 | **Commercial Use** | ✅ Allowed | ✅ Allowed |
 
@@ -140,20 +142,27 @@ The Premium edition includes **all Core features** plus advanced systems for com
   </div>
   <div class="feature-card">
     <div class="card-icon">🗺️</div>
-    <div class="card-title">Visual Quest Editor <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-title">Visual Quest Editor</div>
     <div class="card-desc">Quest list with search & filters, 5-tab form editor, popup editors with entity pickers, graph view with cycle detection, 8 built-in templates, real-time validation, balance analytics, progression simulator</div>
     <a class="card-link" href="#/core-systems/visual-quest-editor">Learn more →</a>
   </div>
   <div class="feature-card">
     <div class="card-icon">🌐</div>
-    <div class="card-title">Translation Editor <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-title">Translation Editor</div>
     <div class="card-desc">Auto-discovery of translatable strings, spreadsheet grid with inline editing, stale detection, one-click Apply to native Godot .translation files, CSV and PO/POT export & import</div>
     <a class="card-link" href="#/core-systems/translation-editor">Learn more →</a>
   </div>
-  <div class="feature-card" style="border-style: dashed; opacity: 0.8;">
-    <div class="card-icon">🎨</div>
-    <div class="card-title">Skill Tree Editor</div>
-    <div class="card-desc">Visual skill tree editor for character progression. Coming Soon!</div>
+  <div class="feature-card">
+    <div class="card-icon">🌳</div>
+    <div class="card-title">Skill Tree Editor <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-desc">Author Talents (passive perk trees) & Abilities (active skills): perk graph, schema-driven Effect Types, conditions, validation, balance view, allocation simulator</div>
+    <a class="card-link" href="#/core-systems/skill-tree-editor">Learn more →</a>
+  </div>
+  <div class="feature-card">
+    <div class="card-icon">👥</div>
+    <div class="card-title">NPC Skills <img src="assets/new.png" alt="new" style="height:1em;vertical-align:middle;"></div>
+    <div class="card-desc">Give NPCs (enemies & companions) their own talents/abilities via a static loadout (per-perk ranks) + optional dynamic leveling</div>
+    <a class="card-link" href="#/core-systems/skill-tree-editor">Learn more →</a>
   </div>
 </div>
 
@@ -170,7 +179,7 @@ The Premium edition includes **all Core features** plus advanced systems for com
 - **Distribution**: ✅ Allowed
 
 ### 💎 Premium
-- **Price**: [$17.99 or above](https://trobugno.itch.io/pandora-plus-premium) (One-time purchase)
+- **Price**: [$21.99 or above](https://trobugno.itch.io/pandora-plus-premium) (One-time purchase)
 - **License**: Commercial License (per-developer)
 - **Support**: Priority email & Discord support
 - **Updates**: All future features and improvements
@@ -249,4 +258,4 @@ If you're using Core and find it valuable, consider:
 
 ---
 
-*Last updated: v1.3.0-premium*
+*Last updated: v1.4.0-premium*
