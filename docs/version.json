@@ -5,8 +5,8 @@
     "changelog": "- ✨ PPRuntimeStats.get_effective_stat() accepts exclude_source_prefix for filtered max computation\n- ✨ PPNPCEntity built-in loot_table property + get_loot_table()/has_loot_table() API\n- ✨ PPRecipeUtils.find_matching_recipe(inventory, type) convenience method\n- 🔧 Fixed PPRuntimeStats._init() else branch dropping default stats\n- 🔧 Fixed migration of corrupted 'undefined' extension properties on existing projects"
   },
   "premium": {
-    "version": "1.4.0-premium",
+    "version": "1.4.1-premium",
     "download_url": "https://trobugno.itch.io/pandora-plus-premium",
-    "changelog": "- 🎁 Skill Tree Editor: author Talents (passive perk trees) & Abilities (active skills) with a perk graph, Effect Types, conditions, validation, balance view and an allocation simulator\n- 🎁 NPC Skills: give NPCs talents/abilities via a static loadout (per-perk ranks) + optional dynamic leveling\n- 🎁 In-editor Documentation tab (browse the online docs without leaving Godot)\n- 🔧 Skill Tree Editor polish: entity names follow your display name, picker labels, inline image/link rendering"
+    "changelog": "- 🔧 Fix: new autoloads (PPSkillTreeUtils) now register on UPDATE, not only on a fresh enable - resolves 'PPSkillTreeUtils not declared' parse errors after updating\n- 🎁 Skill Tree Editor: author Talents (passive perk trees) & Abilities (active skills) with a perk graph, Effect Types, conditions, validation, balance view and an allocation simulator\n- 🎁 NPC Skills: give NPCs talents/abilities via a static loadout (per-perk ranks) + optional dynamic leveling\n- 🎁 In-editor Documentation tab (browse the online docs without leaving Godot)"
   }
 }
