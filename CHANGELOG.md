@@ -5,7 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ---
-## [1.2.7-core] (Current) - 2026-05-13
+## [1.2.8-core] (Current) - 2026-08-10
+
+#### 🔧 Maintenance / Dependencies
+
+- ⬆️ **Bundled Pandora updated `1.0-alpha10-dev` → `1.0-alpha10`** (BitBrain's official release). The Pandora+ resource/array/entity fixes from previous versions are now merged upstream, so this is a clean update. New upstream additions: `is_actual_type()` across the type system and a data versioning/migration layer (`util/migration.gd` + `PANDORA_DATA_VERSION` in `api.gd`). Existing `data.pandora` files load unchanged — the v0→v1 migration is currently a no-op that only stamps the data version.
+- ⬆️ **gdUnit4 updated `6.0.3` → `6.2.0`** (test framework only; not shipped in the distributed package).
+
+---
+## [1.2.7-core] - 2026-05-13
 
 #### ✨ Enhancements
 

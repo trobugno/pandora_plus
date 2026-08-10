@@ -19,13 +19,13 @@ func _execute(context :GdUnitExecutionContext) -> void:
 		if test_context.is_success() or test_context.is_skipped() or test_context.is_interupted():
 			break
 
-	context.gc()
+	await context.gc()
 	if context.is_skipped():
 		fire_test_skipped(context)
 	else:
 		var reports: = context.collect_reports(true)
 		var statistics := context.calculate_statistics(reports)
-		fire_event(GdUnitEvent.new().test_after(context.test_case.id(), statistics, reports))
+		fire_event(GdUnitEvent.new().test_after(context.test_case.id(), context.test_case.test_name(), statistics, reports))
 
 func set_debug_mode(debug_mode :bool = false) -> void:
 	super.set_debug_mode(debug_mode)
@@ -49,4 +49,4 @@ func fire_test_skipped(context: GdUnitExecutionContext) -> void:
 	}
 	var report := GdUnitReport.new() \
 		.create(GdUnitReport.SKIPPED, test_case.line_number(), GdAssertMessages.test_skipped(test_case.skip_info()))
-	fire_event(GdUnitEvent.new().test_after(test_case.id(), statistics, [report]))
+	fire_event(GdUnitEvent.new().test_after(test_case.id(), test_case.test_name(), statistics, [report]))

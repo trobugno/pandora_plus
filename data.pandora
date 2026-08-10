@@ -520,9 +520,7 @@
 			},
 			{
 				"_category_id": "1227.0",
-				"_default_value": {
-
-				},
+				"_default_value": {},
 				"_id": "1235.0",
 				"_name": "quest_giver_for",
 				"_setting_overrides": {
@@ -644,12 +642,24 @@
 					"Category Filter": "1203.0"
 				},
 				"_type": "reference"
+			},
+			{
+				"_category_id": "1227.0",
+				"_default_value": {},
+				"_id": "1291.0",
+				"_name": "loot_table",
+				"_setting_overrides": {
+					"Array Type": "item_drop_property",
+					"Category Filter": "1206.0"
+				},
+				"_type": "array"
 			}
 		]
 	},
 	"_id_generator": {
 		"_ids_by_context": {
-			"default": 1290.0
+			"default": 1709.0
 		}
-	}
+	},
+	"_version": 1
 }

@@ -22,7 +22,10 @@ var _name: String
 var _test_execution_iteration: int = 0
 var _flaky_test_check := GdUnitSettings.is_test_flaky_check_enabled()
 var _flaky_test_retries := GdUnitSettings.get_flaky_max_retries()
-var _orphans := -1
+var _last_error: GdUnitError = null
+
+
+var _settings_snapshot: GdUnitProjectSettingsSnapshot = null
 
 
 var error_monitor: GodotGdErrorMonitor = null:
@@ -53,7 +56,11 @@ func _init(name: StringName, parent_context: GdUnitExecutionContext = null) -> v
 	_parent_context = parent_context
 	_timer = LocalTime.now()
 	_orphan_monitor = GdUnitOrphanNodesMonitor.new(name)
-	_orphan_monitor.start()
+
+	if parent_context != null:
+		parent_context._orphan_monitor.add_child_monitor(_orphan_monitor)
+		orphan_monitor_start()
+
 	_memory_observer = GdUnitMemoryObserver.new()
 	_report_collector = GdUnitTestReportCollector.new()
 	if parent_context != null:
@@ -61,6 +68,8 @@ func _init(name: StringName, parent_context: GdUnitExecutionContext = null) -> v
 
 
 func dispose() -> void:
+	if test_suite != null:
+		test_suite.free()
 	_timer = null
 	_orphan_monitor = null
 	_report_collector = null
@@ -77,6 +86,15 @@ func dispose_sub_contexts() -> void:
 	_sub_context.clear()
 
 
+func last_sub_context() -> GdUnitExecutionContext:
+	return null if _sub_context.is_empty() else _sub_context[-1]
+
+
+func terminate() -> void:
+	if test_case:
+		test_case.do_terminate()
+
+
 static func of(pe: GdUnitExecutionContext) -> GdUnitExecutionContext:
 	var context := GdUnitExecutionContext.new(pe._test_case_name, pe)
 	context._test_case_name = pe._test_case_name
@@ -84,16 +102,9 @@ static func of(pe: GdUnitExecutionContext) -> GdUnitExecutionContext:
 	return context
 
 
-static func of_test_suite(p_test_suite: GdUnitTestSuite) -> GdUnitExecutionContext:
-	assert(p_test_suite, "test_suite is null")
-	var context := GdUnitExecutionContext.new(p_test_suite.get_name())
-	context.test_suite = p_test_suite
-	return context
-
-
 static func of_test_case(pe: GdUnitExecutionContext, p_test_case: _TestCase) -> GdUnitExecutionContext:
 	assert(p_test_case, "test_case is null")
-	var context := GdUnitExecutionContext.new(p_test_case.get_name(), pe)
+	var context := GdUnitExecutionContext.new(p_test_case.test_name(), pe)
 	context.test_case = p_test_case
 	return context
 
@@ -119,12 +130,24 @@ func get_test_case_name() -> StringName:
 	return _test_case_name
 
 
+func save_project_settings() -> void:
+	if _settings_snapshot == null:
+		_settings_snapshot = GdUnitProjectSettingsSnapshot.new()
+	_settings_snapshot.save()
+
+
+func restore_project_settings() -> void:
+	if _settings_snapshot == null:
+		return
+	_settings_snapshot.restore()
+
+
 func error_monitor_start() -> void:
 	error_monitor.start()
 
 
 func error_monitor_stop() -> void:
-	await error_monitor.scan()
+	error_monitor.stop()
 	for error_report in error_monitor.to_reports():
 		if error_report.is_error():
 			_report_collector.push_back(error_report)
@@ -132,6 +155,10 @@ func error_monitor_stop() -> void:
 
 func orphan_monitor_start() -> void:
 	_orphan_monitor.start()
+
+
+func orphan_monitor_collect() -> void:
+	_orphan_monitor.collect()
 
 
 func orphan_monitor_stop() -> void:
@@ -145,6 +172,18 @@ func add_report(report: GdUnitReport) -> GdUnitReport:
 
 func reports() -> Array[GdUnitReport]:
 	return _report_collector.reports()
+
+
+func set_error(error: GdUnitError) -> void:
+	_last_error = error
+
+
+func last_error() -> GdUnitError:
+	if  _last_error != null:
+		return _last_error
+
+	var last_report: GdUnitReport = _report_collector.reports()[-1]
+	return last_report._error if last_report != null else _last_error
 
 
 func collect_reports(recursive: bool) -> Array[GdUnitReport]:
@@ -165,8 +204,8 @@ func calculate_statistics(reports_: Array[GdUnitReport]) -> Dictionary:
 	var error_count := GdUnitTestReportCollector.count_errors(reports_)
 	var warn_count := GdUnitTestReportCollector.count_warnings(reports_)
 	var skip_count := GdUnitTestReportCollector.count_skipped(reports_)
+	var orphan_count := GdUnitTestReportCollector.count_orphans(reports_)
 	var is_failed := !is_success()
-	var orphan_count := _count_orphans()
 	var elapsed_time := _timer.elapsed_since_ms()
 	var retries :=  1 if _parent_context == null else _sub_context.size()
 	# Mark as flaky if it is successful, but errors were counted
@@ -213,22 +252,6 @@ func is_interupted() -> bool:
 	return false if test_case == null else test_case.is_interupted()
 
 
-func _count_orphans() -> int:
-	if _orphans != -1:
-		return _orphans
-
-	var orphans := 0
-	for c in _sub_context:
-		if _orphan_monitor.orphan_nodes() != c._orphan_monitor.orphan_nodes():
-			orphans += c._count_orphans()
-
-	_orphans = _orphan_monitor.orphan_nodes()
-	if _orphan_monitor.orphan_nodes() != orphans:
-		_orphans -= orphans
-
-	return _orphans
-
-
 func sum(accum: int, number: int) -> int:
 	return accum + number
 
@@ -250,20 +273,53 @@ func gc(gc_orphan_check: GC_ORPHANS_CHECK = GC_ORPHANS_CHECK.NONE) -> void:
 	GdUnitThreadManager.get_current_context().clear_assert()
 	await _memory_observer.gc()
 	orphan_monitor_stop()
+	if _orphan_monitor.orphans_count() > 0:
+		# Give the engine time to free resources otherwies we do orphan false detection
+		await test_suite.get_tree().process_frame
 
-	var orphans := _count_orphans()
 	match(gc_orphan_check):
 		GC_ORPHANS_CHECK.SUITE_HOOK_AFTER:
-			if orphans > 0:
-				reports().push_front(GdUnitReport.new() \
-					.create(GdUnitReport.WARN, 1, GdAssertMessages.orphan_detected_on_suite_setup(orphans)))
+			report_ophans(-1, """
+		func before() -> void:
+			collect_orphan_node_details())
+
+		func after() -> void:
+			collect_orphan_node_details())""")
 
 		GC_ORPHANS_CHECK.TEST_HOOK_AFTER:
-			if orphans > 0:
-				reports().push_front(GdUnitReport.new()\
-					.create(GdUnitReport.WARN, 1, GdAssertMessages.orphan_detected_on_test_setup(orphans)))
+			report_ophans(-1, """
+		func before_test() -> void:
+			collect_orphan_node_details()
+
+		func after_test() -> void:
+			collect_orphan_node_details()""")
 
 		GC_ORPHANS_CHECK.TEST_CASE:
-			if orphans > 0:
-				reports().push_front(GdUnitReport.new()\
-					 .create(GdUnitReport.WARN, test_case.line_number(), GdAssertMessages.orphan_detected_on_test(orphans)))
+			report_ophans(test_case.line_number(),
+			"	collect_orphan_node_details()"
+			)
+
+
+
+func report_ophans(line_number: int, additonal_info := "") -> void:
+	var orphan_infos := _orphan_monitor.detected_orphans()
+	if orphan_infos.is_empty():
+		var orphans_count := _orphan_monitor.orphans_count()
+		if orphans_count > 0:
+			reports().push_back(GdUnitReport.new() \
+					.create(GdUnitReport.ORPHAN, line_number, GdAssertMessages.orphan_warning(orphans_count, additonal_info))
+					.with_current_value(orphans_count))
+	else:
+		reports() \
+			.push_back(GdUnitReport.new()\
+			.create(GdUnitReport.ORPHAN, line_number, GdAssertMessages.orphan_detected(orphan_infos.size())) \
+			.with_current_value(orphan_infos.size()))
+
+		for orphan_info in orphan_infos:
+			var error := GdUnitError.new(
+				GdAssertMessages.orphan_node_info(orphan_info),
+				0,
+				GdUnitStackTrace.new([orphan_info._stack_element]) if orphan_info._stack_element != null else null)
+			reports().push_back(GdUnitReport.new()\
+				.from_error(GdUnitReport.ORPHAN, error)
+				.with_current_value(0))

@@ -145,6 +145,14 @@ func _bbcode_tags_to_csi_codes(message: String) -> String:
 	return result
 
 
+## Internal implementation of print_stack_trace.[br]
+## [br]
+## [param stack_trace] The stack trace to print.[br]
+## [param _indent] The indentation level.
+func _print_stack_trace(stack_trace: GdUnitStackTrace, _indent: int) -> void:
+	_print_message(stack_trace.print_stack_trace(), Color.LIGHT_BLUE, _indent, 0)
+
+
 ## Implementation of basic message output with formatting.
 func _print_message(_message: String, _color: Color, _indent: int, _flags: int) -> void:
 	var text := _bbcode_tags_to_csi_codes(_message)
@@ -162,7 +170,7 @@ func _println_message(_message: String, _color: Color, _indent: int, _flags: int
 
 
 ## Implementation of positioned message output with formatting.
-func _print_at(_message: String, cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int) -> void:
+func _print_at(_message: String, cursor_pos: int, _color: Color, _effect: GdUnitMessageWriter.Effect, _align: Align, _flags: int) -> void:
 	if _align == Align.RIGHT:
 		cursor_pos = cursor_pos - _message.length()
 

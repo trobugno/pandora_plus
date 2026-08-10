@@ -29,21 +29,13 @@ func _ready() -> void:
 		_state = EXIT
 		return
 	@warning_ignore("return_value_discarded")
-	_client.connect("connection_failed", _on_connection_failed)
+	_client.connection_failed.connect(_on_connection_failed)
 	GdUnitSignals.instance().gdunit_message.connect(_on_send_message)
+	_executor.fail_fast(_runner_config.is_fail_fast())
 	var result := _client.start("127.0.0.1", _runner_config.server_port())
 	if result.is_error():
 		push_error(result.error_message())
 		return
-
-
-## Cleanup and quit the runner.[br]
-## [br]
-## [param code] The exit code to return.
-func quit(code: int) -> void:
-	if code != RETURN_SUCCESS:
-		_state = EXIT
-	await GdUnitMemoryObserver.gc_on_guarded_instances()
 
 
 ## Called when the TCP connection to the GdUnit server fails.[br]
