@@ -50,7 +50,7 @@ Each **level** grants one perk point (the player learns the talent at level 1). 
 A **perk** is a node with:
 
 - A **perk_id** (referenced by other perks' prerequisites)
-- A **category** (Foundation / Technique / Capstone) and an optional **branch group** (to mark forks/"bivii")
+- A **category** (Foundation / Technique / Capstone) and an optional **branch group** (to mark [forks/"bivii"](/core-systems/skill-tree-editor?id=forks-bivii))
 - A **max rank**
 - **Prerequisites** (other perk_ids that must be ranked first)
 - **Effects** — one or more [Effect Types](/core-systems/skill-tree-editor?id=effect-types) with values per rank
@@ -67,6 +67,27 @@ Switch the right-pane view to **Graph** to see a Talent's perk topology:
 
 <!-- Screenshot: Perk Graph view showing several perk nodes connected by prerequisite edges with branch tinting -->
 ![Skill Tree Editor — Perk Graph](../assets/screenshots/skill_tree_graph.png)
+
+### Forks (Bivii)
+
+*(v1.4.3+)* A **fork** (Italian *bivio*) is a branching choice in a Talent: perks the player picks **between**, not all of. Perks that share the same **branch group** belong to the same fork.
+
+**Exclusivity.** Once the player spends a point in one branch of a fork, the rival branches **lock** and stay unavailable until the Talent is respec'd. This is enforced by the runtime (`can_allocate`) — you don't script it yourself.
+
+**Two fork shapes.** A branch group uses an optional `bivio:branch` syntax:
+
+- **Single-perk alternatives** — give each rival perk the *same* branch group (e.g. `mastery` on three perks). Each perk is its own branch, so the player picks exactly one.
+- **Multi-perk branches** — use `bivio:branch` (e.g. `mastery:fire` on the fire perks, `mastery:ice` on the ice perks). Perks in the *same* branch coexist; the two branches exclude each other.
+
+Existing branch groups keep working unchanged — no data migration.
+
+**Fork-aware prerequisites.** Prerequisites are **AND** across the tree, but **OR within a fork** ("at least one branch"). This lets a **Capstone** list the whole tree as prerequisites without demanding *both* sides of a fork the player can never take together — one branch of each fork is enough.
+
+**Where you see it:**
+
+- **Perk Graph** — after simulating, allocated perks are flagged and fork-locked perks are dimmed with a **LOCKED (fork)** tag.
+- **Allocation Simulator** — a disabled **+1** explains *why* (fork-locked, missing prerequisite, no points, maxed…), inline and as a tooltip.
+- **Validation** — a fork with only one branch is flagged (no real choice), and a perk that requires a rival branch of its own fork is an error (it could never be allocated).
 
 ---
 
@@ -114,9 +135,9 @@ Inventory/stat/flag/quest checks are answered by your game through a **state pro
 
 ## Validation, Balance & Simulator
 
-- **Validation Panel** (collapsible, spans the module bottom) — project-wide checks: missing IDs, broken prerequisite references, cycles, perks/abilities with unconfigured effects, conditions missing a target/compare value. Double-click an issue to navigate to it.
+- **Validation Panel** (collapsible, spans the module bottom) — project-wide checks: missing IDs, broken prerequisite references, cycles, perks/abilities with unconfigured effects, conditions missing a target/compare value, plus [fork](/core-systems/skill-tree-editor?id=forks-bivii) checks (a single-branch fork, or a perk that requires a rival branch of its own fork). Double-click an issue to navigate to it.
 - **Balance View** (Talents) — effect distribution per Talent, grouped by effect nature, so you can spot lopsided trees.
-- **Allocation Simulator** (Talents) — grant XP, spend points, and watch the runtime resolver compute effect values live, exactly as they would be in-game.
+- **Allocation Simulator** (Talents) — grant XP, spend points, and watch the runtime resolver compute effect values live, exactly as they would be in-game. A disabled **+1** tells you *why* it's blocked (fork-locked, missing prerequisite, no points, maxed).
 
 <!-- Screenshot: Allocation Simulator with a talent partially allocated and resolved effect values -->
 ![Skill Tree Editor — Simulator](../assets/screenshots/skill_tree_simulator.png)
@@ -156,6 +177,14 @@ for e in PPSkillTreeUtils.get_resolved_effects(talent_id):
     print(e.effect_type, e.effect_nature, e.values)
 ```
 
+To reflect [fork](/core-systems/skill-tree-editor?id=forks-bivii) state in your own UI, `is_perk_branch_locked(talent_id, perk_id)` reports whether a rival branch has locked a perk, and `allocation_block_reason(talent_id, perk_id)` returns a short human-readable reason `can_allocate()` is false (empty string when the perk *is* allocatable):
+
+```gdscript
+if not PPSkillTreeUtils.can_allocate(talent_id, "p_ice"):
+    var why = PPSkillTreeUtils.allocation_block_reason(talent_id, "p_ice")
+    # e.g. "Locked: another branch of this fork is taken"
+```
+
 Provide a **state provider** so condition checks that need per-player data work:
 
 ```gdscript
@@ -185,4 +214,4 @@ The NPC's loadout and progression are serialized with the NPC's `to_dict()` / `f
 
 ---
 
-*Complete Guide for Pandora+ v1.4.0-premium*
+*Complete Guide for Pandora+ v1.4.3-premium*

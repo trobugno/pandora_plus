@@ -5,8 +5,8 @@
     "changelog": "- 🧹 Maintenance release — version bump and internal tooling updates. No functional changes to the addon API."
   },
   "premium": {
-    "version": "1.4.2-premium",
+    "version": "1.4.3-premium",
     "download_url": "https://trobugno.itch.io/pandora-plus-premium",
-    "changelog": "- 🧹 Maintenance release — version bump and internal tooling updates. No functional changes to the addon API."
+    "changelog": "- 🔧 Skill Tree forks (\"bivii\") are now enforced: only one branch per fork can be taken (rivals lock until respec), with fork-aware prerequisites — AND across the tree, OR within a fork.\n- A new `bivio:branch` branch-group syntax supports multi-perk branches (fully backward compatible).\n- The Perk Graph dims fork-locked perks, the Allocation Simulator explains why a +1 is disabled, and two new validation rules cover forks.\n- New API: `is_perk_branch_locked()` and `allocation_block_reason()`."
   }
 }
